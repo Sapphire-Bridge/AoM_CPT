@@ -112,6 +112,20 @@ For chat models, you can interpret dataset prompt fields as user messages and re
 
 Run manifests store hashes only (e.g., `system_prompt_sha256`, `chat_template_sha256`) and never write raw prompt/system text to disk.
 
+## Paper submission reproduction (canonical artifacts)
+
+Regenerate the paper-cited artifact set (AoM eval + specificity + CF/COH patching + report + run manifest + strict tables) into the canonical directories (`results_submission_full/`, `tables_submission_full/`):
+
+```bash
+bash scripts/run_submission_full_strong.sh
+```
+
+Clean-room / “one command” reproducibility check (exports a clean repo snapshot, installs pinned deps from `requirements.lock.txt`, runs the suite, runs evidence checks, and builds a replication bundle):
+
+```bash
+bash scripts/final_repro_cleanroom.sh
+```
+
 ## Paper-mode runner (smoke / M1Max / A100)
 
 This repo includes a convenience runner that generates a hardened “paper dataset” (with CF shams + COH controls) and runs reproducible evaluation presets:

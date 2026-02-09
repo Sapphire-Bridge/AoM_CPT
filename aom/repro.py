@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import importlib
+import importlib.metadata
 import os
 import platform
 import random
+import re
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -27,9 +28,9 @@ class ReproConfig:
 
 def _safe_version(module_name: str) -> str:
     try:
-        mod = importlib.import_module(module_name)
-        v = getattr(mod, "__version__", None)
-        return "" if v is None else str(v)
+        # Prefer distribution metadata so we don't import heavy modules (e.g. torch)
+        # just to record a version string.
+        return str(importlib.metadata.version(str(module_name)))
     except Exception:
         return ""
 
@@ -63,6 +64,20 @@ def get_git_commit_hash(*, repo_root: str | Path | None = None, required: bool =
             return str(out)
     except Exception:
         pass
+
+    # Fallback for clean exports (e.g., `git archive`) that intentionally omit the `.git/` directory.
+    # `scripts/final_repro_cleanroom.sh` writes this file into the exported tree.
+    try:
+        p = root / "SOURCE_GIT_COMMIT.txt"
+        if p.exists():
+            raw = p.read_text(encoding="utf-8").strip().splitlines()
+            if raw:
+                s = raw[0].strip()
+                if re.fullmatch(r"[0-9a-f]{40}", s):
+                    return str(s)
+    except Exception:
+        pass
+
     if required:
         raise RuntimeError(f"Failed to determine git commit hash (expected a git checkout at {root})")
     return ""

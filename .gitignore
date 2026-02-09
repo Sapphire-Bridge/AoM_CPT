@@ -6,5 +6,6 @@ results_submission*/
 tables_submission*/
 results_submission_full/
 tables_submission_full/
+results_quickcheck/
 *.tar.gz
 *.sha256

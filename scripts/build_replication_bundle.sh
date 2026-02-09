@@ -2,11 +2,12 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
 
-MODE="m1max"
-RESULTS_DIR="$ROOT/results_submission"
-TABLES_DIR="$ROOT/tables_submission"
-ARCHIVE="$ROOT/aom_replication_bundle.tar.gz"
+MODE="submission_full_strong"
+RESULTS_DIR="results_submission_full"
+TABLES_DIR="tables_submission_full"
+ARCHIVE="aom_replication_bundle.tar.gz"
 REVISION=""
 TOKENIZER_REVISION=""
 LOCAL_FILES_ONLY=0
@@ -21,9 +22,9 @@ Usage:
   bash scripts/build_replication_bundle.sh [options]
 
 Options:
-  --mode MODE                  run_paper mode: smoke | m1max | a100 (default: m1max)
-  --results-dir PATH           run/results directory (default: results_submission)
-  --tables-dir PATH            output directory for strict LaTeX tables (default: tables_submission)
+  --mode MODE                  run mode: smoke | m1max | a100 | submission_full_strong (default: submission_full_strong)
+  --results-dir PATH           run/results directory (default: results_submission_full)
+  --tables-dir PATH            output directory for strict LaTeX tables (default: tables_submission_full)
   --archive PATH               output archive path (default: aom_replication_bundle.tar.gz)
   --revision REV               HF model revision pin passed to run_paper
   --tokenizer-revision REV     HF tokenizer revision pin passed to run_paper
@@ -33,8 +34,9 @@ Options:
   -h, --help                   show this help
 
 Examples:
+  bash scripts/build_replication_bundle.sh --mode submission_full_strong --revision <hf_commit>
   bash scripts/build_replication_bundle.sh --mode m1max --revision <hf_commit>
-  bash scripts/build_replication_bundle.sh --skip-run --results-dir results/paper_m1max --tables-dir tables_submission
+  bash scripts/build_replication_bundle.sh --skip-run --results-dir results/paper_m1max --tables-dir tables_submission_full
 EOF
 }
 
@@ -118,8 +120,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$MODE" in
-  smoke|m1max|a100) ;;
-  *) die "Invalid --mode: $MODE (expected smoke|m1max|a100)" ;;
+  smoke|m1max|a100|submission_full_strong) ;;
+  *) die "Invalid --mode: $MODE (expected smoke|m1max|a100|submission_full_strong)" ;;
 esac
 
 RESULTS_DIR_ABS="$(cd "$(dirname "$RESULTS_DIR")" && pwd)/$(basename "$RESULTS_DIR")"
@@ -128,30 +130,58 @@ ARCHIVE_ABS="$(cd "$(dirname "$ARCHIVE")" && pwd)/$(basename "$ARCHIVE")"
 
 if [[ "$SKIP_RUN" -eq 0 ]]; then
   mkdir -p "$RESULTS_DIR_ABS"
-  cmd=(
-    python
-    "$ROOT/scripts/run_paper.py"
-    "$MODE"
-    --results_dir
-    "$RESULTS_DIR_ABS"
-  )
-  if [[ "$LOCAL_FILES_ONLY" -eq 1 ]]; then
-    cmd+=(--local_files_only)
+  if [[ "$MODE" == "submission_full_strong" ]]; then
+    cmd=(
+      bash
+      "$ROOT/scripts/run_submission_full_strong.sh"
+      --results-dir
+      "$RESULTS_DIR"
+      --tables-dir
+      "$TABLES_DIR"
+    )
+    if [[ "$LOCAL_FILES_ONLY" -eq 1 ]]; then
+      cmd+=(--local-files-only)
+    fi
+    if [[ -n "$REVISION" ]]; then
+      cmd+=(--revision "$REVISION")
+    fi
+    if [[ -n "$TOKENIZER_REVISION" ]]; then
+      cmd+=(--tokenizer-revision "$TOKENIZER_REVISION")
+    fi
+    if [[ "$SKIP_TABLES" -eq 1 ]]; then
+      cmd+=(--skip-tables)
+    fi
+    echo "[run] ${cmd[*]}"
+    "${cmd[@]}"
+  else
+    cmd=(
+      python
+      "$ROOT/scripts/run_paper.py"
+      "$MODE"
+      --results_dir
+      "$RESULTS_DIR_ABS"
+    )
+    if [[ "$LOCAL_FILES_ONLY" -eq 1 ]]; then
+      cmd+=(--local_files_only)
+    fi
+    if [[ -n "$REVISION" ]]; then
+      cmd+=(--revision "$REVISION")
+    fi
+    if [[ -n "$TOKENIZER_REVISION" ]]; then
+      cmd+=(--tokenizer_revision "$TOKENIZER_REVISION")
+    fi
+    echo "[run] ${cmd[*]}"
+    "${cmd[@]}"
   fi
-  if [[ -n "$REVISION" ]]; then
-    cmd+=(--revision "$REVISION")
-  fi
-  if [[ -n "$TOKENIZER_REVISION" ]]; then
-    cmd+=(--tokenizer_revision "$TOKENIZER_REVISION")
-  fi
-  echo "[run] ${cmd[*]}"
-  "${cmd[@]}"
 fi
 
 if [[ "$SKIP_TABLES" -eq 0 ]]; then
-  mkdir -p "$TABLES_DIR_ABS"
-  echo "[run] MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=$RESULTS_DIR_ABS TABLES_OUT_DIR=$TABLES_DIR_ABS"
-  MAKE_TABLES_STRICT=1 make tables RESULTS_DIR="$RESULTS_DIR_ABS" TABLES_OUT_DIR="$TABLES_DIR_ABS"
+  # submission_full_strong already runs strict table generation (unless it was asked to skip).
+  if [[ "$MODE" != "submission_full_strong" || "$SKIP_RUN" -eq 1 ]]; then
+    mkdir -p "$TABLES_DIR_ABS"
+    echo "[run] MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=$RESULTS_DIR_ABS TABLES_OUT_DIR=$TABLES_DIR_ABS"
+    MAKE_TABLES_STRICT=1 make tables RESULTS_DIR="$RESULTS_DIR_ABS" TABLES_OUT_DIR="$TABLES_DIR_ABS"
+  fi
 fi
 
 require_dir "$ROOT/data_paper_hardened_v2"
@@ -188,6 +218,7 @@ bundle_paths=(
   "README.md"
   "PAPER_MODES.md"
   "PAPER_VERIFICATION_GUIDE.md"
+  "AoM_JoLLLI"
   "Makefile"
   "requirements.txt"
   "requirements.lock.txt"
@@ -195,10 +226,15 @@ bundle_paths=(
   "aom_eval.py"
   "aom_cf_patching.py"
   "aom_coh_patching.py"
+  "scripts/run_submission_full_strong.sh"
   "scripts/run_paper.py"
   "scripts/report_results.py"
   "scripts/make_tables.py"
   "scripts/build_replication_bundle.sh"
+  "scripts/final_repro_cleanroom.sh"
+  "scripts/check_evidence_contract.py"
+  "scripts/check_evidence_contract_fields.py"
+  "tests"
   "tables/table_aom_eval.py"
   "tables/table_cf_patching.py"
   "tables/table_coh_patching.py"

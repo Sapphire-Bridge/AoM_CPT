@@ -17,6 +17,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from aom.io import write_jsonl
+from aom.repro import collect_versions, get_git_commit_hash
 
 
 M1MAX_MODELS: list[str] = [
@@ -63,11 +64,7 @@ def _run(argv: List[str], *, cwd: Path, dry_run: bool) -> None:
 
 
 def _try_git_commit() -> str:
-    try:
-        out = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True, stderr=subprocess.DEVNULL)
-        return out.strip()
-    except Exception:
-        return ""
+    return get_git_commit_hash(repo_root=ROOT, required=False)
 
 
 def _sha256_file(path: Path) -> str:
@@ -177,19 +174,28 @@ def ensure_paper_dataset(
                         continue
                     yield json.loads(line)
 
+        def _rel(path: Path) -> str:
+            try:
+                return str(path.resolve().relative_to(ROOT.resolve()))
+            except Exception:
+                try:
+                    return str(path.relative_to(ROOT))
+                except Exception:
+                    return str(path.name)
+
         files = {
             "disamb_pairs.jsonl": {
-                "path": str(disamb_path),
+                "path": _rel(disamb_path),
                 "n_lines": int(_count_nonempty_lines(disamb_path)),
                 "sha256": _sha256_file(disamb_path),
             },
             "counterfactual.jsonl": {
-                "path": str(cf_path),
+                "path": _rel(cf_path),
                 "n_lines": int(_count_nonempty_lines(cf_path)),
                 "sha256": _sha256_file(cf_path),
             },
             "coherence.jsonl": {
-                "path": str(coh_path),
+                "path": _rel(coh_path),
                 "n_lines": int(_count_nonempty_lines(coh_path)),
                 "sha256": _sha256_file(coh_path),
             },
@@ -457,12 +463,17 @@ class PaperRun:
 
 
 def _write_run_manifest(run: PaperRun) -> None:
+    req_txt = ROOT / "requirements.txt"
+    req_lock = ROOT / "requirements.lock.txt"
     out = {
         "mode": str(run.mode),
         "generated_at_utc": _utc_now_iso(),
         "git_commit": _try_git_commit(),
         "results_dir": str(run.results_dir),
         "dataset_manifest_path": "" if run.dataset_manifest_path is None else str(run.dataset_manifest_path),
+        "runtime_versions": collect_versions(),
+        "requirements_txt_sha256": "" if not req_txt.exists() else _sha256_file(req_txt),
+        "requirements_lock_sha256": "" if not req_lock.exists() else _sha256_file(req_lock),
         "commands": [list(cmd) for cmd in run.commands],
     }
     _write_json(run.results_dir / "RUN_MANIFEST.json", out)

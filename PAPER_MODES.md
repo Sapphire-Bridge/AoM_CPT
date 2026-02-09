@@ -1,50 +1,48 @@
-# Paper Modes (Smoke / M1Max / A100)
+# Paper modes / runners
 
-This repo ships a single runner script that standardizes “paper-style” runs:
+There are two supported ways to run “paper-style” suites in this repo:
 
-- `smoke`: offline end-to-end check (tiny local model + tiny datasets)
-- `m1max`: long run intended for Apple Silicon (MPS)
-- `a100`: full run intended for CUDA GPUs (e.g. A100)
+## 1) Canonical submission suite (paper-cited artifacts)
 
-## Canonical paper dataset (hardened)
-
-All non-smoke modes generate (or reuse) a hardened dataset bundle with CF shams and COH ablation controls:
+This is the canonical end-to-end runner referenced by the evidence contract (`AoM_JoLLLI/AoM_evidence_contract.md`):
 
 ```bash
-python scripts/run_paper.py m1max --data_dir data_paper_hardened_v1
+bash scripts/run_submission_full_strong.sh
 ```
 
-This writes:
+Default outputs:
+- `results_submission_full/` (CSVs + per-artifact `*.manifest.json` + `results_report.md` + `RUN_MANIFEST.json`)
+- `tables_submission_full/` (strictly regenerated LaTeX tables)
 
-- `data_paper_hardened_v1/disamb_pairs.jsonl`
-- `data_paper_hardened_v1/counterfactual.jsonl` (includes `expected_effect ∈ {shift,invariant}`)
-- `data_paper_hardened_v1/coherence.jsonl` (includes matched `main` / `ablate_relevant` / `ablate_irrelevant`)
-- `data_paper_hardened_v1/DATASET_MANIFEST.json` (SHA256 hashes + line counts)
+This suite includes:
+- Behavioral AoM eval + CPT (core paper models)
+- CPT target-specificity control run (8-model suite)
+- AoM-CF intervention-span patching
+- AoM-COH pseudo-ablation patching
+- Strict table regeneration
 
-## Running
+## 2) Preset runner (`run_paper.py`)
+
+`run_paper.py` provides hardware-tuned presets:
 
 ```bash
-# Offline end-to-end smoke check (no downloads)
 python scripts/run_paper.py smoke
-
-# M1Max preset (expects `--device mps` to work)
 python scripts/run_paper.py m1max
-
-# CUDA preset (flash attention optional for the behavioral run)
 python scripts/run_paper.py a100 --attn_behavioral flash_attention_2
 ```
 
-Outputs land in:
+`run_paper.py` writes `RUN_MANIFEST.json` in its results directory and logs the same provenance fields into the generated CSVs.
 
-- `results/paper_smoke/`
-- `results/paper_m1max/`
-- `results/paper_a100/`
+## Dataset bundle
 
-Each folder contains `RUN_MANIFEST.json` (command lines) and `results_report.md` (inventory summary).
+The canonical hardened paper dataset is checked in at `data_paper_hardened_v2/` and is SHA-gated by:
+- `data_paper_hardened_v2/DATASET_MANIFEST.json`
 
-## Notes / pitfalls for writeups
+---
 
-- CPT patching runs in these presets are **DISAMB-only** (`--cf_path "" --coh_path ""`). Do not interpret `aom_composite` in those CSVs.
-- `--device_map` (multi-GPU sharding) is supported for behavioral runs, but patching/specificity assume a single-device model.
-- If you use `--device_map`, install `accelerate` (Transformers requirement for `device_map`).
+For clean-room reproduction from a pinned commit, use:
+
+```bash
+bash scripts/final_repro_cleanroom.sh
+```
 

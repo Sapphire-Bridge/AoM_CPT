@@ -4,9 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-DATA_DIR="$ROOT/data_paper_hardened_v2"
-RESULTS_DIR="$ROOT/results_submission_full"
-TABLES_DIR="$ROOT/tables_submission_full"
+DATA_DIR="data_paper_hardened_v2"
+RESULTS_DIR="results_submission_full"
+TABLES_DIR="tables_submission_full"
 
 CORE_DEVICE="cpu"
 CORE_TORCH_DTYPE="float32"
@@ -295,8 +295,9 @@ elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   SOURCE_GIT_COMMIT="$(git rev-parse HEAD)"
 fi
 
-python - <<'PY' "$RESULTS_DIR" "$DATASET_MANIFEST_PATH" "$SOURCE_GIT_COMMIT" "$COMMAND_LOG"
+python - <<'PY' "$RESULTS_DIR" "$DATASET_MANIFEST_PATH" "$SOURCE_GIT_COMMIT" "$COMMAND_LOG" "$ROOT"
 import json
+import hashlib
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -305,13 +306,39 @@ results_dir = Path(sys.argv[1])
 dataset_manifest = Path(sys.argv[2])
 git_commit = sys.argv[3]
 command_log = Path(sys.argv[4])
+repo_root = Path(sys.argv[5]).resolve()
 commands = [line.strip() for line in command_log.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _rel_under_root(p: Path) -> str:
+    try:
+        return str(p.resolve().relative_to(repo_root))
+    except Exception:
+        return str(p)
+
+
+from aom.repro import collect_versions
+
+req_txt = repo_root / "requirements.txt"
+req_lock = repo_root / "requirements.lock.txt"
+
 manifest = {
     "mode": "submission_full_strong",
     "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-    "results_dir": str(results_dir.resolve()),
-    "dataset_manifest_path": str(dataset_manifest.resolve()),
     "git_commit": str(git_commit),
+    "results_dir": _rel_under_root(results_dir),
+    "dataset_manifest_path": _rel_under_root(dataset_manifest),
+    "runtime_versions": collect_versions(),
+    "requirements_txt_sha256": "" if not req_txt.exists() else _sha256_file(req_txt),
+    "requirements_lock_sha256": "" if not req_lock.exists() else _sha256_file(req_lock),
     "commands": commands,
 }
 (results_dir / "RUN_MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

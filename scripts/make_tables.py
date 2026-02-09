@@ -10,6 +10,7 @@ from typing import List, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_PROVENANCE_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit", "argv_sha256")
+REQUIRED_CROSSCHECK_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit", "bootstrap_n", "bootstrap_seed", "ci")
 
 
 def parse_args() -> argparse.Namespace:
@@ -98,6 +99,10 @@ def main() -> None:
 
     selected: List[Tuple[str, Path, Path, Path]] = []
     bundle_id_by_job: dict[str, str] = {}
+    git_commit_by_job: dict[str, str] = {}
+    bootstrap_n_by_job: dict[str, str] = {}
+    bootstrap_seed_by_job: dict[str, str] = {}
+    ci_by_job: dict[str, str] = {}
     for name, script, in_csv, out_tex in jobs:
         if not script.exists():
             raise FileNotFoundError(f"Missing table script: {str(script)}")
@@ -108,9 +113,17 @@ def main() -> None:
                 continue
             raise FileNotFoundError(msg)
         header = _read_csv_header(in_csv)
-        missing_cols = [c for c in REQUIRED_PROVENANCE_COLUMNS if c not in set(header)]
+        header_set = set(header)
+        missing_cols = [c for c in REQUIRED_PROVENANCE_COLUMNS if c not in header_set]
         if missing_cols:
             msg = f"[missing] {name}: {str(in_csv)} (missing required columns: {missing_cols!r})"
+            if bool(args.skip_missing):
+                print(msg, file=sys.stderr, flush=True)
+                continue
+            raise ValueError(msg)
+        missing_crosscheck = [c for c in REQUIRED_CROSSCHECK_COLUMNS if c not in header_set]
+        if missing_crosscheck:
+            msg = f"[missing] {name}: {str(in_csv)} (missing cross-check columns: {missing_crosscheck!r})"
             if bool(args.skip_missing):
                 print(msg, file=sys.stderr, flush=True)
                 continue
@@ -119,6 +132,10 @@ def main() -> None:
             for col in REQUIRED_PROVENANCE_COLUMNS:
                 _read_unique_column_value(in_csv, column=col)
             bundle_id_by_job[name] = _read_unique_column_value(in_csv, column="dataset_bundle_id")
+            git_commit_by_job[name] = _read_unique_column_value(in_csv, column="git_commit")
+            bootstrap_n_by_job[name] = _read_unique_column_value(in_csv, column="bootstrap_n")
+            bootstrap_seed_by_job[name] = _read_unique_column_value(in_csv, column="bootstrap_seed")
+            ci_by_job[name] = _read_unique_column_value(in_csv, column="ci")
         except ValueError as e:
             msg = f"[missing] {name}: {str(in_csv)} ({e})"
             if bool(args.skip_missing):
@@ -130,6 +147,22 @@ def main() -> None:
     used_bundle_ids = {v for v in bundle_id_by_job.values() if str(v).strip()}
     if len(used_bundle_ids) > 1:
         raise ValueError(f"Mismatched dataset_bundle_id across table inputs: {bundle_id_by_job!r}")
+
+    used_git_commits = {v for v in git_commit_by_job.values() if str(v).strip()}
+    if len(used_git_commits) > 1:
+        raise ValueError(f"Mismatched git_commit across table inputs: {git_commit_by_job!r}")
+
+    used_bootstrap_n = {v for v in bootstrap_n_by_job.values() if str(v).strip()}
+    if len(used_bootstrap_n) > 1:
+        raise ValueError(f"Mismatched bootstrap_n across table inputs: {bootstrap_n_by_job!r}")
+
+    used_bootstrap_seed = {v for v in bootstrap_seed_by_job.values() if str(v).strip()}
+    if len(used_bootstrap_seed) > 1:
+        raise ValueError(f"Mismatched bootstrap_seed across table inputs: {bootstrap_seed_by_job!r}")
+
+    used_ci = {v for v in ci_by_job.values() if str(v).strip()}
+    if len(used_ci) > 1:
+        raise ValueError(f"Mismatched ci across table inputs: {ci_by_job!r}")
 
     for name, script, in_csv, out_tex in selected:
         _run(

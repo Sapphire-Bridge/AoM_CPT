@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-MODE="m1max"
+MODE="submission_full_strong"
 GIT_REV="HEAD"
 CLEAN_DIR=""
 PYTHON_BIN="python3"
@@ -13,8 +13,8 @@ INSTALL_DEPS=1
 LOCAL_FILES_ONLY=0
 HF_REVISION=""
 HF_TOKENIZER_REVISION=""
-RESULTS_REL="results_submission"
-TABLES_REL="tables_submission"
+RESULTS_REL="results_submission_full"
+TABLES_REL="tables_submission_full"
 ARCHIVE_REL="aom_replication_bundle.tar.gz"
 ALLOW_DIRTY=0
 SKIP_RUN=0
@@ -36,7 +36,7 @@ Usage:
   bash scripts/final_repro_cleanroom.sh [options]
 
 Options:
-  --mode MODE                  run_paper mode: smoke | m1max | a100 (default: m1max)
+  --mode MODE                  run mode: smoke | m1max | a100 | submission_full_strong (default: submission_full_strong)
   --git-rev REV                git revision to export (default: HEAD)
   --clean-dir PATH             clean-room directory (default: /tmp/aom_cleanroom_<utc>)
   --python BIN                 python executable (default: python3)
@@ -64,9 +64,8 @@ Examples:
     --tokenizer-revision <hf_commit>
 
   bash scripts/final_repro_cleanroom.sh \
-    --mode a100 \
-    --clean-dir /tmp/aom_final_release \
-    --copy-back-dir /Users/felixb/aom_prototype/release_artifacts
+    --mode submission_full_strong \
+    --clean-dir /tmp/aom_final_release
 EOF
 }
 
@@ -175,8 +174,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$MODE" in
-  smoke|m1max|a100) ;;
-  *) die "Invalid --mode: $MODE (expected smoke|m1max|a100)" ;;
+  smoke|m1max|a100|submission_full_strong) ;;
+  *) die "Invalid --mode: $MODE (expected smoke|m1max|a100|submission_full_strong)" ;;
 esac
 
 need_cmd git

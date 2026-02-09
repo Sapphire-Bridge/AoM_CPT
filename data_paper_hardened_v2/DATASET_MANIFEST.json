@@ -7,17 +7,17 @@
   "files": {
     "coherence.jsonl": {
       "n_lines": 240,
-      "path": "/Users/felixb/aom_prototype/data_paper_hardened_v2/coherence.jsonl",
+      "path": "data_paper_hardened_v2/coherence.jsonl",
       "sha256": "04e122738582a3d5ea2a7e7f8e38a3c7841c3bab2cc04cf4d24640d5a902fc64"
     },
     "counterfactual.jsonl": {
       "n_lines": 140,
-      "path": "/Users/felixb/aom_prototype/data_paper_hardened_v2/counterfactual.jsonl",
+      "path": "data_paper_hardened_v2/counterfactual.jsonl",
       "sha256": "e269fbd4fb819591d0bd5932137fcd18037a9ede9e743b7528916ead9f9374bf"
     },
     "disamb_pairs.jsonl": {
       "n_lines": 52,
-      "path": "/Users/felixb/aom_prototype/data_paper_hardened_v2/disamb_pairs.jsonl",
+      "path": "data_paper_hardened_v2/disamb_pairs.jsonl",
       "sha256": "a9587c185bde2ca83a1fd2d22a62d9d961b2105e7626117240e8aeff207adee1"
     }
   },

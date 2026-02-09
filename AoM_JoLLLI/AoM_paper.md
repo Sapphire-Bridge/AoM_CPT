@@ -120,24 +120,10 @@ For the SDH target-specificity stress test (§4.7, §5.7), we additionally run t
 * meta-llama/Llama-3.2-3B — https://huggingface.co/meta-llama/Llama-3.2-3B
 * meta-llama/Meta-Llama-3.1-8B — https://huggingface.co/meta-llama/Meta-Llama-3.1-8B
 All evaluations run in deterministic inference mode (model.eval()), and all reported metrics use log-probabilities rather than sampled generations.
-Software + hardware provenance (as logged by the evaluation framework).
-* Platform / accelerator: macOS-15.6-arm64-arm-64bit, using Apple mps (Metal Performance Shaders) where applicable (device=mps in logged runs).
-* Python: 3.12.7
-* PyTorch: 2.5.1
-* Transformers: varies by run batch (logged per run). Examples:
-    * GPT‑2 AoM + CPT layer sweep (Table 1/2 numbers): transformers==4.46.2 (logged in the GPT‑2 result CSV).
-    * SDH specificity runs (Table 3/3b numbers): transformers==4.57.3 (logged in the specificity CSVs).
-Dtypes and logging gaps.
-* Log-probability computations use float32 (log-softmax and gathered token log-probabilities).
-* Model parameter dtype varies by run batch:
-    * GPT‑2 AoM runs: torch.float32 (logged).
-    * Qwen/Llama specificity runs: commonly torch.bfloat16 or torch.float16 (logged per run in specificity CSVs).
-* Tokenizer provenance: tokenizers are loaded from each checkpoint via transformers. The tokenizer library version was not recorded in the result CSVs in this submission.
-* Checkpoint hashes / exact Hugging Face revisions: not recorded in the current result artifacts. Default model-repo “main” revisions were used at runtime unless otherwise configured.
-* Code commit hash: not recorded here because the evaluation ran outside a git checkout (no .git directory; git_commit logged as empty).
-* Legacy CSV caveat: some earlier result files predate full provenance columns and do not include the provenance fields above.
-* Sweep launcher logs (for some runs): exact `aom_eval.py` argv (including dataset paths) is recorded in `results/*launcher.log`. [R5]
-[R3, R4, R5]
+Software + hardware provenance (captured in the canonical run artifacts).
+* Per-row provenance fields in `results_submission_full/*.csv` include platform, device/dtypes, bootstrap settings, dataset hashes, git commit, and Hugging Face revision/commit metadata. [R3]
+* Per-artifact manifests (`results_submission_full/*.manifest.json`) record redacted argv, run status/summary, dataset validity counts/samples, and determinism metadata. [R0, C2]
+* Paper tables are regenerated in strict mode from a single results directory; strict mode fails on missing/mismatched provenance to prevent mixing artifact sets. [C11]
 4.2. Datasets
 All datasets are JSONL with schema validation and tokenization boundary checks.
 [C1]
@@ -156,7 +142,7 @@ Each item contains two labeled continuations ((a_i,b_i)) and the expected flip/n
 4.2.3. Coherence dataset (AoM-COH)
 The coherence suite contains 40 main items, each with matched ablate-relevant and ablate-irrelevant variants (total 120 contexts). The irrelevant ablation removes an unrelated sentence of comparable length. [E2a, E1]
 4.3. Scoring and aggregation
-Scoring uses log-softmax probabilities for numerical stability. Continuations are scored by mean per-token log-probability when length normalization is enabled (no_length_norm=False where recorded in the result artifacts). [R3, R4]
+Scoring uses log-softmax probabilities for numerical stability. Continuations are scored by mean per-token log-probability when length normalization is enabled (no_length_norm=False as recorded in the canonical result artifacts). [R3]
 The evaluator uses:
 * deterministic evaluation (model.eval()),
 * log-prob computations in float32,
@@ -418,7 +404,6 @@ Current limits:
 * DISAMB cue vulnerability; [E9, C5]
 * CF causal patching is coverage-limited and shift-only under the reported alignment protocol (60/140 items); insertion-type invariant shams yield empty receiver (base) spans (empty_span) and were skipped, so the shift/invariant causal separation remains untested under patching in this revision. [C10, E10a, E10b]
 * limited seeds in reported AoM+CPT sweeps; [E2a, E1, E3, E4a]
-* incomplete provenance for some legacy artifacts (explicitly reported). [R4]
 6.6. Burden shift and the context trilemma
 If AoM is robust and scalable, meaning-beyond-AoM positions must specify:
 1. the additional required property,
