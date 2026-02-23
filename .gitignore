@@ -9,3 +9,4 @@ tables_submission_full/
 results_quickcheck/
 *.tar.gz
 *.sha256
+.claude/
