@@ -84,7 +84,12 @@ Expected outputs:
 - `results_submission_full/aom_eval.csv` (+ `*.manifest.json`)
 - `results_submission_full/cpt_specificity_disamb_only.csv` (+ `*.manifest.json`)
 - `results_submission_full/cf_patching.csv` (+ `*.manifest.json`)
-- `results_submission_full/coh_patching.csv` (+ `*.manifest.json`)
+- `results_submission_full/cf_patching_shift_vs_subinv.csv` (+ `*.manifest.json`)
+- `results_submission_full/CF_SHIFT_SUBINV_RUN_MANIFEST.json`
+- `results_submission_full/coh_patching.csv` (merged from per-model COH patching runs; see the `coh_patching_qwen*.manifest.json` files)
+- `results_submission_full/coh_patching_qwen.csv` (+ `*.manifest.json`)
+- `results_submission_full/coh_patching_qwen15.csv` (+ `*.manifest.json`)
+- `results_submission_full/coh_patching_qwen3b.csv` (+ `*.manifest.json`)
 - `results_submission_full/results_report.md`
 - `results_submission_full/RUN_MANIFEST.json`
 - `tables_submission_full/*.tex`
@@ -120,4 +125,3 @@ pytest -q
 ## Troubleshooting
 
 - If `import torch` fails with an OpenMP shared-memory error (e.g. `OMP: Error #179: Function Can't open SHM2 failed`), run in a less-restricted environment or consult your system’s OpenMP runtime settings (this is environment-specific and not a repo bug).
-

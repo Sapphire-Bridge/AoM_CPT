@@ -17,8 +17,9 @@ Default outputs:
 This suite includes:
 - Behavioral AoM eval + CPT (core paper models)
 - CPT target-specificity control run (8-model suite)
-- AoM-CF intervention-span patching
-- AoM-COH pseudo-ablation patching
+- AoM-CF intervention-span patching (canonical CF suite)
+- AoM-CF shift vs substitution-invariant patching (E10e; `cf_patching_shift_vs_subinv.csv`)
+- AoM-COH pseudo-ablation patching (GPT-2 + Qwen2.5 per-checkpoint artifacts; `coh_patching.csv` + `coh_patching_qwen*.csv`)
 - Strict table regeneration
 
 ## 2) Preset runner (`run_paper.py`)
@@ -45,4 +46,3 @@ For clean-room reproduction from a pinned commit, use:
 ```bash
 bash scripts/final_repro_cleanroom.sh
 ```
-

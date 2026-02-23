@@ -193,6 +193,18 @@ require_file "$ROOT/data_paper_hardened_v2/DATASET_MANIFEST.json"
 require_dir "$RESULTS_DIR_ABS"
 require_file "$RESULTS_DIR_ABS/RUN_MANIFEST.json"
 require_file "$RESULTS_DIR_ABS/results_report.md"
+if [[ "$MODE" == "submission_full_strong" ]]; then
+  require_file "$ROOT/data_paper_hardened_v2/counterfactual_invariant_sub.jsonl"
+  require_file "$RESULTS_DIR_ABS/cf_patching_shift_vs_subinv.csv"
+  require_file "$RESULTS_DIR_ABS/cf_patching_shift_vs_subinv.manifest.json"
+  require_file "$RESULTS_DIR_ABS/CF_SHIFT_SUBINV_RUN_MANIFEST.json"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen.csv"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen.manifest.json"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen15.csv"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen15.manifest.json"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen3b.csv"
+  require_file "$RESULTS_DIR_ABS/coh_patching_qwen3b.manifest.json"
+fi
 
 shopt -s nullglob
 results_csv=("$RESULTS_DIR_ABS"/*.csv)
@@ -206,6 +218,9 @@ if [[ "$SKIP_TABLES" -eq 0 ]]; then
   require_file "$TABLES_DIR_ABS/aom_eval.tex"
   require_file "$TABLES_DIR_ABS/cf_patching.tex"
   require_file "$TABLES_DIR_ABS/coh_patching.tex"
+  if [[ "$MODE" == "submission_full_strong" ]]; then
+    require_file "$TABLES_DIR_ABS/cf_patching_shift_vs_subinv.tex"
+  fi
 fi
 
 results_rel="$(abs_under_root_to_rel "$RESULTS_DIR_ABS")"
@@ -232,11 +247,14 @@ bundle_paths=(
   "scripts/make_tables.py"
   "scripts/build_replication_bundle.sh"
   "scripts/final_repro_cleanroom.sh"
+  "scripts/run_cf_shift_vs_subinv.sh"
+  "scripts/build_cf_shift_subinv_dataset.py"
   "scripts/check_evidence_contract.py"
   "scripts/check_evidence_contract_fields.py"
   "tests"
   "tables/table_aom_eval.py"
   "tables/table_cf_patching.py"
+  "tables/table_cf_shift_vs_subinv.py"
   "tables/table_coh_patching.py"
   "data/README.md"
   "data_paper_hardened_v2"

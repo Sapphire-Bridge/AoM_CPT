@@ -47,11 +47,27 @@ def write_csv(rows: List[Dict[str, Any]], path: str) -> None:
     fieldnames = sorted({k for r in rows for k in r.keys()})
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
-    with open(p, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
-        w.writeheader()
-        for r in rows:
-            w.writerow(r)
+    tmp = p.with_name(f".{p.name}.tmp")
+    max_attempts = 8
+    for attempt in range(max_attempts):
+        try:
+            with open(tmp, "w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=fieldnames)
+                w.writeheader()
+                for r in rows:
+                    w.writerow(r)
+                f.flush()
+            tmp.replace(p)
+            return
+        except OSError as e:
+            try:
+                tmp.unlink(missing_ok=True)
+            except Exception:
+                pass
+            is_timeout = isinstance(e, TimeoutError) or int(getattr(e, "errno", -1)) == 60
+            if (not is_timeout) or attempt == max_attempts - 1:
+                raise
+            time.sleep(min(8.0, 0.5 * (2**attempt)))
 
 
 def parse_args() -> argparse.Namespace:
@@ -252,6 +268,18 @@ def main() -> None:
     csv_p = Path(csv_path)
     manifest_path = str(csv_p.with_suffix(".manifest.json"))
 
+    def _flush_partial_csv() -> None:
+        if not rows:
+            return
+        ended_at_utc = _utc_now_iso()
+        wall_time_sec = float(time.perf_counter() - run_t0)
+        for row in rows:
+            row["started_at_utc"] = str(run_started_at_utc)
+            row["ended_at_utc"] = str(ended_at_utc)
+            row["wall_time_sec"] = float(wall_time_sec)
+        csv_p.parent.mkdir(parents=True, exist_ok=True)
+        write_csv(rows, str(csv_p))
+
     try:
         import torch
 
@@ -435,6 +463,7 @@ def main() -> None:
                 row.update({f"coh_patch_{k}": v for k, v in patch_res.items()})
                 rows.append(row)
                 summary.record_success()
+                _flush_partial_csv()
                 print(
                     f"model={row['model']} seed={row['seed']} coh_patch_mean_max_effect={row.get('coh_patch_mean_max_effect', float('nan'))}",
                     flush=True,

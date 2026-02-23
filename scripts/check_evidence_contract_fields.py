@@ -17,6 +17,7 @@ _CONTRACT_ROW_RE = re.compile(r"^\|\s*`([ERC]\d+[a-z]?)`\s*\|")
 _EVIDENCE_ID_RE = re.compile(r"\b[ERC]\d+[a-z]?\b")
 
 REQUIRED_CSV_PROVENANCE_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit", "argv_sha256")
+REQUIRED_CSV_UNIQUE_PROVENANCE_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit")
 
 
 @dataclass(frozen=True)
@@ -120,6 +121,22 @@ def _read_unique_nonempty_value(path: Path, *, column: str, max_rows: int = 5000
     if len(values) > 1:
         raise ValueError(f"CSV {str(path)} has multiple values for column {column!r}: {sorted(values)!r}")
     return next(iter(values))
+
+
+def _require_nonempty_column_values(path: Path, *, column: str) -> None:
+    total_rows = 0
+    empty_rows = 0
+    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+        r = csv.DictReader(f)
+        for row in r:
+            total_rows += 1
+            v = "" if row.get(column) is None else str(row.get(column)).strip()
+            if not v:
+                empty_rows += 1
+    if total_rows == 0:
+        raise ValueError(f"CSV {str(path)} has no rows for required column {column!r}")
+    if empty_rows > 0:
+        raise ValueError(f"CSV {str(path)} has {empty_rows} empty values for required column {column!r}")
 
 
 def _json_has_path_pattern(obj: Any, dotted: str) -> bool:
@@ -239,6 +256,8 @@ def main(argv: list[str]) -> int:
                     continue
                 try:
                     for col in REQUIRED_CSV_PROVENANCE_COLUMNS:
+                        _require_nonempty_column_values(pth, column=col)
+                    for col in REQUIRED_CSV_UNIQUE_PROVENANCE_COLUMNS:
                         _read_unique_nonempty_value(pth, column=col)
                 except Exception as e:
                     failures.append(f"{eid}: {str(pth)!r} provenance check failed: {type(e).__name__}: {e}")
@@ -289,4 +308,3 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
-

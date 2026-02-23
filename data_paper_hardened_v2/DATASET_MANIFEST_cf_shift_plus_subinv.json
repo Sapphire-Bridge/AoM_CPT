@@ -1,0 +1,64 @@
+{
+  "bundle_id": "fd6067b4b229772c6519cbfa8f6db02c5d0f79fa6b3df8d88c4eac3a5db8f412",
+  "construction": {
+    "base_cf_path": "data_paper_hardened_v2/counterfactual.jsonl",
+    "base_cf_sha256": "e269fbd4fb819591d0bd5932137fcd18037a9ede9e743b7528916ead9f9374bf",
+    "base_rows_shift_after_type_filter": 60,
+    "base_rows_shift_total": 60,
+    "base_rows_shift_used": 60,
+    "base_rows_total": 140,
+    "shift_geometry_filter": "all",
+    "shift_intervention_types_filter": [],
+    "subinv_cf_path": "data_paper_hardened_v2/counterfactual_invariant_sub.jsonl",
+    "subinv_cf_sha256": "d6c501fe600eaf31b2caa29b7e17cab77d019b98af8b50bcb5508a3d70052024",
+    "subinv_rows_invariant_used": 20,
+    "subinv_rows_total": 20
+  },
+  "files": {
+    "counterfactual.jsonl": {
+      "n_lines": 80,
+      "path": "data_paper_hardened_v2/counterfactual_shift_plus_subinv.jsonl",
+      "sha256": "46738b96227b4e2dde18f701bfe384c63a162cd4ba3c6ebd4cf25e8a7f015109"
+    }
+  },
+  "generated_at_utc": "2026-02-22T13:20:37+00:00",
+  "generator": "scripts/build_cf_shift_subinv_dataset.py",
+  "git_commit": "ea24714787ac14d6641f15fc08483a463dfb70b9",
+  "name": "cf_shift_plus_subinv_v1",
+  "quality_checks": {
+    "single_change_block_check": {
+      "enabled": true,
+      "failed_examples": [],
+      "invariant_change_len_a_max": 1,
+      "invariant_change_len_a_mean": 1.0,
+      "invariant_change_len_b_max": 1,
+      "invariant_change_len_b_mean": 1.0,
+      "n_invariant_rows_checked": 20,
+      "n_invariant_rows_failed": 0,
+      "shift_change_len_a_mean": 1.0,
+      "shift_change_len_b_mean": 1.5,
+      "shift_rows_single_block_bad": 20,
+      "shift_rows_single_block_ok": 40,
+      "shift_rows_total": 60,
+      "shift_rows_used": 60
+    }
+  },
+  "suite_counts": {
+    "cf": {
+      "expected_effect_counts": {
+        "invariant": 20,
+        "shift": 60
+      },
+      "intervention_type_counts": {
+        "negation": 20,
+        "quantifier": 20,
+        "role_swap": 20,
+        "substitution_adj_synonym": 5,
+        "substitution_name": 4,
+        "substitution_noun_synonym": 3,
+        "substitution_verb_synonym": 8
+      },
+      "n_items_total": 80
+    }
+  }
+}

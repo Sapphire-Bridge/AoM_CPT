@@ -10,6 +10,7 @@ from typing import List, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_PROVENANCE_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit", "argv_sha256")
+REQUIRED_UNIQUE_PROVENANCE_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit")
 REQUIRED_CROSSCHECK_COLUMNS: tuple[str, ...] = ("dataset_bundle_id", "git_commit", "bootstrap_n", "bootstrap_seed", "ci")
 
 
@@ -61,6 +62,22 @@ def _read_unique_column_value(path: Path, *, column: str, max_rows: int = 1000) 
     if len(values) > 1:
         raise ValueError(f"CSV {str(path)} has multiple values for column {column!r}: {sorted(values)!r}")
     return next(iter(values))
+
+
+def _require_nonempty_column_values(path: Path, *, column: str) -> None:
+    total_rows = 0
+    empty_rows = 0
+    with open(path, "r", encoding="utf-8-sig", newline="") as f:
+        r = csv.DictReader(f)
+        for row in r:
+            total_rows += 1
+            v = "" if row.get(column) is None else str(row.get(column)).strip()
+            if not v:
+                empty_rows += 1
+    if total_rows == 0:
+        raise ValueError(f"CSV {str(path)} has no rows for required column {column!r}")
+    if empty_rows > 0:
+        raise ValueError(f"CSV {str(path)} has {empty_rows} empty values for required column {column!r}")
 
 
 def _run(cmd: List[str], *, dry_run: bool) -> None:
@@ -130,6 +147,8 @@ def main() -> None:
             raise ValueError(msg)
         try:
             for col in REQUIRED_PROVENANCE_COLUMNS:
+                _require_nonempty_column_values(in_csv, column=col)
+            for col in REQUIRED_UNIQUE_PROVENANCE_COLUMNS:
                 _read_unique_column_value(in_csv, column=col)
             bundle_id_by_job[name] = _read_unique_column_value(in_csv, column="dataset_bundle_id")
             git_commit_by_job[name] = _read_unique_column_value(in_csv, column="git_commit")

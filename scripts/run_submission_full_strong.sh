@@ -34,7 +34,13 @@ Outputs:
   <results-dir>/aom_eval.csv
   <results-dir>/cpt_specificity_disamb_only.csv
   <results-dir>/cf_patching.csv
+  <results-dir>/cf_patching_shift_vs_subinv.csv
+  <results-dir>/cf_patching_shift_vs_subinv.manifest.json
+  <results-dir>/CF_SHIFT_SUBINV_RUN_MANIFEST.json
   <results-dir>/coh_patching.csv
+  <results-dir>/coh_patching_qwen.csv
+  <results-dir>/coh_patching_qwen15.csv
+  <results-dir>/coh_patching_qwen3b.csv
   <results-dir>/results_report.md
   <results-dir>/RUN_MANIFEST.json
   <tables-dir>/*.tex (unless --skip-tables)
@@ -266,15 +272,100 @@ run_and_log python aom_cf_patching.py \
   --csv_path "$RESULTS_DIR/cf_patching.csv" \
   "${cmd_common[@]}"
 
+# 3b) CF intervention-span patching (shift vs substitution-invariant controls; E10e).
+cf_subinv_cmd=(bash scripts/run_cf_shift_vs_subinv.sh
+  --dataset-profile full
+  --data-dir "$DATA_DIR"
+  --results-dir "$RESULTS_DIR"
+  --tables-dir "$TABLES_DIR"
+  --device "$CORE_DEVICE"
+  --bootstrap-n "$BOOTSTRAP_N"
+  --bootstrap-seed "$BOOTSTRAP_SEED"
+  --ci "$CI"
+  --sweep-seeds "0"
+)
+if [[ "$LOCAL_FILES_ONLY" -eq 1 ]]; then
+  cf_subinv_cmd+=(--local-files-only)
+fi
+if [[ -n "$REVISION" ]]; then
+  cf_subinv_cmd+=(--revision "$REVISION")
+fi
+if [[ -n "$TOKENIZER_REVISION" ]]; then
+  cf_subinv_cmd+=(--tokenizer-revision "$TOKENIZER_REVISION")
+fi
+run_and_log "${cf_subinv_cmd[@]}"
+
 # 4) COH pseudo-ablation patching (constraint vs irrelevant).
+COH_GPT2_CSV="$RESULTS_DIR/coh_patching_gpt2.csv"
+COH_QWEN05_CSV="$RESULTS_DIR/coh_patching_qwen.csv"
+COH_QWEN15_CSV="$RESULTS_DIR/coh_patching_qwen15.csv"
+COH_QWEN3B_CSV="$RESULTS_DIR/coh_patching_qwen3b.csv"
+
 run_and_log python aom_coh_patching.py \
-  --models gpt2 Qwen/Qwen2.5-0.5B Qwen/Qwen2.5-1.5B Qwen/Qwen2.5-3B \
+  --models gpt2 \
   --device "$CORE_DEVICE" \
   --attn_implementation eager \
   --coh_path "$COH_PATH" \
   --sweep_seeds 0 \
-  --csv_path "$RESULTS_DIR/coh_patching.csv" \
+  --csv_path "$COH_GPT2_CSV" \
   "${cmd_common[@]}"
+
+run_and_log python aom_coh_patching.py \
+  --models Qwen/Qwen2.5-0.5B \
+  --device "$CORE_DEVICE" \
+  --attn_implementation eager \
+  --coh_path "$COH_PATH" \
+  --sweep_seeds 0 \
+  --csv_path "$COH_QWEN05_CSV" \
+  "${cmd_common[@]}"
+
+run_and_log python aom_coh_patching.py \
+  --models Qwen/Qwen2.5-1.5B \
+  --device "$CORE_DEVICE" \
+  --attn_implementation eager \
+  --coh_path "$COH_PATH" \
+  --sweep_seeds 0 \
+  --csv_path "$COH_QWEN15_CSV" \
+  "${cmd_common[@]}"
+
+run_and_log python aom_coh_patching.py \
+  --models Qwen/Qwen2.5-3B \
+  --device "$CORE_DEVICE" \
+  --attn_implementation eager \
+  --coh_path "$COH_PATH" \
+  --sweep_seeds 0 \
+  --csv_path "$COH_QWEN3B_CSV" \
+  "${cmd_common[@]}"
+
+# Merge model-specific COH patching artifacts into the canonical combined CSV.
+python - <<'PY' "$RESULTS_DIR/coh_patching.csv" "$COH_GPT2_CSV" "$COH_QWEN05_CSV" "$COH_QWEN15_CSV" "$COH_QWEN3B_CSV"
+import csv
+import sys
+from pathlib import Path
+
+out_path = Path(sys.argv[1])
+in_paths = [Path(p) for p in sys.argv[2:]]
+
+rows: list[dict[str, str]] = []
+fieldnames: set[str] = set()
+for p in in_paths:
+    with open(p, "r", encoding="utf-8-sig", newline="") as f:
+        r = csv.DictReader(f)
+        for row in r:
+            # Normalize to str so we can safely write with DictWriter.
+            norm = {str(k): ("" if v is None else str(v)) for k, v in row.items()}
+            rows.append(norm)
+            fieldnames.update(norm.keys())
+
+out_path.parent.mkdir(parents=True, exist_ok=True)
+tmp = out_path.with_name(f".{out_path.name}.tmp")
+with open(tmp, "w", encoding="utf-8", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=sorted(fieldnames))
+    w.writeheader()
+    for row in rows:
+        w.writerow(row)
+tmp.replace(out_path)
+PY
 
 run_and_log python scripts/report_results.py \
   --results_dir "$RESULTS_DIR" \
