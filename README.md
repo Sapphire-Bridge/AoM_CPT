@@ -126,6 +126,12 @@ Clean-room / “one command” reproducibility check (exports a clean repo snaps
 bash scripts/final_repro_cleanroom.sh
 ```
 
+Release-ready 8h gate (exact copy-paste command, from repo root):
+
+```bash
+TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=0 ALLOW_DIRTY=0 RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz bash scripts/release_gate_fast_8h.sh
+```
+
 ## Paper-mode runner (smoke / M1Max / A100)
 
 This repo includes a convenience runner that generates a hardened “paper dataset” (with CF shams + COH controls) and runs reproducible evaluation presets:
