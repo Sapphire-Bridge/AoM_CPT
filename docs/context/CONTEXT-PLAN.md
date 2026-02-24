@@ -7,6 +7,16 @@ Scope: Open-source research companion repo (`AoM_CPT`)
 
 Produce maintainable context files under `docs/context/` that let a new engineer or LLM make safe, provenance-aware changes without reverse-engineering the entire codebase.
 
+## Required read routing (for humans and agents)
+
+Read order:
+1. `docs/context/CONTEXT-INDEX.md`
+2. `docs/context/CONTEXT-PLAN.md`
+3. Task-specific files from `docs/context/CONTEXT-INDEX.md`
+
+Mandatory rule:
+- If a task includes patching, intervention, counterfactual/coherence patching, or mechanistic analysis, read `docs/context/CONTEXT-003-mechanistic-patching.md` before editing code.
+
 ## Non-negotiables
 
 - No invention: every concrete claim must be traceable to code or checked-in artifacts.
@@ -43,11 +53,12 @@ Original partition labels were backend/frontend-heavy. Adapted partitions for th
 ## Proposed doc set
 
 Already generated in this pass:
+- `docs/context/CONTEXT-INDEX.md`
 - `docs/context/SCAN-000.md`
 - `docs/context/CONTEXT-PLAN.md`
 - `docs/context/CONTEXT-001-core-runtime-provenance.md`
 - `docs/context/CONTEXT-002-datasets-metrics-eval.md`
-- `docs/context/CONTEXT-003-patching-mechanistic.md`
+- `docs/context/CONTEXT-003-mechanistic-patching.md`
 - `docs/context/CONTEXT-004-repro-packaging-verification.md`
 - `docs/context/CONTEXT-005-benchmark-perf-harness.md`
 

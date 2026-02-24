@@ -7,6 +7,61 @@ Research-prototype evaluator for AoM competences and CPT-style causal tests:
 - AoM-COH: discourse-level coherence / constraint tracking
 - CPT (optional): context-swap activation patching on internal states
 
+## Paper
+
+The repository companion manuscript is:
+
+- **The Appearance of Meaning: Context-Dependence and Semantic Competence in Transformer Architectures**
+- Manuscript: [`AoM_JoLLLI/AoM_paper.md`](AoM_JoLLLI/AoM_paper.md)
+- Abstract: in the manuscript section `Abstract (≈200 words)` near the top of the file
+- Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
+
+## One-command reproduction (canonical paper artifacts)
+
+Regenerate the paper-cited artifacts (results + manifests + strict tables):
+
+```bash
+bash scripts/run_submission_full_strong.sh
+```
+
+For a clean-room verification pass from a fresh exported commit:
+
+```bash
+bash scripts/final_repro_cleanroom.sh
+```
+
+## Environment (reference release runtime)
+
+Reference runtime captured in `results_submission_full/RUN_MANIFEST.json`:
+
+- Python `3.12.7`
+- `torch==2.5.1`
+- `transformers==4.57.3`
+- `tokenizers==0.22.1`
+- `numpy==1.26.4`
+
+Environment setup:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.lock.txt
+```
+
+If you prefer the slimmer top-level pin set instead of the full lock snapshot:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Canonical dataset manifest
+
+Use the hardened paper dataset bundle and manifest:
+
+- Dataset directory: [`data_paper_hardened_v2/`](data_paper_hardened_v2/)
+- Manifest: [`data_paper_hardened_v2/DATASET_MANIFEST.json`](data_paper_hardened_v2/DATASET_MANIFEST.json)
+- Canonical bundle id: `fa2f39387339d26abd45912e31eede3b5f88aac4ed7bff20660262fcb46787ff`
+
 ## Quickstart
 
 Run a small offline smoke test (random small GPT-2 config; no downloads):
@@ -165,3 +220,7 @@ Generate LaTeX tables from `results/` artifacts:
 ```bash
 make tables
 ```
+
+## License
+
+MIT. See [`LICENSE`](LICENSE).

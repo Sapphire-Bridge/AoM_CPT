@@ -12,6 +12,7 @@ ALLOW_DIRTY="${ALLOW_DIRTY:-0}"
 RESULTS_DIR="${RESULTS_DIR:-results_submission_full}"
 TABLES_DIR="${TABLES_DIR:-tables_submission_full}"
 ARCHIVE_NAME="${ARCHIVE_NAME:-aom_replication_bundle_fast8h.tar.gz}"
+REPORT_MAX_ROWS_PER_CSV="${REPORT_MAX_ROWS_PER_CSV:-5000}"
 
 START_TS="$(date +%s)"
 
@@ -189,6 +190,69 @@ run_step "Pytest (evidence contract suite)" pytest -q tests/test_evidence_contra
 
 run_step "Strict table regeneration" env MAKE_TABLES_STRICT=1 make tables "RESULTS_DIR=$RESULTS_DIR" "TABLES_OUT_DIR=$TABLES_DIR"
 
+# Ensure release metadata files exist even when results were assembled incrementally.
+if [[ ! -f "$RESULTS_DIR/results_report.md" ]]; then
+  run_step "Generate results_report.md (missing)" \
+    python3 scripts/report_results.py \
+    --results_dir "$RESULTS_DIR" \
+    --out_path "$RESULTS_DIR/results_report.md" \
+    --max_rows_per_csv "$REPORT_MAX_ROWS_PER_CSV"
+fi
+
+if [[ ! -f "$RESULTS_DIR/RUN_MANIFEST.json" ]]; then
+  run_step "Generate RUN_MANIFEST.json (missing)" \
+    python3 -c '
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+from aom.repro import collect_versions
+
+results_dir = Path(sys.argv[1]).resolve()
+repo_root = Path(".").resolve()
+head_sha = sys.argv[2]
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+def rel_under_root(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(repo_root))
+    except Exception:
+        return str(path)
+
+commands = []
+for cand in ("commands.log", "commands_cf_shift_vs_subinv.log"):
+    p = results_dir / cand
+    if p.exists():
+        commands.extend([ln.strip() for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()])
+
+req_txt = repo_root / "requirements.txt"
+req_lock = repo_root / "requirements.lock.txt"
+dataset_manifest = repo_root / "data_paper_hardened_v2" / "DATASET_MANIFEST.json"
+
+manifest = {
+    "mode": "submission_full_strong",
+    "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+    "git_commit": head_sha,
+    "results_dir": rel_under_root(results_dir),
+    "dataset_manifest_path": rel_under_root(dataset_manifest),
+    "runtime_versions": collect_versions(),
+    "requirements_txt_sha256": "" if not req_txt.exists() else sha256_file(req_txt),
+    "requirements_lock_sha256": "" if not req_lock.exists() else sha256_file(req_lock),
+    "commands": commands,
+}
+(results_dir / "RUN_MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+print("[ok] wrote", results_dir / "RUN_MANIFEST.json")
+' "$RESULTS_DIR" "$HEAD_SHA"
+fi
+
 if [[ "$STRICT_SHA" == "1" ]]; then
   run_step "STRICT_SHA check (results CSV git_commit == HEAD)" \
     python3 -c '
@@ -212,13 +276,16 @@ print(f"[ok] STRICT_SHA matched head={head}")
 ' "$HEAD_SHA" "$RESULTS_DIR"
 fi
 
+mkdir -p "$(dirname "$ARCHIVE_NAME")"
+
 run_step "Build publication bundle from frozen artifacts" \
   bash scripts/build_replication_bundle.sh \
   --mode submission_full_strong \
   --results-dir "$RESULTS_DIR" \
   --tables-dir "$TABLES_DIR" \
   --archive "$ARCHIVE_NAME" \
-  --skip-run
+  --skip-run \
+  --skip-tables
 
 ARCHIVE_SHA="${ARCHIVE_NAME}.sha256"
 [[ -f "$ARCHIVE_NAME" ]] || die "Archive not found: $ARCHIVE_NAME"

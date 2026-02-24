@@ -10,4 +10,8 @@ results_quickcheck/
 *.tar.gz
 *.sha256
 .claude/
-.claude/
+tmp/
+results/
+submission/
+RELEASE_BRANCH_HARDENING_CHECKLIST.md
+RELEASE_GAP_ANALYSIS.md

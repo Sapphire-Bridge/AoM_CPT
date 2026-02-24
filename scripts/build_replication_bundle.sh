@@ -126,6 +126,7 @@ esac
 
 RESULTS_DIR_ABS="$(cd "$(dirname "$RESULTS_DIR")" && pwd)/$(basename "$RESULTS_DIR")"
 TABLES_DIR_ABS="$(cd "$(dirname "$TABLES_DIR")" && pwd)/$(basename "$TABLES_DIR")"
+mkdir -p "$(dirname "$ARCHIVE")"
 ARCHIVE_ABS="$(cd "$(dirname "$ARCHIVE")" && pwd)/$(basename "$ARCHIVE")"
 
 if [[ "$SKIP_RUN" -eq 0 ]]; then
@@ -270,14 +271,33 @@ if [[ -n "$tables_rel" ]]; then
 fi
 
 mkdir -p "$(dirname "$ARCHIVE_ABS")"
-echo "[run] tar -czf $ARCHIVE_ABS ..."
-tar \
-  --exclude="*/__pycache__/*" \
-  --exclude="*.pyc" \
-  --exclude=".DS_Store" \
-  -czf "$ARCHIVE_ABS" \
-  -C "$ROOT" \
-  "${bundle_paths[@]}"
+echo "[run] build archive $ARCHIVE_ABS (python tarfile)"
+python3 - "$ROOT" "$ARCHIVE_ABS" "${bundle_paths[@]}" <<'PY'
+import os
+import sys
+import tarfile
+from pathlib import Path
+
+root = Path(sys.argv[1]).resolve()
+archive = Path(sys.argv[2]).resolve()
+paths = sys.argv[3:]
+
+def include_filter(info: tarfile.TarInfo) -> tarfile.TarInfo | None:
+    parts = info.name.split("/")
+    base = os.path.basename(info.name)
+    if "__pycache__" in parts:
+        return None
+    if base.endswith(".pyc") or base == ".DS_Store":
+        return None
+    return info
+
+with tarfile.open(archive, "w:gz", format=tarfile.PAX_FORMAT) as tar:
+    for rel in paths:
+        src = root / rel
+        if not src.exists():
+            raise SystemExit(f"[error] Missing required bundle path: {src}")
+        tar.add(src, arcname=rel, recursive=True, filter=include_filter)
+PY
 
 checksum_path="${ARCHIVE_ABS}.sha256"
 if command -v shasum >/dev/null 2>&1; then

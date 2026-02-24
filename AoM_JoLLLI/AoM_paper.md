@@ -1,20 +1,16 @@
 The Appearance of Meaning: Context-Dependence and Semantic Competence in Transformer Architectures
-Author: [Felix Borck / Goethe University / felix.borck@gmail.com]Acknowledgements / Funding: self funded
+Author: Felix Borck (Goethe University; felix.borck@gmail.com)  
 ESSLLI note: This manuscript develops and extends an ESSLLI 2025 Student Session presentation. The operational AoM evaluation framework, the CPT-style activation-patching protocol, and the cross-family empirical results reported here (GPT‑2 and Qwen2.5) are new to this submission (i.e., not previously published).
-Keywords: large language models; transformers; context dependence; semantic competence; appearance of meaning; causal interpretability; activation patching; Kaplan; Braun; Wittgenstein; Kant
+Keywords: transformer language models; context dependence; semantic competence; causal interpretability; activation patching; philosophy of language
 
 Evidence tags (for auditability): bracketed IDs like [E3], [R0], [C2] refer to rows in `AoM_evidence_contract.md`.
 
 Abstract (≈200 words)
-Large language models (LLMs) produce text that human interlocutors routinely treat as meaningful and context-sensitive. This paper does not address whether LLMs possess meaning proper. It isolates an empirical target: appearance of meaning (AoM), operationalized as three measurable competences: (i) context-sensitive disambiguation, (ii) sensitivity to meaning-altering vs. meaning-preserving interventions, and (iii) discourse-level constraint coherence. We then state a mechanistic hypothesis, the Context-Primacy Thesis (CPT): in transformer LMs, causal control of AoM-relevant preference margins is exerted by contextualized token-in-context states at specific depths, in the sense that intervening on those states (with weights fixed) produces donor-directed changes beyond sham baselines.
-The framework supports sham counterfactual (CF) items, relevance-controlled coherence (COH) ablations, and CPT sham patching. [C6, C7, C3]
-We evaluate GPT‑2 (124M) and Qwen2.5-{0.5B, 1.5B, 3B} using log-probability scoring and report suite metrics with bootstrap confidence intervals. [E2a, E1, C8]
-AoM composite scores range from 0.8489 (Qwen/Qwen2.5-0.5B) to 0.9026 (Qwen/Qwen2.5-3B). [E2a, E1]
-Context-swap activation patching on disambiguation minimal pairs yields donor-directed effects with sham baselines near zero (mean max effect: 0.3946 [0.3010, 0.5010] for GPT‑2; 1.6511 [1.2414, 2.1279], 1.8066 [1.4607, 2.2301], and 1.6861 [1.3043, 2.1170] across Qwen2.5-0.5B/1.5B/3B, respectively). [E3, E4a]
-Intervention-span patching on a relevance-controlled counterfactual patching set (shift N=60 vs substitution-invariant N=20) yields shift > invariant separation for GPT‑2, Qwen2.5‑0.5B, and Qwen2.5‑3B (d = 0.68–1.18), but not for Qwen2.5‑1.5B (d ≈ 0), indicating heterogeneous relevance control across checkpoints under this protocol. [E10e, C10]
-Constraint-sentence pseudo-ablation patching on the coherence suite yields a robust constraint–irrelevant degradation asymmetry across all four models (Cohen's d ranging from 1.27 to 1.53), providing causal evidence for coherence sensitivity under this intervention regime. [E10c, E10d, C9]
-To probe the spatial structure of causal control, we test a supplementary Spatial Distribution Hypothesis (SDH) via a fixed-layer target-specificity protocol (depth_frac=0.25; position_window=8) across eight models (adding Qwen3‑4B and Llama‑3.x checkpoints). [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-Specificity is heterogeneous: only Qwen2.5‑3B shows a robust positive target–control delta, while most models show deltas near zero or negative. This constrains token-atomic interpretations of causal control and is consistent with a local, relational integration picture within the tested window. [E5a, E5b, E5c, E5d, E5e, E5f]
+Large language models routinely elicit interpretations of meaning and context-sensitivity from competent speakers. This paper does not argue that such models possess meaning proper. Instead, it presents a protocol-and-constraint framework that isolates an empirical explanandum—appearance of meaning (AoM)—understood as a competence profile exhibited under controlled contextual variation: (i) context-sensitive disambiguation, (ii) selective sensitivity to meaning-altering edits over meaning-preserving shams, and (iii) discourse-level constraint tracking beyond length-matched controls.
+
+The central question is mechanistic and philosophically diagnostic: in transformer language models, what internal variables causally control these meaning-like preference patterns when weights are held fixed? We test a Context-Primacy Thesis (CPT): that donor-directed changes in AoM-relevant preference margins can be induced by intervening on contextualized token-in-context states at characteristic depths, beyond sham baselines. Across GPT‑2 and Qwen2.5 checkpoints, activation patching yields structured, depth-localized donor-directed effects with near-zero sham controls.
+
+A fixed-depth target-specificity stress test further indicates that, within a local positional neighborhood, causal leverage is often not uniquely localized to the ambiguous token position—constraining token-privileged implementation glosses that treat context as merely a parameter applied to stable lexical carriers. The result is disciplined mechanistic constraint-setting for philosophical interpretations: an empirically anchored account of context-dependence in transformer computation that informs, without settling, disputes about semantic competence, reference, and normativity.
 
 1. Introduction
 Transformer LLMs produce language that competent speakers often judge as coherent and context-responsive. This behavioral profile motivates a question that does not require settling metaphysical debates: what mechanisms explain systematic meaning-like behavior under controlled contextual variation?
@@ -23,321 +19,227 @@ Appearance of meaning is a term of art. AoM is a competence profile that (i) tra
 1. Context-sensitive disambiguation (AoM-DISAMB): systematic selection among ambiguous senses conditioned on surrounding cues.
 2. Minimal-pair intervention sensitivity (AoM-CF): systematic output shifts under meaning-altering interventions, and relative invariance under meaning-preserving shams.
 3. Discourse-level coherence (AoM-COH): constraint tracking across extended contexts, with stronger degradation under relevant ablations than under length-matched irrelevant ablations.
+
+In the AoM composite, the CF component is scored on shift items (directional sensitivity), while sham/invariant separation is treated as an internal-validity control reported alongside the main CF metric (§2; §5.3).
 All three are computed from log-probability comparisons over labeled continuations. AoM targets controlled sensitivity patterns, not free-form generation quality. This corresponds to what Mahowald et al. (2024) term formal linguistic competence—text-internal statistical mastery of language structure—while explicitly bracketing functional linguistic competence involving world knowledge, reasoning, and grounding.
+By meaning proper, we mean reference-involving, normatively governed semantic content (truth-conditional or otherwise public-rule constrained); AoM deliberately does not target these properties.
 1.2. Mechanistic hypothesis: Context-Primacy Thesis (CPT)
 Transformers compute contextualized states at every position. That fact alone does not decide between semantic theories. This paper states a causal hypothesis about proximate controllers:
 Context-Primacy Thesis (CPT): In transformer language models, causal control of AoM-relevant preference margins is exerted by contextualized token-in-context states at specific depths, in the sense that intervening on those states (with weights fixed) produces donor-directed changes beyond sham baselines.
-CPT is an architectural claim about causal control under intervention. It is not a claim that LLMs have meaning proper.^1
+CPT is an architectural claim about causal control under intervention. It is not a claim that LLMs have meaning proper.[^1]
+Epistemically, this is primarily a protocol-and-constraint contribution. It isolates an operational explanandum (AoM), specifies a sham-controlled intervention framework (CPT-style patching) for testing which internal variables control AoM-relevant preference margins with weights fixed, and reports mechanistic constraints (including a target-specificity stress test) that broader accounts must accommodate. The suites are intentionally small and templated to maximize identifiability and internal validity of the causal inferences, not to deliver population-level estimates of LLM semantic competence under naturalistic variation.
 1.3. Contributions
-1. Operationalization: an AoM competence profile (DISAMB/CF/COH) with explicit scoring and uncertainty.
-2. Mechanistic thesis: CPT stated as a causal-control claim testable by intervention.
-3. Method: controlled evaluation with shams and relevance-controlled ablations; deterministic log-probability scoring.
-4. Evidence: AoM and DISAMB/CF patching results for GPT‑2 and Qwen2.5, plus COH pseudo-ablation patching across all four models; and an SDH target-specificity stress test across eight models.
+1. Explanandum (AoM): a disciplined operational target—appearance of meaning—defined as a competence profile under controlled contextual variation (DISAMB/CF/COH), explicitly bracketing meaning proper.
+2. Causal mechanism claim (CPT): a falsifiable interventionist thesis that AoM-relevant preference margins are causally controlled by contextualized token-in-context states at characteristic depths, supported by sham-controlled activation patching and demonstrated across GPT‑2 and Qwen2.5 checkpoints.
+3. Constraint on simplistic locality (SDH stress test): a fixed-depth target-specificity analysis that, within a local window, often fails to show unique causal privilege for the ambiguous token position—yielding suite‑conditional mechanistic constraints on token‑privileged implementation glosses (comparative dominance of the ambiguous token position within the tested window at fixed depth), without making a global claim about token‑atomic exclusivity.
+4. Methodological transparency: sham controls, relevance-controlled ablations, deterministic log-probability evaluation, and an audit trail (evidence tags and provenance) provided in appendices/supplementary artifacts.
 1.4. Philosophical payoff and discipline
 The paper is methodologically conservative. It treats AoM as an explanandum and asks which causal mechanisms in transformer computation control it. If AoM is granted as robust behavior, then dismissals that classify it as “mere surface” must identify an additional property, argue that it is competence-relevant, and state detectable signatures. This paper supplies an empirical anchor that makes those demands concrete.
-The interpretive contrast is between a stability ideal—stable, context-independent meaning carriers plus context as parameter—and an architectural reality in which representations are contextualized throughout computation. The question here is mechanistic: what variables causally control AoM behavior in these systems?
-^1 Footnote 1. Following Kant’s phenomena/noumena discipline (KrV A51/B75), we treat AoM as an empirical explanandum and bracket claims about meaning proper. The target is conditions for the appearance of competence, not metaphysical semantics.
-2. Formal targets: AoM, CPT, and SDH
-2.1. Preliminaries: scoring labeled continuations
-Let (M) be a causal language model defining a conditional distribution over token sequences. For a prompt (x) and a candidate continuation (y=(y_1,\dots,y_T)), define the raw log-probability score:
-[S_M(x,y) ;=; \sum_{t=1}^{T} \log P_M\!\left(y_t \mid x \oplus y_{<t}\right).]
-Define the length-normalized score:
-[\overline{S}_M(x,y) ;=; \frac{1}{T} S_M(x,y).]
-Scoring used in reported runs. Reported results use length-normalized scoring (the evaluation flag no_length_norm=False), i.e., label scores are based on (\overline{S}_M) unless stated otherwise.
-When a label corresponds to multiple candidate continuations (Y={y^{(1)},\dots,y^{(k)}}), label scores are aggregated via log-mean-exp:
-[s(Y) ;=; \log\left(\frac{1}{k}\sum_{j=1}^{k} e^{\overline{S}_M(x,y^{(j)})}\right).]
-In the reported AoM suites, labels are single-candidate (so log-mean-exp reduces to the single candidate’s score). The evaluator supports multi-candidate labels.
-2.2. AoM-DISAMB: context-sensitive disambiguation
-A disambiguation item (i) consists of an ambiguous word type (w_i), two contexts (x_i^{(A)}), (x_i^{(B)}), and sense-diagnostic continuations (y_i^{(A)}), (y_i^{(B)}).
-Define the model’s predicted sense label in context (x) by:
-[\widehat{s}_M(x) ;=; \arg\max_{s \in \{A,B\}} \overline{S}_M(x, y_i^{(s)}).]
-DISAMB accuracy is computed over both sides of each minimal pair.
-2.3. AoM-CF: minimal-pair intervention sensitivity
-A counterfactual item (i) consists of a base prompt (x_i), an intervention prompt (x_i'), and two labeled continuations (a_i), (b_i), with an annotation indicating whether the intervention should flip the model’s preference (shift item) or preserve it (invariant/sham item).
-Define the preference margin:
-[\Delta_M(x_i) ;=; \overline{S}_M(x_i,a_i) - \overline{S}_M(x_i,b_i), \qquad\Delta_M(x_i') ;=; \overline{S}_M(x_i',a_i) - \overline{S}_M(x_i',b_i).]
-Define the predicted preferred label as (\operatorname{pref}(x)=a) iff (\Delta_M(x_i) > 0), else (b).
-Primary CF metric (reported): shift-direction accuracy computed on shift items only (N=60 in the canonical `aom_eval.csv` artifact). A shift item is correct iff (\operatorname{pref}(x_i)\neq \operatorname{pref}(x_i')). Invariant items (\operatorname{pref}(x_i)= \operatorname{pref}(x_i')) and graded items are reported separately via split metrics and perturbation-magnitude fields (N=60 invariant; N=20 graded).
-We also report mean absolute preference changes (|\Delta_M(x_i')-\Delta_M(x_i)|) separately for shift vs invariant items to verify that shams induce smaller perturbations.
-2.4. AoM-COH: discourse-level coherence and constraint tracking
-A coherence item (i) consists of a context (x_i), a valid continuation (v_i), an invalid continuation (u_i), and constraint metadata.
-The coherence decision uses mean-per-token scoring:
-[\text{COH-ACC}_i(M) ;=;\mathbf{1}\!\left[\overline{S}_M(x_i,v_i) > \overline{S}_M(x_i,u_i)\right].]
-Items are grouped into three matched conditions: main, ablate-relevant, and ablate-irrelevant (length-matched control). The ablations test whether degradation tracks informational role rather than context length reduction alone.
-2.5. AoM composite
-For compact reporting:
-[\text{AoM}(M) ;=; \frac{1}{3}\left(\text{DISAMB}(M) + \text{CF}(M) + \text{COH}(M)\right).]
-This composite is instrumental. It is not a definition of meaning.
-2.6. CPT stated, predicted, and falsifiable
-Let (h_{M,\ell,p}(x)) denote the hidden state vector at transformer block (\ell) and token position (p) when processing prompt (x). CPT predicts that interventions that replace token-in-context states at meaning-relevant locations—holding weights fixed—should change meaning-relevant output preferences.
-We test CPT using context-swap activation patching on disambiguation pairs by patching the receiver’s hidden state at the ambiguous target span from a donor run, sweeping (\ell) across layers.
-Supplementary hypothesis: spatial distribution (SDH)
-In addition to CPT, we test a hypothesis about the spatial structure of causal control at a fixed depth:
-SDH (Spatial Distribution Hypothesis): At a consolidation depth, disambiguation-relevant causal control is distributed across a local positional neighborhood around the ambiguous span, such that patching nearby off-target positions yields non-trivial donor-directed effects.
-SDH is independent of CPT. CPT can be true with SDH false (token-local control). CPT can be true with SDH true (distributed local control). The target-specificity protocol in §4.7 and results in §5.7 test SDH directly.
+The interpretive contrast is between token‑privileged implementation glosses (stable lexical carriers with context as a parameter applied at the carrier site) and relational glosses (context integrated across positions in computation), in an architecture whose internal variables are contextualized throughout. The question here is mechanistic: what variables causally control AoM behavior in these systems?
+Here **token‑privileged** denotes a *comparative asymmetry* claim (target-span interventions systematically dominate nearby controls), whereas **token‑atomic** denotes a stronger *exclusivity* gloss (the target position as the uniquely dominant locus of control). **SDH directly stress-tests token‑privilege** at a fixed depth within a local window; it bears on token‑atomic exclusivity only insofar as exclusivity readings predict such comparative dominance.
+[^1]: Following Kant’s phenomena/noumena discipline (KrV A51/B75), we treat AoM as an empirical explanandum and bracket claims about meaning proper. The target is conditions for the appearance of competence, not metaphysical semantics.
+2. Formal targets
+We evaluate three components of appearance of meaning (AoM) using deterministic log-probability comparisons over labeled continuations. DISAMB measures context-sensitive sense selection on minimal pairs. CF measures selective sensitivity to meaning-altering edits relative to meaning-preserving shams via preference flips and preference-margin changes. COH measures discourse-level constraint tracking, including relevance-controlled ablations that match context length while varying informational role.
+For CF item i with base prompt x_i, intervention prompt x_i', and labeled continuations (a_i, b_i), define preference margins:
+Δ_M(x_i) = S̄_M(x_i, a_i) − S̄_M(x_i, b_i), and
+Δ_M(x_i') = S̄_M(x_i', a_i) − S̄_M(x_i', b_i).
+For COH item i with context x_i, valid continuation v_i, and invalid continuation u_i, define the coherence decision rule:
+COH-ACC_i(M) = 1[S̄_M(x_i, v_i) > S̄_M(x_i, u_i)].
+Appendix A provides additional scoring details, including log-mean-exp label aggregation and bootstrap resampling specifications.
+2.1. CPT stated, predicted, and falsifiable
+Let h_{M,ℓ,p}(x) denote the hidden state vector at transformer block ℓ and token position p when processing prompt x. CPT predicts that interventions that replace token-in-context states at meaning-relevant locations—holding weights fixed—should change meaning-relevant output preferences.
+With label score s(·), define donor-label margin:
+margin(y) = s(y) − max_{y' ≠ y} s(y').
+For donor-directed context-swap patching at layer ℓ, define:
+effect_ℓ = margin_patched(y_donor) − margin_base(y_donor).
+Sham patching uses the same patch site and procedure but replaces receiver states with receiver states (no-op), giving the baseline for CPT effect comparisons.
+We test CPT using context-swap activation patching on disambiguation pairs by patching the receiver’s hidden state at the ambiguous target span from a donor run, sweeping ℓ across layers.
+Target-specificity stress test (SDH)
+In addition to CPT, we run a fixed-depth target-specificity stress test about the spatial structure of causal control:
+SDH: target-specificity stress test (local non-exclusivity check). At a consolidation depth, disambiguation-relevant causal control may be distributed across a local positional neighborhood around the ambiguous span, such that patching nearby off-target positions yields non-trivial donor-directed effects.
+SDH is used here as a stress test on token‑privileged implementation glosses of CPT, not as a third co‑equal thesis.
+The target-specificity protocol in §4.5 and results in §5.7 test this stress condition directly.  
 Testable predictions (within this operational program)
-* P1 (Causal control via patching; CPT). Patching a receiver’s target-span state with the donor’s corresponding state shifts the receiver’s preference toward the donor’s sense label, beyond sham/no-op baselines.
-* P2 (Layer localization; CPT). Patching-induced effects show a reproducible depth profile with early-to-mid peaks rather than random diffuse changes.
-* P3 (Informational role over length; AoM-COH control). Removing relevant constraints degrades coherence more than removing length-matched irrelevant context.
-* P4 (Locality within window; SDH stress test). At fixed depth (\ell^*), off-target patches within the local window produce effects that are often comparable to target patches, and control strategy materially affects measured specificity.
-Falsifiers (in the current experimental regime)
-* F1 (Causal null; CPT). Patching effects indistinguishable from sham/no-op controls across layers.
-* F2 (No localization; CPT). No stable layerwise structure; effects are non-replicable.
-* F3 (Length dominance; AoM-COH control failure). Coherence degradation tracks truncation length more than relevance-controlled ablations.
-* F4 (Global diffusion; SDH). If patches far outside the tested position window yield effects comparable to within-window patches, SDH (as a local distribution claim) is falsified. (Outside-window effects are not tested in this submission.)
-2.7. What AoM, CPT, and SDH are not
-* AoM is not defined as truth-tracking, grounding, normativity, or consciousness.
-* CPT does not claim lexical information is absent. It is a claim about proximate causal control under intervention for these operational targets.
-* SDH is not a claim of global positional symmetry. It is a local-window claim tied to an explicit protocol (§4.7).
-* None of these settles reference, grounding, or normativity without additional detectable competence signatures.
 
-3. Related work (minimal load-bearing set)
-3.1. Context sensitivity: formal semantics and contextualized representations
-Formal semantics provides explicit models of how context parameters and evolving discourse states affect interpretation (Kaplan 1989; Heim & Kratzer 1998; Groenendijk & Stokhof 1991; Veltman 1996). In transformer LMs, token representations vary strongly across contexts; embedding geometry is anisotropic and complicates naive similarity interpretations (Ethayarajh 2019). These are correlational observations; they motivate causal tests of whether and how context-sensitive information is used in generation.
-3.2. Probing versus causal interpretability
-Probing can show information is decodable, not that it is used (Belinkov & Glass 2019; Rogers et al. 2020). Causal mediation analysis applies counterfactual interventions on network-internal components to distinguish decodable from causally active information (Vig et al. 2020). Interchange interventions formalize this as counterfactual substitution on aligned internal variables across inputs, enabling causal abstraction tests (Geiger et al. 2021). The CPT patching protocol in §4.6 is an interchange intervention specialized to token-in-context hidden states and AoM preference margins; it does not perform a full mediation decomposition. Mechanistic interpretability work develops patching-style interventions and circuit frameworks (Elhage et al. 2021; Wang et al. 2023). The transformer-circuits view treats the residual stream as a shared communication channel, with attention heads iteratively writing context-conditioned information to token representations. Related work also shows that intervening on intermediate representations can redirect downstream generation in predictable ways (Li et al. 2021; Lindsey et al. 2025). Editing approaches intervene on internal associations (Meng et al. 2022). To connect causal effects to the “surface-statistics” objection, we report keyword baselines as a diagnostic. A stratified analysis in §5.2 evaluates model DISAMB accuracy on pairs where the keyword baseline fails, providing a direct test of whether performance depends on cue availability.
-3.3. Surface-statistics objections, grounding, and operational methodology
-A prominent worry is that LLM success reflects surface form statistics rather than semantic competence (Bender & Koller 2020; Bender et al. 2021). Lappin (2024) evaluates LLM strengths and weaknesses from a logic-and-semantics perspective, arguing that current models exhibit substantial but incomplete linguistic competence; this assessment within the present journal motivates finer-grained causal investigation of specific competence components. Relatedly, the vector grounding problem challenges inferences from vector representations to reference or world-involving content (Mollo & Milliere 2023). In contrast, inferential and functional accounts argue that substantial aspects of meaning can be realized without direct reference (Piantadosi & Hill 2022) and that current debates are continuous with classic disputes in philosophy of language and mind (Milliere & Buckner 2024a, 2024b). When metaphysical disputes stall, Turing-style methodology recommends specifying testable competence profiles (Turing 1950). Recent work documents strong LLM performance on complex evaluations (Katz et al. 2024; Jannai et al. 2023). This paper targets context-sensitivity signatures that bear directly on these debates, rather than general benchmark ranking.
-3.4. Philosophical frameworks: Kaplan, Braun, Wittgenstein, Kant
-Kaplan (1989) formalizes character/content using stable meaning rules plus contextual parameters; this is a semantic framework, not an implementation claim. Its decomposition nevertheless suggests a natural empirical question for mechanistic analysis: whether models route and integrate context variables in a stable, expression-linked manner. Braun (1995) critiques overly extensional or insufficiently structured character theories and emphasizes relational structure. Wittgenstein (1953) and Cavell (1979) stress use and normativity. Kant’s phenomena/noumena distinction supports methodological discipline: empirical competence profiles can be studied without treating them as decisive about meaning “in itself.”
+**P1 (Causal control via patching; CPT).** Patching a receiver’s target-span state with the donor’s corresponding state shifts the receiver’s preference toward the donor’s sense label, beyond sham/no-op baselines.
+
+**P2 (Layer localization; CPT).** Patching-induced effects show a reproducible depth profile with early-to-mid peaks rather than random diffuse changes.
+
+**P3 (Informational role over length; AoM-COH control).** Removing relevant constraints degrades coherence more than removing length-matched irrelevant context.
+
+**P4 (Locality within window; SDH stress test).** At fixed depth (ℓ*), off-target patches within the local window produce effects that are often comparable to target patches, and control strategy materially affects measured specificity.  
+Falsifiers (in the current experimental regime)
+
+**F1 (Causal null; CPT).** Patching effects indistinguishable from sham/no-op controls across layers.
+
+**F2 (No localization; CPT).** No stable layerwise structure; effects are non-replicable.
+
+**F3 (Length dominance; AoM-COH control failure).** Coherence degradation tracks truncation length more than relevance-controlled ablations.
+
+**F4 (Global diffusion; SDH).** If patches far outside the tested position window yield effects comparable to within-window patches, SDH (as a local distribution claim) is falsified. Outside-window controls are not part of the present submission, so this falsifier remains prospective.
+2.2. What AoM, CPT, and SDH are not
+AoM is not defined as truth-tracking, grounding, normativity, or consciousness. CPT does not claim lexical information is absent; it is a claim about proximate causal control under intervention for these operational targets. SDH is not a claim of global positional symmetry but a local-window claim tied to an explicit protocol (§4.5). None of these settles reference, grounding, or normativity without additional detectable competence signatures.
+
+3. Related work
+3.1. Context sensitivity and formal frameworks
+Formal semantics provides explicit context-sensitive models of interpretation (Kaplan 1989; Heim & Kratzer 1998), while transformer representations are strongly context-dependent in practice (Ethayarajh 2019). The present question is mechanistic: whether this contextual dependence is causally used in model behavior.
+3.2. From probing to causal intervention
+Probing establishes decodability, not causal use (Belinkov & Glass 2019; Rogers et al. 2020). Interchange-style interventions provide a causal framework by substituting aligned internal variables across inputs (Geiger et al. 2021). Our CPT protocol is a sham-controlled token-in-context specialization of this intervention family (formalized in §2.1; protocol details in Appendix C.1), positioned alongside patching/circuit work in mechanistic interpretability (Elhage et al. 2021; Wang et al. 2023).
+3.3. Surface-statistics objections and philosophical framing
+The “surface statistics” objection (Bender & Koller 2020) motivates explicit competence tests and causal controls rather than benchmark-only claims. Methodologically, we follow a Turing-style strategy of operationalizing testable competence profiles (Turing 1950), while treating Kaplan/Braun/Wittgenstein as interpretive frameworks for what implementation constraints would matter philosophically.
 
 4. Methods
-This section reflects the AoM prototype evaluation framework and the logged run metadata in the provided result artifacts. Where a fact is not recorded, the paper states that explicitly.
+This section states only the load-bearing protocol choices for internal validity; full formal and implementation details are in Appendices A–D.
 4.1. Models evaluated
-We evaluate four causal LMs spanning two transformer families for the full AoM + CPT layer-sweep protocol:
-* openai-community/gpt2 (GPT‑2, 124M parameters; 12 transformer blocks)
-    * Radford et al. (2019), Language Models are Unsupervised Multitask Learners (GPT‑2 technical report; OpenAI).
-    * Checkpoint distributed via Hugging Face: https://huggingface.co/openai-community/gpt2
-* Qwen/Qwen2.5-0.5B
-    * Model card / checkpoint: https://huggingface.co/Qwen/Qwen2.5-0.5B
-* Qwen/Qwen2.5-1.5B
-    * Model card / checkpoint: https://huggingface.co/Qwen/Qwen2.5-1.5B
-* Qwen/Qwen2.5-3B
-    * Model card / checkpoint: https://huggingface.co/Qwen/Qwen2.5-3B
-For the SDH target-specificity stress test (§4.7, §5.7), we additionally run the fixed-layer specificity protocol on:
-* Qwen/Qwen3-4B — https://huggingface.co/Qwen/Qwen3-4B
-* meta-llama/Llama-3.2-1B — https://huggingface.co/meta-llama/Llama-3.2-1B
-* meta-llama/Llama-3.2-3B — https://huggingface.co/meta-llama/Llama-3.2-3B
-* meta-llama/Meta-Llama-3.1-8B — https://huggingface.co/meta-llama/Meta-Llama-3.1-8B
-All evaluations run in deterministic inference mode (model.eval()), and all reported metrics use log-probabilities rather than sampled generations.
-Software + hardware provenance (captured in the canonical run artifacts).
-* Per-row provenance fields in `results_submission_full/*.csv` include platform, device/dtypes, bootstrap settings, dataset hashes, git commit, and Hugging Face revision/commit metadata. [R3]
-* Per-artifact manifests (`results_submission_full/*.manifest.json`) record redacted argv, run status/summary, dataset validity counts/samples, and determinism metadata. [R0, C2]
-* Paper tables are regenerated in strict mode from a single results directory; strict mode fails on missing/mismatched provenance to prevent mixing artifact sets. [C11]
+For AoM+CPT sweeps we evaluate GPT‑2 (124M) and Qwen2.5-{0.5B, 1.5B, 3B}; for SDH we add Qwen3‑4B and Llama‑3.{2‑1B, 2‑3B, 1‑8B}. Runs use deterministic `model.eval()` log-probability scoring (no sampling). [E2a, E1, E3, E4a, E5a, E5b, E5c, E5d, E5e, E5f]
 4.2. Datasets
-All datasets are JSONL with schema validation and tokenization boundary checks.
-[C1]
-4.2.1. Disambiguation dataset (AoM-DISAMB)
-The disambiguation suite contains 52 minimal pairs (104 sides) across six ambiguous word types: [E2a, E1]
-* bank, bat, spring, match, pitcher, mole.
-Each item provides two contexts and a sense-diagnostic continuation for each sense.
-Tokenization validation. The evaluator checks alignment of the ambiguous target span across minimal-pair contexts for scoring and patching. Misaligned directions are skipped. [C3]
-Keyword baseline. A keyword baseline predicts senses from cue words. Its role is diagnostic, not competitive. [C5]
-4.2.2. Counterfactual dataset (AoM-CF)
-The counterfactual suite contains 140 base/intervention pairs: [E2a, E1]
-* 60 shift items (expected preference flip)
-* 60 invariant items (meaning-preserving shams; expected no flip)
-* 20 graded items (not used in the primary AoM-CF shift-direction accuracy in Table 1; excluded from CF patching evaluation by configuration, but included in the coverage accounting in §5.8)
-Each item contains two labeled continuations ((a_i,b_i)) and the expected flip/no-flip annotation.
-4.2.3. Coherence dataset (AoM-COH)
-The coherence suite contains 80 main items, each with matched ablate-relevant and ablate-irrelevant variants (total 240 contexts across the three conditions). The irrelevant ablation removes an unrelated sentence of comparable length. [E2a, E1]
-4.3. Scoring and aggregation
-Scoring uses log-softmax probabilities for numerical stability. Continuations are scored by mean per-token log-probability when length normalization is enabled (no_length_norm=False as recorded in the canonical result artifacts). [R3]
-The evaluator uses:
-* deterministic evaluation (model.eval()),
-* log-prob computations in float32,
-* strict finiteness checking.
-Strict finiteness checks. In the logged runs reported here, strict_finite=True (fail on NaN/Inf). [R3]
-Run provenance (canonical artifacts). Reported behavioral AoM and DISAMB patching numbers come from deterministic CPU runs with strict metric/data enforcement: platform `macOS-15.7.3-arm64-arm-64bit`; Python `3.12.7`; PyTorch `2.5.1`; Transformers `4.57.3`; Tokenizers `0.22.1`; `logprobs_dtype=float32`; `no_length_norm=False`; `strict_finite=True`; `bootstrap_n=1000`; `bootstrap_seed=42`; `ci=0.95`; `git_commit=ea24714787ac14d6641f15fc08483a463dfb70b9`. Dataset bundle name is `paper_hardened_v2` with bundle id `fa2f39387339d26abd45912e31eede3b5f88aac4ed7bff20660262fcb46787ff` and bundle manifest sha256 `deb9b00c165a9b8fafe9a7aa9080bdb1fc7f5d637ad9c148e825d2155a0e4a31` (`data_paper_hardened_v2/DATASET_MANIFEST.json`). Model checkpoint revisions logged per run are: `gpt2` `607a30d783dfa663caf39e06633721c8d4cfcd7e`; `Qwen/Qwen2.5-0.5B` `060db6499f32faf8b98477b0a26969ef7d8b9987`; `Qwen/Qwen2.5-1.5B` `8faed761d45a263340a0528343f099c05c9a4323`; `Qwen/Qwen2.5-3B` `3aab1f1954e9cc14eb9509a215f9e5ca08227a9b`. Dataset file checksums are anchored in `DATASET_MANIFEST.json`: `disamb_pairs.jsonl` `a9587c...adee1`; `counterfactual.jsonl` `e269fb...74bf`; `coherence.jsonl` `04e122...fc64`. Caveat: in the current `aom_eval.csv`, the Qwen2.5-3B row has blank per-row dataset sha256 fields; `DATASET_MANIFEST.json` is the authoritative checksum source.
-4.4. Statistical uncertainty: bootstrap confidence intervals
-Metrics report 95% bootstrap confidence intervals.
-* Bootstrap replicates: 1000 in logged runs (bootstrap_n=1000 where recorded). [C8, R3]
-* Resampling units:
-    * DISAMB: minimal pairs (pair-averaged across the two sides).
-    * CF / COH: items.
-    * CPT and SDH: donor→receiver directions.
-Legacy CSVs may omit some bootstrap configuration fields; the framework defaults above were used for the logged runs.
-Seeds. Forward passes are run in evaluation mode with no sampling. Reported seed values therefore do not index stochastic model behavior; they affect bootstrap resampling and, where applicable, deterministic control-span selection procedures.
-4.5. Controls
-The framework includes:
-* AoM-CF shams (invariant items should flip less than shift items),
-* AoM-COH relevance-controlled ablations,
-* CPT sham patching (no-op replacement),
-* tokenization/alignment checks with explicit skipping.
-4.6. CPT-style activation patching
-The framework runs context-swap activation patching on the disambiguation suite.
-What is patched. Hidden states at the ambiguous target span are recorded from a donor run and injected into a receiver run at transformer block (\ell) via forward hooks (weights fixed).
-Layer sweep. The patch is applied across all transformer blocks (\ell = 0,1,\dots,L-1), producing a per-layer effect curve.
-Patch-effect definition (reported units)
-For a disambiguation direction (donor→receiver) and layer (\ell), let (s(\text{label})) be the label score computed as log-mean-exp over the label’s continuation set, where each continuation is scored by mean per-token log-probability(length-normalized by default; --no_length_norm disables this).
-Define the margin for an expected label (y) as:
-[\operatorname{margin}(y) ;=; s(y) ;-; \max_{y'\neq y} s(y').]
-For CPT context-swap patching, define the donor-directed effect at layer (\ell) as:
-[\operatorname{effect}_\ell ;=; \operatorname{margin}_{\text{patched}}(y_{\text{donor}});-;\operatorname{margin}_{\text{base}}(y_{\text{donor}}),]
-where (y_{\text{donor}}) is the donor side’s gold sense label, and “patched” replaces the receiver’s post-block hidden states at the target span with the donor’s corresponding span states.
-We report:
-* Mean max effect. Per direction, compute (\max_\ell \operatorname{effect}_\ell) over the swept layers. Report the bootstrap mean and CI over directions.
-* Flip rate at best layer. Per direction, at the argmax layer for (\operatorname{effect}_\ell), count a flip iff the unpatched receiver prediction is not (y_{\text{donor}}) and the patched prediction equals (y_{\text{donor}}). Report bootstrap mean and CI.
-* Sham baseline. Same patch site, but replace with the receiver’s own hidden states (no-op). Reported analogously.
-4.7. Target-specificity stress test (SDH)
-This protocol tests SDH by comparing donor-directed effects from target-span patching to effects from off-target control-span patching at a fixed depth.
-Fixed layer choice
-For each model with (L) transformer blocks, we set a fixed “consolidation” layer index:
-[\ell^* ;=; \operatorname{round}\!\big(\text{depth_frac} \times (L-1)\big),\quad \text{with } \text{depth_frac}=0.25 \text{ in reported runs.}]
-This ensures cross-model comparability. It does not guarantee (\ell^*) equals the empirically best layer from a full sweep.
-Position window and exclusion buffers
-Control spans are selected within a local position neighborhood around the ambiguous span, operationalized as:
-* cpt_spec_position_window = 8 tokens (setting used in reported runs).
-Candidate control positions are filtered by exclusion buffers:
-* receiver exclusion buffer: buffer = 2 tokens (exclude positions within ±2 tokens of the target span),
-* donor exclusion buffer: donor_buffer = 2 tokens (default in reported runs).
-Deterministic control selection and strategy fallback
-Off-target controls are selected deterministically (selection_seed=0). Control selection uses a fallback strategy:
-1. matched_token
-2. same_index
-3. same_index_relaxed
-The strategy used materially affects measured specificity; results are therefore reported both aggregated (Table 3) and stratified (Table 3b). [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-Per-direction effects and summary statistics
-At layer (\ell^*), for each donor→receiver direction (i), compute:
-* (E_{\text{target},i} = \operatorname{effect}_{\ell^*}) with target-span patching,
-* (E_{\text{ctrl},i} = \operatorname{effect}_{\ell^*}) with control-span patching,
-* (\Delta_i = E_{\text{target},i} - E_{\text{ctrl},i}),
-* (\text{win}_i = \mathbf{1}[\Delta_i > 0]).
-Aggregate over directions using bootstrap means and 95% CIs:
-* (E_{\text{target}}), (E_{\text{ctrl}}), (\Delta), and win rate.
-
-4.8. Causal patching beyond disambiguation: COH and CF protocols
-To test whether CPT-style causal leverage extends beyond disambiguation, we specify two additional activation patching protocols for the coherence and counterfactual suites. [C9, C10]
-
-COH pseudo-ablation patching. For each COH item, we construct two pseudo-ablated variants that preserve length and alignment: (i) constraint-pseudo: replace the constraint-relevant sentence with length-matched padding tokens; (ii) irrelevant-pseudo: replace the irrelevant sentence with length-matched padding tokens. Coherence is measured as the margin between valid and invalid continuation scores. For constraint-span patching, we patch hidden states at the constraint sentence positions from constraint-pseudo into the main run; for irrelevant-span patching, we patch hidden states at the irrelevant sentence positions from irrelevant-pseudo into the main run. Sham patching replaces main-run states with main-run states (no-op). The primary diagnostic is the constraint–irrelevant degradation asymmetry. [C9]
-
-CF intervention-span patching. For each CF item, the base prompt x and intervention prompt x' are tokenized, and the minimal contiguous token-level divergence (intervention span) is identified. In the reported runs, span alignment uses span_mode=left_aligned_truncated: when donor and receiver intervention spans differ in token count, we left-align and truncate to a shared span length. Hidden states at the aligned intervention span are cached from the x' (donor) run and patched into the x (receiver) run at each transformer block ℓ. The effect metric is the donor-directed preference margin shift (analogous to §4.6). Sham patching replaces receiver states with receiver states. Items with empty receiver (base) spans are skipped (empty_span); graded items are excluded by configuration. Skip counts are reported. For the relevance-controlled CF patching analysis (§5.8.2), we use a patching-specific dataset combining the 60 shift items from the canonical CF suite with 20 substitution-invariant controls designed to ensure non-empty base spans (E10e); this differs from the canonical 140-item CF suite used for behavioral AoM-CF metrics in §5.3. [C10]
-
-Both protocols use the same scoring, bootstrap, and finiteness-checking infrastructure as the DISAMB patching described in §4.3–4.6. [C9, C10]
+We use three controlled suites chosen for intervention identifiability: DISAMB (52 pairs), CF (shift/invariant/graded), and COH (80 items plus matched ablations). Schemas and validation are in Appendix B. [C1, E2a, E1]
+4.3. Scoring, uncertainty, and controls
+Scoring uses deterministic mean per-token log-probabilities; uncertainty is reported as 95% bootstrap CIs. Controls are central: sham patching (no-op), relevance-controlled contrasts (COH/CF), and explicit alignment/skip accounting. Formal scoring and CI details are in Appendix A; protocol details are in Appendix C. [R3, C8, C3, C9, C10]
+4.4. CPT-style activation patching
+To test CPT, donor hidden states are injected into aligned receiver positions on DISAMB minimal pairs with weights fixed, and donor-directed margin shifts are measured across layers. The `effect_ℓ` metric is defined in §2.1; aggregate reporting and protocol details are in Appendix C.1.
+4.5. Target-specificity stress test (SDH)
+SDH compares target-span and nearby control-span patching at fixed quarter-depth in a local window (`position_window=8`, exclusion buffers ±2), with deterministic control selection; strategy-specific diagnostics are reported outside the main narrative (Appendix D / supplement). [C4, E5a, E5b, E5c, E5d, E5e, E5f]
+4.6. Extensions beyond disambiguation
+We also run COH pseudo-ablation patching as a relevance-controlled extension in the main paper; CF intervention-span patching is reported in main results, with type-stratified diagnostics in supplement/appendix materials. [C9, C10, E10c, E10d, E10e]
 
 5. Results
-Results are reported for:
-* AoM + CPT sweep: GPT‑2 and Qwen2.5-{0.5B, 1.5B, 3B} (Tables 1–2). [E2a, E1, E3, E4a]
-* SDH specificity stress test (fixed layer): eight models total (Table 3, Table 3b). [E5a, E5b, E5c, E5d, E5e, E5f]
-* CF intervention-span patching with substitution-invariant controls (§5.8.2; shift N=60 vs invariant N=20; zero skips) for GPT‑2 and Qwen2.5-{0.5B, 1.5B, 3B} (Table 4). [E10e, C10]
-* COH pseudo-ablation patching (§5.8) for GPT‑2 and Qwen2.5-{0.5B, 1.5B, 3B} (Table 4). [E10c, E10d, C9]
-Unless stated otherwise, confidence intervals are 95% bootstrap CIs.
+The main mechanistic results cover DISAMB+CPT+SDH, with COH and CF patching reported as causal extensions; behavioral AoM metrics are summarized in Table 1.
 5.1. Behavioral AoM metrics
-AoM composite scores:
-* GPT‑2 (124M): 0.869
-* Qwen2.5‑0.5B: 0.849
-* Qwen2.5‑1.5B: 0.869
-* Qwen2.5‑3B: 0.903
-[E2a, E1]
-[Table 1 about here] [E2a, E1]
+AoM composite scores are 0.869 (GPT‑2), 0.849 (Qwen2.5‑0.5B), 0.869 (Qwen2.5‑1.5B), and 0.903 (Qwen2.5‑3B). [E2a, E1]
 5.2. AoM-DISAMB: high accuracy with a baseline caveat
-DISAMB accuracies:
-* GPT‑2 (124M): 0.856 [0.788, 0.914] (N = 52 pairs; 104 sides)
-* Qwen2.5‑0.5B: 0.913 [0.856, 0.962]
-* Qwen2.5‑1.5B: 0.933 [0.885, 0.971]
-* Qwen2.5‑3B: 0.933 [0.885, 0.981]
-[E2a, E1]
-A keyword baseline attains 0.615 [0.558, 0.673] with pair-bootstrap CIs aligned to the DISAMB bootstrap unit (minimal pairs). [E2a, E1, C5]
-Keyword stratification analysis. Of the 52 pairs, the keyword heuristic gets both sides correct on 12 and at least one side wrong on 40. On the 40 keyword-incorrect pairs, model DISAMB accuracy remains well above chance with CI lower bounds above 0.75: GPT‑2 0.838 [0.762, 0.912]; Qwen2.5‑0.5B 0.912 [0.850, 0.963]; Qwen2.5‑1.5B 0.900 [0.838, 0.963]; Qwen2.5‑3B 0.925 [0.863, 0.975]. The Qwen models show minimal degradation on the keyword-incorrect subset relative to overall accuracy (drops of 0.001–0.023), indicating that their disambiguation performance does not depend on cue-word availability. This is the strongest rebuttal available to the cue-leakage objection: models disambiguate accurately even on pairs where a keyword heuristic fails. [E2a, E1, C5, E11b]
-DISAMB accuracy alone is therefore not the main philosophical load-bearer in this submission, but the keyword stratification demonstrates that the competence captured is not reducible to surface-cue exploitation. CPT patching and CF/COH controls carry the weight.
-Mean DISAMB margins increase with capacity within Qwen2.5 (reported in the CSV artifacts), consistent with increased separation between senses under these templates. [E1]
+DISAMB accuracy is high across models, and remains high on the keyword-failure subset where the cue heuristic fails. The keyword baseline is non-trivial (0.615 [0.558, 0.673]) but does not explain model performance on that subset; details are in Table 1 and Appendix artifacts. [E2a, E1, C5, E11b]
 5.3. AoM-CF: controlled sensitivity with sham separation
-CF shift-direction accuracy:
-* GPT‑2: 0.850 [0.750, 0.933] (N = 60 shift items)
-* Qwen2.5‑0.5B: 0.733 [0.617, 0.833]
-* Qwen2.5‑1.5B: 0.800 [0.700, 0.883]
-* Qwen2.5‑3B: 1.000 [1.000, 1.000]
-[E2a, E1]
-Sham separation is visible in mean absolute preference changes (|\Delta(x')-\Delta(x)|): invariant items shift less than shift items across models, including GPT‑2. [E8]
+Behavioral CF shift-direction accuracy is reported in Table 1. As an internal-validity control, invariant (sham) items exhibit smaller absolute preference-margin changes than shift items on this suite (Appendix / artifacts). [E2a, E1, E8]
 5.4. AoM-COH: coherence tracks informational role, not only length
-Main-group coherence accuracies:
-* GPT‑2: 0.900 [0.838, 0.963]
-* Qwen2.5‑0.5B: 0.900 [0.838, 0.963]
-* Qwen2.5‑1.5B: 0.875 [0.800, 0.938]
-* Qwen2.5‑3B: 0.775 [0.688, 0.863]
-[E2a, E1]
-Ablations show an informational-role pattern: ablate-relevant degrades more than length-matched ablate-irrelevant across all four models, with varying magnitude. [E7]
+COH main accuracy and ablation contrasts (Table 1) show that ablate-relevant degrades more than length-matched ablate-irrelevant across models, supporting an informational-role effect beyond length alone. [E2a, E1, E7]
 5.5. CPT-style activation patching: causal leverage for token-in-context control
-Activation patching is run on the disambiguation suite for GPT‑2 and Qwen2.5 models reported in Table 2. Each has 104 patching directions total, with all 104 patched and no misalignment skips in these hardened runs. [E3, E4a, C3]
-Primary CPT aggregates:
-* Mean max effect (defined in §4.6):
-    * GPT‑2: 0.395 [0.301, 0.501]
-    * Qwen2.5‑0.5B: 1.651 [1.241, 2.128]
-    * Qwen2.5‑1.5B: 1.807 [1.461, 2.230]
-    * Qwen2.5‑3B: 1.686 [1.304, 2.117]
-* Flip rate at best layer:
-    * GPT‑2: 0.000 [0.000, 0.000]
-    * Qwen2.5‑0.5B: 0.058 [0.019, 0.106]
-    * Qwen2.5‑1.5B: 0.115 [0.058, 0.183]
-    * Qwen2.5‑3B: 0.048 [0.010, 0.087]
-* Mean argmax layer:
-    * GPT‑2: 5.47 / (12-1) (≈50% depth)
-    * Qwen2.5‑0.5B: 8.19 / (24-1) (≈36%)
-    * Qwen2.5‑1.5B: 7.72 / (28-1) (≈29%)
-    * Qwen2.5‑3B: 13.53 / (36-1) (≈39%)
-* Sham patching baseline: near zero in all reported runs. [E3, E4a]
-These results support CPT as a causal-control claim under this intervention regime. They do not establish exclusivity of the target span as the only causal locus. [E3, E4a]
-[Table 2 about here] [E3, E4a]
+CPT patching on DISAMB uses 104/104 patched donor→receiver directions in hardened runs and yields robust donor-directed margin shifts with near-zero sham baselines. The key aggregates are in Table 2, and Figure 1 shows structured early-to-mid depth profiles across GPT‑2 and Qwen2.5. [E3, E4a, C3]
 5.6. Scaling summary (AoM + CPT sweep)
-* CPT patching effects are present in GPT‑2 and Qwen2.5; within Qwen2.5, effect magnitudes are non-monotonic in these hardened runs. [E3, E4a]
-* CF shift-direction accuracy scales strongly within Qwen2.5 on these items; GPT‑2 is competitive despite smaller size. [E2a, E1]
-* COH ablations show an informational-role effect across models; main coherence does not show uniform monotonic scaling on this suite. [E7]
+CPT effects are present in GPT‑2 and Qwen2.5 (non-monotonic within Qwen2.5); within Qwen2.5, CF behavioral shift-direction improves with scale on this suite; and COH ablation asymmetries are robust though main COH accuracy is not uniformly monotonic. [E3, E4a, E2a, E1, E7]
 5.7. Target-specificity stress test: SDH results
-This section tests SDH using the fixed-layer target-specificity protocol (§4.7). Results are measured at:
-* (\ell^* = \operatorname{round}(0.25\times(L-1))),
-* cpt_spec_position_window=8,
-* exclusion buffers buffer=2, donor_buffer=2,
-* deterministic selection (selection_seed=0).
-[C4, E5a, E5b, E5c, E5d, E5e, E5f]
-Table 3. Target-specificity analysis across models (SDH stress test). Reported effects are donor-directed margin shifts (\operatorname{effect}_{\ell^*}) as defined in §4.6, evaluated at fixed (\ell^*). [E5a, E5b, E5c, E5d, E5e, E5f]
-[Table 3 about here] [E5a, E5b, E5c, E5d, E5e, E5f]
-Findings.
-1. Specificity is heterogeneous. Only Qwen2.5‑3B shows a robust positive (\Delta = E_{\text{target}} - E_{\text{ctrl}}) with CI excluding zero. Most models show (\Delta \approx 0) and win rates near 0.5. GPT‑2 and Llama‑3.1‑8B show negative deltas (control patches stronger than target patches at (\ell^*) under this protocol). [E5a, E5b, E5c, E5d, E5e, E5f]
-2. No monotonic capacity claim is supported for specificity. Qwen2.5‑3B is positive; Qwen3‑4B is not. Llama deltas are non-positive across 1B–8B in these runs. [E5a, E5b, E5c, E5d, E5e, E5f]
-3. Control strategy is a first-order factor. Stratified deltas differ sharply by control selection strategy (Table 3b). The same_index strategy yields consistently negative point-estimate deltas across models, though CIs include zero for most; same_index_relaxed yields positive deltas across most models. The qualitative contrast between strategies is robust even where individual CIs are wide. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
-Table 3b. Specificity deltas stratified by control selection strategy (means with 95% CIs; N per strategy shown).
-[Table 3b about here] [E5a, E5b, E5c, E5d, E5e, E5f]
-Interpretation. The fixed-layer specificity results constrain a token-atomic reading of causal control. Under a local-window protocol (position_window=8 with exclusion buffers), donor-directed effects are often not unique to target-span patching. This is consistent with local distribution of disambiguation-relevant control across nearby positions at (\ell^*). The result is protocol-conditional: it establishes local non-exclusivity within the tested window, not global diffusion. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
-Caveats (explicit).
-* The test is at fixed (\ell^*), not at each model’s empirically best layer from a sweep. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-* Control selection is not guaranteed semantically neutral. The same_index strategy appears to select meaning-relevant positions in these templates, inflating control effects. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-* Effects outside the tested position window are not measured here. SDH is not tested as a global claim in this submission. [C4]
+At fixed quarter-depth, SDH is heterogeneous: only Qwen2.5‑3B shows a robust positive target–control delta, while several models are near zero and some are negative. This pattern constrains strong token-privileged implementation glosses under the tested local protocol. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
+SDH is protocol-conditional: it is evaluated at fixed (ℓ*) within a bounded local window, not at each model’s best sweep layer and not over global position space. Control selection materially affects measured specificity, so strategy-stratified outputs are reported in Appendix D and supplementary materials rather than expanded in the main text. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
+5.8. COH causal patching extension (main)
+COH pseudo-ablation patching shows a large and consistent constraint>irrelevant asymmetry with near-zero sham baselines across GPT‑2 and Qwen2.5 checkpoints, supporting relevance-sensitive causal effects on the coherence margin under this intervention regime. The main text reports the compact aggregate in Table 4; protocol details and caveats (including padding confounds) are in Appendix C.2 and §6.3. [E10c, E10d, C9]
+5.8.3. Summary of causal evidence across components
+Figure 2 shows panel-local contrasts across components: robust COH constraint>irrelevant separation across all four checkpoints, alongside heterogeneous CF shift>control separation with a Qwen2.5‑1.5B null discussed in §5.9. [E10e, E10c, E10d, C9, C10]
+[Figure 2 about here] [E10e, E10c, E10d, C9, C10]
+5.9. CF intervention-span patching (main)
+On the relevance-controlled CF patching set (shift N=60 vs substitution controls N=20), GPT‑2, Qwen2.5‑0.5B, and Qwen2.5‑3B show clear shift>control separation (d = 1.179, 0.677, 0.798), while Qwen2.5‑1.5B is null (d ≈ 0). Full per-model breakdowns are in Table 4. [E10e, C10]
+The expected relevance-controlled separation appears in 3/4 checkpoints, while Qwen2.5‑1.5B is a genuine checkpoint-level null under this intervention protocol. This qualifies any blanket generalization from CF patching and motivates model- and protocol-conditional interpretation. [E10e, C10]
+The Qwen2.5‑1.5B behavioral CF shift-direction score remains high (0.800 in Table 1), yet CF patching shows no shift>control separation. Appendix F’s type-stratified outputs indicate a quantifier-specific weakness for this checkpoint (quantifier mean max effect 0.159), supporting a protocol-conditional heterogeneity reading rather than global incompetence on CF behavior. [E2a, E1, E10e]
 
-5.8. Causal patching beyond disambiguation: COH and CF
-Sections 5.5–5.7 establish causal control via activation patching on the disambiguation suite. This section extends patching-style interventions beyond disambiguation to coherence and counterfactual sensitivity. We report COH pseudo-ablation patching and CF intervention-span patching as specified in §4.8 (summarized in Table 4). [C9, C10]
 
-5.8.1. COH causal patching: constraint-directed degradation under pseudo-ablation patching
-To test whether CPT-style causal leverage extends to coherence constraint tracking, we apply COH pseudo-ablation patching to the coherence suite (§4.8). [C9]
+6. Discussion: from metrics to mechanism to philosophy
+6.1. What the results establish (and what they do not)
+Within the limits of templated datasets and a small number of seeds, the results establish an AoM competence profile under controlled variation:
+context-sensitive disambiguation and coherence behavior [E2a, E1], stronger response to meaning-altering interventions than to shams [E8, E7], causal leverage of token-in-context states via patching [E3, E4a, C3], constraint-directed coherence degradation under COH pseudo-ablation patching (constraint vs irrelevant spans, relevance-controlled) [E10c, E10d, C9], and relevance-controlled CF intervention-span patching with shift>control separation in 3/4 checkpoints (and a Qwen2.5‑1.5B null) [E10e, C10].
+The results do not settle reference, grounding, normativity, or consciousness.
+6.2. From behavior to mechanism: what patching adds
+Behavioral AoM metrics alone underdetermine mechanism. CPT patching adds an intervention:
+1. Define a meaning-relevant behavioral readout on minimal pairs: relative preference between sense-diagnostic labels.
+2. Intervene on internal variables: h_{M,ℓ,p}(x) at the ambiguous target span.
+3. Measure donor-directed change via effect_ℓ (margin shift; Appendix C.1).
+4. Compare to controls (sham patching; alignment checks).
+This yields causal evidence that token-in-context states at specific depths control disambiguation behavior. [E3, E4a, C3]
+COH pseudo-ablation patching extends this intervention logic to discourse constraints: across the tested model families (GPT‑2 and Qwen2.5‑{0.5B, 1.5B, 3B}), injecting pseudo-ablated states at constraint-relevant spans degrades coherence substantially more than patching length-matched irrelevant spans (d = 1.27–1.53), supporting a relevance-controlled causal effect on coherence under this protocol. [E10c, E10d, C9]
+The SDH stress test adds a second constraint: at fixed depth (ℓ*) and within a local position window (position_window=8, buffers ±2), off-target control patches often produce donor-directed effects comparable to target patches. This rules out a general claim that causal control at (ℓ*) is uniquely anchored to the target span. The appropriate mechanistic reading is local distributed control within the tested neighborhood, not isolated token storage. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
+6.3. Threats to validity and robustness checks
+Templates and cue leakage. The keyword baseline (0.615) confirms that surface cues exist in these templates, but the keyword-failure subset analysis (40/52 pairs) shows that model DISAMB accuracy remains high when that heuristic fails. This is the core control against a pure-cue explanation in the current suite. [E2a, E1, C5, E11b]
 
-Method (summary; see §4.8). For each COH item, we form two pseudo-ablated variants that preserve length and alignment: constraint-pseudo (constraint sentence replaced with padding) and irrelevant-pseudo (irrelevant sentence replaced with padding). For constraint-span patching, we patch hidden states at the constraint-sentence positions from constraint-pseudo into the main run; for irrelevant-span patching, we patch hidden states at the irrelevant-sentence positions from irrelevant-pseudo into the main run, sweeping across layers ℓ. The effect metric is the (positive) degradation in the coherence margin (valid vs invalid continuation), and the primary diagnostic is the constraint–irrelevant degradation asymmetry. Sham patching is a no-op baseline. [C9]
+Patching artifacts and alignment constraints. Sham patching remains near zero and layerwise profiles are structured, but stronger diagnostics (outside-window patching, random-span controls, activation-norm checks) are still desirable. Alignment checks and skip accounting remain hard validity conditions for interpreting any patching result. [E3, E4a, C3]
 
-Results (N = 80 constraint-span cases; 80 irrelevant-span cases; total 160 per model).
-* GPT‑2 (124M): mean max effect 0.753 [0.651, 0.858]; constraint-span 1.094 [0.970, 1.219]; irrelevant-span 0.411 [0.305, 0.515]; Δ = 0.683 (d = 1.266); sham ≈ 0. [E10c]
-* Qwen2.5‑0.5B: mean max effect 1.010 [0.837, 1.193]; constraint-span 1.687 [1.452, 1.945]; irrelevant-span 0.332 [0.255, 0.428]; Δ = 1.355 (d = 1.526); sham 0.009. [E10d]
-* Qwen2.5‑1.5B: mean max effect 1.150 [0.964, 1.355]; constraint-span 1.838 [1.595, 2.133]; irrelevant-span 0.463 [0.354, 0.593]; Δ = 1.375 (d = 1.368); sham 0.019. [E10d]
-* Qwen2.5‑3B: mean max effect 0.869 [0.725, 1.025]; constraint-span 1.403 [1.195, 1.627]; irrelevant-span 0.336 [0.276, 0.400]; Δ = 1.067 (d = 1.377); sham 0.010. [E10d]
+COH pseudo-ablation scope. Length-matched irrelevant ablations reduce a simple length-only explanation, and the observed constraint>irrelevant asymmetry is large across models. However, padding-based pseudo-ablations can conflate informational relevance with information presence; fluent distractor replacements are the next robustness check. [E10c, E10d, C9]
 
-Interpretation. Across the tested model families (GPT‑2 and Qwen2.5‑{0.5B, 1.5B, 3B}), patching pseudo-ablated states at constraint-relevant positions yields substantially larger coherence-margin degradation than patching at irrelevant positions. The resulting constraint–irrelevant asymmetry is large in every model (d = 1.27–1.53, computed over per-case max-over-layers effects for constraint vs irrelevant patching), while sham baselines remain near zero. This supports a relevance-controlled causal effect on coherence under this alignment-preserving pseudo-ablation protocol. [E10c, E10d, C9]
+**Objection: “The observed control is still just complex syntactic-distributional matching, not semantic competence.”** Suppose, for the sake of argument, that the causal controllers isolated here-those that govern context-sensitive disambiguation, selective intervention sensitivity, and discourse-level constraint tracking-could be fully characterized in purely syntactic-distributional terms. This would not refute the present framework; it would place it on a deflationary horn of the interpretive space: substantial AoM-level competence can be causally realized without reference-involving or normatively governed **meaning proper**. Importantly, the present results do not purport to identify the patched variables as “semantic” rather than “syntactic.” What they establish is that AoM-relevant preference margins are controlled by **context-conditioned, relationally integrated internal states** at characteristic depths (with near-zero sham baselines and structured depth profiles), and that this control is often not token-atomic at the tested fixed depth (SDH). In this setting, labeling the mechanism “mere syntax” is not yet an explanation unless it is paired with an additional claim: which empirically detectable language behaviors, beyond the AoM competence profile operationalized here, remain exclusively diagnostic of meaning proper and why. As Piantadosi & Hill (2022) argue, sufficiently rich internal structural relations can blur the traditional syntax/semantics boundary; the residual dispute must therefore be cashed out in further measurable competence signatures rather than terminological stipulations. On this reading, “mere syntax” is either a promissory mechanistic research program (to specify the relevant structural computations) or a concession that syntactic-distributional structure is causally sufficient for the appearance of meaning.
+6.4. Context, stability ideals, and implementation glosses: what the data can and cannot discriminate
 
-Scale note. Absolute effect magnitudes vary non-monotonically within Qwen2.5, so cross-model comparisons should emphasize the asymmetry direction and standardized effect sizes rather than raw deltas.
+A standing risk in philosophy-of-LLMs is a category mistake: moving too quickly from (i) a semantic framework as a theory of meaning to (ii) a claim about how a particular architecture must implement it. Kaplan’s character/content distinction, Braun’s critiques of overly simple factorization, and Wittgenstein’s emphasis on use are semantic or meta-semantic positions; none of them entails a specific neural implementation. The aim here is narrower. We use these frameworks to articulate contrasting implementation ideals—ways one might expect “context dependence” to be routed and localized in a computational system—and then ask what our intervention results constrain.
 
-Padding caveat. COH pseudo-ablation uses padding-token replacements to preserve alignment, which is off-distribution relative to fluent text. Accordingly, we interpret the observed asymmetry as evidence of span-local causal sensitivity under this intervention protocol, not as definitive isolation of a discourse-constraint circuit. A priority robustness test is to repeat the analysis with fluent, semantically irrelevant distractor replacements matched for length and syntactic profile.
+Levels of claim.
+"Context" in the operational sections denotes linguistic co-text: the prefix and discourse material available to the model at inference time. We do not manipulate Kaplanian extra-linguistic context parameters (speaker, time, place), and we do not claim to test indexicals as such. The question is instead: given a system that exhibits robust context-sensitive competence on controlled items, is the causal control of that competence plausibly token‑privileged (anchored primarily at the target expression’s site) or relational (distributed across positions participating in an integration structure)?
 
-Device note. The GPT‑2 COH patching row was computed on CPU; Qwen2.5 rows were computed on MPS (Apple Silicon GPU). Sham baselines are near zero on both devices and effects are large; exact floating-point values may differ by device without changing the qualitative pattern.
+A stability ideal and a token‑privileged gloss.
+Kaplan’s framework is naturally associated with a stability ideal: an expression has a relatively stable contribution (character) and context supplies parameters that select a content. This is a semantic decomposition, not a neural story. But one tempting implementation gloss—common in informal talk about “word meaning inside the model”—is token‑privileged: the ambiguous token position is treated as the primary carrier of the relevant contribution, with surrounding context modulating that token’s state. On such a gloss, one expects a strong asymmetry: interventions at the target span should systematically dominate interventions at nearby off‑target spans, because the expression’s own site is privileged as the locus of control.
 
-5.8.2. CF causal patching: shift vs substitution-invariant controls under intervention-span patching
-To test whether CPT-style causal leverage extends to counterfactual sensitivity with relevance controls, we apply intervention-span patching to a combined CF set containing shift items (N=60; meaning-altering) and substitution-invariant items (N=20; label-preserving substitution controls expected not to flip the preferred continuation under these templates). [C10]
+What CPT supports (and what it does not).
+Our CPT-style patching results provide sham-controlled causal evidence that contextualized token‑in‑context states at specific depths exert donor-directed control over disambiguation preferences. This supports a context‑primacy picture in a precise interventionist sense: the causal variables that control meaning‑like preference margins are not static type‑level carriers, but context-conditioned states computed over the prefix. Importantly, CPT by itself is neutral on whether causal control is token‑atomic. A model could satisfy CPT even if control is distributed across multiple positions, provided patching at the target span intercepts some of that distributed signal.
 
-Method (summary; see §4.8). For each CF item, base prompt x and intervention prompt x' are tokenized and the minimal contiguous token-level divergence (intervention span) is identified. In the reported runs, we use span_mode=left_aligned_truncated to align donor and receiver spans when they differ in token count by left-aligning and truncating to a shared span length. Hidden states at the aligned intervention span are cached from the x' (donor) run and patched into the x (receiver) run at each transformer block ℓ. The primary metric is the donor-directed preference margin shift; sham patching replaces receiver states with receiver states (no-op). Stratified results by intervention type are reported in the result artifacts. [C10]
+The SDH stress test as a constraint on token privilege (not a semantic-theory verdict).
+The fixed-depth target-specificity analysis adds a local constraint: at a fixed depth and within a local positional window, off-target control patches often yield donor-directed effects comparable to target-span patches, and in several models the measured target–control delta is near zero or negative under some control-selection strategies. This does not show that the target span is never privileged (specificity can vary by depth, and controls can inadvertently target salient positions). Nor does it discriminate Kaplan versus Braun as semantic theories. What it does constrain is the token‑privileged gloss described above: at least at the tested depth and within the tested neighborhood, disambiguation-relevant causal control is frequently not uniquely anchored to the ambiguous token position.
 
-Dataset. The patching set comprises 60 shift items (negation / quantifier / role-swap; from the canonical CF suite) and 20 substitution-invariant items (verb-synonym, adjective-synonym, name-substitution, noun-synonym), designed so that the divergence span is non-empty for both base and intervention prompts. These controls are patching invariants (label-preserving under the template), not guaranteed full semantic equivalences; the goal is to test whether patching effects preferentially track meaning-altering interventions relative to plausible same-label substitutions under this protocol. Some substitution controls (notably certain noun substitutions) are not tight lexical synonyms; we treat this as a control-calibration issue and report type-stratified diagnostics below. All 80 items were evaluated with zero skips across all four models. [E10e]
+What SDH rules out.
+At the tested depth (ℓ*) and within the specified local window, SDH is inconsistent with token‑privileged implementation glosses that predict systematic dominance of target-span patching over nearby controls under the tested protocol. Under that gloss, off-target patches in the window should be systematically weaker than target-span patches; this is not the modal profile observed across models and control strategies.
 
-Results (per model: N=60 shift, N=20 substitution-invariant; total N=80; zero skips).
-* GPT‑2 (124M): shift 0.701 [0.574, 0.850]; invariant 0.133 [0.031, 0.260]; Δ = 0.568 (d = 1.179); sham ≈ 0. [E10e]
-* Qwen2.5‑0.5B: shift 1.478 [1.072, 1.911]; invariant 0.402 [0.123, 0.873]; Δ = 1.076 (d = 0.677); sham ≈ 0. [E10e]
-* Qwen2.5‑1.5B: shift 0.491 [0.370, 0.632]; invariant 0.496 [0.224, 0.797]; Δ = −0.005 (d ≈ 0); sham ≈ 0. [E10e]
-* Qwen2.5‑3B: shift 1.515 [1.151, 1.929]; invariant 0.356 [0.070, 0.777]; Δ = 1.159 (d = 0.798); sham ≈ 0. [E10e]
+What SDH is consistent with.
+The observed local non-exclusivity is consistent with an implementation in which disambiguation-relevant control is carried by a locally integrated set of residual-stream states, so that multiple nearby positions provide causal handles on the same downstream preference margin. This supports the negative point: “context as merely a parameter applied at a stable lexical carrier site” is too simple as an implementation gloss in this architecture.
 
+What SDH does not diagnose.
+Positional non-exclusivity alone does not establish that the controlling information is organized by Braun-style relational semantic structure (for example, syntactic or discourse relations) rather than by generic information diffusion in a shared stream. SDH as implemented here varies position but does not control structural relevance of the patched positions. The present results therefore constrain token-privileged localization claims, but they do not yet discriminate relational-structure hypotheses from diffusion-based alternatives.
+
+What a Braun-diagnostic stress test would require.
+A diagnostic test for Braun-style relational structure would hold positional distance roughly fixed while varying whether patched positions stand in specific syntactic or discourse relations to the ambiguous expression (for example, argument head, modifier, or coreference antecedent) versus structurally irrelevant roles at comparable distance. Under a relational-structure hypothesis, causally effective off-target positions should concentrate in structurally related roles, not merely in a local neighborhood. This paper does not implement that control.
+
+Wittgenstein and the limits of the operational target.
+Wittgensteinian themes help locate what is—and is not—being claimed. On a use-oriented view, context is not merely an input that selects among pre-existing meanings; it is part of what constitutes the use that makes an utterance intelligible. AoM is explicitly a use-profile in this restricted sense: DISAMB/CF/COH test whether preferences track controlled changes in co-text, meaning-altering edits, and discourse constraints, and patching identifies internal variables that causally control those sensitivities. But this remains text-internal and non-normative. Nothing here establishes public criteria, social correction, or rule-following as a practice. The philosophical point is narrower: within transformer architectures, the proximate controllers of meaning-like behavior are context-conditioned and often not token‑atomic at the tested depth—so any position that treats context as merely auxiliary to stable lexical atoms must say how it expects such a picture to be realized in this architecture, and what empirical signatures would distinguish it.
+
+Summary.
+The experiments do not adjudicate semantic theories, but they do constrain plausible implementation glosses of stability-based pictures. In the tested intervention regimes, context dependence is not merely an external parameter applied to fixed lexical carriers; it is constitutively integrated into the causal variables that control meaning-like preference patterns.
+6.5. Falsifiers and limits
+CPT is falsifiable in this framework (F1–F2). SDH is falsifiable as a local distribution claim once outside-window controls are implemented (F4).
+The current evidence is subject to several limitations. The suites remain small and templated (DISAMB 52 pairs plus the current CF/COH sets), which strengthens internal validity for a first-pass causal test but limits naturalistic generalization. Surface cues remain present in DISAMB (keyword baseline 0.615) despite high performance on the 40/52 keyword-failure pairs, so further adversarial hardening is needed [E2a, E1, C5, E11b]. CF causal patching remains heterogeneous across checkpoints (including a Qwen2.5‑1.5B null) under the current span definition and controls, motivating stronger invariant controls [C10, E10e]. Reported AoM+CPT sweeps also use limited seeds [E2a, E1, E3, E4a].
+6.6. Burden shift and the context trilemma
+The AoM program is intended to change what must be argued, not to settle metaphysics. The results in this paper provide (i) behavioral evidence for a consistent (suite-conditional) pattern of context-sensitivity across DISAMB/CF/COH under controlled manipulations, and (ii) causal evidence that internal token-in-context states at specific depths exert donor-directed control over AoM-relevant preference margins under activation patching, with sham baselines near zero and structured depth profiles. SDH adds a further mechanistic constraint: at a fixed tested depth and within a local neighborhood, causal control is often not uniquely localized to the ambiguous token position. These findings do not establish meaning proper, but they do make purely dismissive “mere surface” moves less informative: to maintain a meaning-beyond-AoM position while conceding AoM-like competence, one must identify an additional property that is (1) competence-relevant, (2) plausibly absent here, and (3) associated with detectable signatures that could in principle be measured.
+If one insists that a system exhibiting AoM under relevance/sham controls and showing sham-controlled, depth-localized causal context-routing is merely a “stochastic parrot,” then “parrot” must be broadened to include systems with highly structured, relationally integrated, and causally measurable discourse-level constraint tracking-at which point “surface statistics” ceases to be a deflationary dismissal and becomes a substantive mechanistic explanans.
+However, the force of this burden-shift is **conditional** on closing the remaining validation gaps in the present experimental regime. In this revision, DISAMB cue controls and COH relevance controls are strong, while CF causal diagnostics are mixed across checkpoints. As remaining gaps are closed—by broadening invariant controls, extending COH patching with fluent distractor replacements (in addition to padding), and adding outside-window SDH controls—the AoM evidence would increasingly constrain meaning-beyond-AoM proposals to be explicit about what more is required and how it would show up empirically.
+The present results remain compatible with multiple interpretations: (A) context-dependent semantics realized by non-token-atomic control states; (B) robust competence without traditional semantics; (C) compressed, practice-derived competence without normativity. This paper does not adjudicate among (A)–(C). It aims to supply a shared empirical substrate—operational competence signatures plus causal-control and spatial-structure constraints—on which broader philosophical positions can make more discriminating commitments. Søgaard (2025) is cited as a map of the dialectical space—surveying five positions on whether and in what sense LMs have semantics (ranging from outright denial, through deflationary/instrumentalist views, to qualified attribution)—rather than as a premise in any argument here.
+
+7. Conclusion
+This paper supplies a disciplined empirical and mechanistic substrate for disputes about semantic competence in transformer architectures. The AoM framework isolates a controlled competence profile; CPT-style activation patching identifies contextualized token-in-context states at characteristic depths as causal controllers of that profile, with near-zero sham baselines and structured depth profiles across GPT-2 and Qwen2.5; and the SDH stress test constrains token-privileged implementation glosses by showing that causal leverage is often not uniquely localized to the ambiguous token position within the tested local window. These constraints make it more costly to dismiss transformer context-sensitivity as “mere surface” without specifying what additional competence property is required and what its detectable signatures would be.
+
+More broadly, the framework demonstrates that transformer architectures offer the philosophy of language a fully observable, manipulable system in which hypotheses about implementation, context-dependence, and semantic competence can be subjected to sham-controlled causal testing rather than resting solely on a priori reasoning.
+
+Three extensions are highest priority. First, harden CF relevance controls and diagnose the Qwen2.5-1.5B null via per-type behavioral stratification. Second, replace padding-based COH pseudo-ablations with fluent, semantically irrelevant distractors to separate relevance from information-presence effects. Third, add outside-window SDH controls and structure-controlled off-target positions to discriminate relational-structure hypotheses from diffusion-based alternatives. Together these steps would convert the present protocol-and-constraint framework into a progressively sharper instrument for connecting transformer mechanisms to debates about semantic competence.
+
+Appendix A. Additional scoring and uncertainty details
+A.1. Scoring and label aggregation
+Let M be a causal language model defining a conditional distribution over token sequences. For a prompt x and candidate continuation y = (y_1, ..., y_T), define the raw log-probability score:
+S_M(x, y) = Σ_{t=1}^{T} log P_M(y_t | concat(x, y_{<t})).
+Define the length-normalized score:
+S̄_M(x, y) = (1/T) · S_M(x, y).
+Reported results use length-normalized scoring (the evaluation flag `no_length_norm=False`), i.e., label scores are based on S̄_M unless stated otherwise.
+When a label corresponds to multiple candidate continuations Y = {y^(1), ..., y^(k)}, label scores are aggregated via log-mean-exp:
+s(Y) = log((1/k) · Σ_{j=1}^{k} exp(S̄_M(x, y^(j)))).
+
+A.2. AoM composite
+AoM(M) = (DISAMB(M) + CF(M) + COH(M)) / 3.
+This composite is instrumental and not a definition of meaning.
+
+A.3. Statistical uncertainty
+Metrics report 95% bootstrap confidence intervals. Bootstrap replicates are 1000 in logged runs (`bootstrap_n=1000` where recorded). Resampling units are minimal pairs (DISAMB), items (CF/COH), and donor→receiver directions (CPT/SDH). Forward passes are run in evaluation mode with no sampling; reported seeds affect bootstrap resampling and deterministic selection procedures. [C8, R3]
+
+Appendix B. Datasets and validation
+Three JSONL suites are used: DISAMB (52 minimal pairs across 6 ambiguous word types), CF (140 items: 60 shift, 60 invariant, 20 graded), and COH (80 items with matched ablation variants; 240 contexts total). Schema validation and tokenization boundary checks are documented in the replication bundle supplementary materials (including full schemas, template examples, and validation diagnostics). [C1, E2a, E1]
+
+Appendix C. Activation patching protocols
+C.1. CPT-style activation patching
+Aggregates and controls. Per donor→receiver direction i, compute layerwise effect_{i,ℓ} values (with effect_ℓ defined in §2.1). Define maxeff_i = max_ℓ effect_{i,ℓ} and ℓ_i* = argmax_ℓ effect_{i,ℓ}. Reported “mean max effect” is the bootstrap mean of maxeff_i over directions (95% CI). “Flip rate @ best layer” counts donor-directed flips at ℓ_i* when the unpatched receiver prediction is not y_donor and the patched prediction equals y_donor. Sham patching replaces receiver states with receiver states (no-op). Full protocol/implementation details are in supplementary materials.
+
+C.2. Causal patching beyond disambiguation (COH and CF)
+COH pseudo-ablation patching. For each COH item, construct alignment-preserving pseudo-ablated variants by replacing either the constraint sentence or an irrelevant sentence with padding tokens. Patch the corresponding span states from pseudo runs into the main run across layers ℓ. The effect metric is positive degradation in the coherence margin (valid vs invalid continuation), and the primary diagnostic is the constraint–irrelevant degradation asymmetry; sham patching is a no-op baseline. [C9]
+
+CF intervention-span patching. For each CF item, identify the minimal contiguous token-level divergence between base prompt x and intervention prompt x'. With `span_mode=left_aligned_truncated`, donor and receiver spans are left-aligned and truncated to shared length when needed; donor states from x' are patched into x at each layer ℓ. The primary metric is donor-directed preference-margin shift with receiver→receiver sham no-op. Reported CF patching excludes graded items and uses 60 shift items plus 20 substitution-invariant controls with non-empty divergence spans. [C10]
+
+Appendix D. SDH protocol details
+The SDH target-specificity test compares donor-directed effects from target-span versus off-target control-span patching at fixed depth ℓ* = round(0.25 × (L−1)) under `position_window=8`, exclusion buffers (`buffer=2`, `donor_buffer=2`), and deterministic selection (`selection_seed=0`; fallback order `matched_token`, `same_index`, `same_index_relaxed`). For each direction i, compute E_target,i = effect_{ℓ*} under target-span patching, E_ctrl,i = effect_{ℓ*} under control-span patching, Δ_i = E_target,i − E_ctrl,i, and win_i = 1[Δ_i>0]; report bootstrap means and 95% CIs for E_target, E_ctrl, Δ, and win rate. Strategy-stratified SDH diagnostics (former Table 3b detail) are reported in supplementary materials. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
+
+Appendix E. Provenance and evidence contract
+Evidence tags (e.g., `[E3]`, `[R0]`, `[C2]`) map manuscript claims to rows in `AoM_evidence_contract.md`.
+Supplementary materials in the project repository and archived replication bundle include SDH strategy-stratified outputs (Table 3b detail), expanded dataset schemas/templates/validation checks, CF span-alignment and interpretive-scope diagnostics, full deterministic provenance listings (hardware/software, commits, hashes, checkpoint revisions), and per-artifact manifests/run metadata.
+This appendix intentionally omits full hash/version listings from the printed paper. [R0, R3, C2, C11]
+
+Appendix F. Additional analyses
 Intervention-type stratification (shift items; N = 20 per type) is heterogeneous across models. [E10e]
 
 | Model | Negation mean max effect (CI) | Quantifier mean max effect (CI) | Role-swap mean max effect (CI) |
@@ -347,85 +249,14 @@ Intervention-type stratification (shift items; N = 20 per type) is heterogeneous
 | Qwen2.5‑1.5B | 0.806 [0.700, 0.925] | 0.159 [0.106, 0.231] | 0.506 [0.219, 0.881] |
 | Qwen2.5‑3B | 0.753 [0.663, 0.839] | 0.338 [0.278, 0.397] | 3.453 [2.903, 4.034] |
 
-Interpretation. Three models show the expected relevance-controlled pattern: intervention-span patching produces substantially larger donor-directed effects on meaning-altering shift items than on label-preserving substitution controls (d = 0.68–1.18), with sham baselines near zero. Qwen2.5‑1.5B is a genuine negative: shift and invariant effects are statistically indistinguishable (d ≈ 0). This qualifies any blanket generalization claim for CF patching: relevance control holds in 3/4 tested checkpoints under this protocol, not 4/4. [E10e, C10]
+Sensitivity check (noun-substitution controls; criterion-based exclusion). Three noun-substitution controls produced unusually large invariant effects across Qwen models, consistent with weak lexical calibration for those specific "synonym" substitutions. Excluding those 3 controls yields updated shift-vs-control Cohen's d values: GPT-2 1.25 (+0.08), Qwen2.5-0.5B 0.81 (+0.13), Qwen2.5-1.5B 0.28 (+0.29), Qwen2.5-3B 0.99 (+0.19). The Qwen2.5-1.5B null therefore partially lifts but remains weak, so the checkpoint-level null is not solely an artifact of those control items. This exclusion is criterion-based (lexical calibration), not outcome-based. [E10e]
 
-Interpretive scope of the 1.5B null. The Qwen2.5-1.5B shift≈invariant result is treated as a model-specific protocol failure, not as a direct falsification of CPT. CPT predicts donor-directed causal leverage under meaning-relevant interventions, but does not entail uniform shift>invariant separation at every checkpoint under one intervention design. This null therefore motivates heterogeneity hypotheses (e.g., training-mixture effects, lexical calibration, or span-alignment sensitivity) for targeted follow-up tests.
-
-Type note (diagnostic). The 1.5B null is driven by two factors visible in the intervention-type strata: unusually weak shift effects for quantifier items (0.159 vs 1.132 in GPT‑2) and elevated invariant effects for synonym substitutions. We treat this as a model-specific constraint on CF relevance control under patching and report intervention-type strata in the artifacts for follow-up. [E10e]
-
-Sensitivity: excluding noun-substitution controls (criterion-based). Three noun-substitution items produce invariant effects 4–22× larger than the remaining 17 controls across all Qwen models, indicating poor lexical calibration (the "synonyms" are not close distributional equivalents). Excluding these 3 items and holding the pooled SD constant yields adjusted d values: GPT‑2 1.25 (+0.08); Qwen2.5‑0.5B 0.81 (+0.13); Qwen2.5‑1.5B 0.28 (+0.29); Qwen2.5‑3B 0.99 (+0.19). The 1.5B null partially lifts (d: −0.01 → 0.28) but remains weak, confirming that the 1.5B result is not solely an artifact of poorly calibrated noun controls. This exclusion is criterion-based (lexical calibration), not outcome-based. [E10e]
-
-5.8.3. Summary: causal evidence across AoM components
-Table 4 summarizes causal patching evidence across AoM components. DISAMB, CF (with substitution-invariant controls), and COH patching are reported for all four models. [E3, E4a, E10e, E10c, E10d, C9, C10]
-
-[Table 4 about here]
-
-
-6. Discussion: from metrics to mechanism to philosophy
-6.1. What the results establish (and what they do not)
-Within the limits of templated datasets and a small number of seeds, the results establish an AoM competence profile under controlled variation:
-* context-sensitive disambiguation and coherence behavior. [E2a, E1]
-* stronger response to meaning-altering interventions than to shams. [E8, E7]
-* causal leverage of token-in-context states via patching. [E3, E4a, C3]
-* constraint-directed coherence degradation under COH pseudo-ablation patching (constraint vs irrelevant spans, relevance-controlled). [E10c, E10d, C9]
-* donor-directed causal effects on counterfactual sensitivity under intervention-span patching, with shift > invariant separation in 3/4 tested checkpoints (d = 0.68–1.18) and a genuine null for Qwen2.5‑1.5B (d ≈ 0). [E10e, C10]
-The results do not settle reference, grounding, normativity, or consciousness.
-6.2. From behavior to mechanism: what patching adds
-Behavioral AoM metrics alone underdetermine mechanism. CPT patching adds an intervention:
-1. Define a meaning-relevant behavioral readout on minimal pairs: relative preference between sense-diagnostic labels.
-2. Intervene on internal variables: (h_{M,\ell,p}(x)) at the ambiguous target span.
-3. Measure donor-directed change via (\operatorname{effect}_\ell) (margin shift; §4.6).
-4. Compare to controls (sham patching; alignment checks).
-This yields causal evidence that token-in-context states at specific depths control disambiguation behavior. [E3, E4a, C3]
-COH pseudo-ablation patching extends this intervention logic to discourse constraints: across the tested model families (GPT‑2 and Qwen2.5‑{0.5B, 1.5B, 3B}), injecting pseudo-ablated states at constraint-relevant spans degrades coherence substantially more than patching length-matched irrelevant spans (d = 1.27–1.53), supporting a relevance-controlled causal effect on coherence under this protocol. [E10c, E10d, C9]
-Spatial structure (SDH constraint). The SDH stress test adds a second constraint: at fixed depth (\ell^*) and within a local position window (position_window=8, buffers ±2), off-target control patches often produce donor-directed effects comparable to target patches. This rules out a general claim that causal control at (\ell^*) is uniquely anchored to the target span. The natural mechanistic reading is local relational distribution within the tested neighborhood, not isolated token storage. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-6.3. Anticipating hostile reviewers: strongest objections and responses
-Objection 1: “AoM is only surface.”
-AoM is an empirical target. It is not a metaphysical thesis. If meaning requires more than AoM, the burden is to specify competence-relevant necessity and detectable signatures (§6.6).
-Objection 2: "Templates are too easy; keyword baseline is strong."
-The keyword baseline attains 0.615, confirming that surface cues are present in these templates. However, stratified analysis (§5.2) shows that models maintain accuracy well above 0.75 even on the 40/52 pairs where the keyword heuristic fails—with Qwen models dropping by at most 0.023. DISAMB accuracy is not reducible to cue exploitation. [E2a, E1, E9, C5]
-Objection 3: “Patching could be artifact.”
-Sham patching is near zero and layerwise profiles are structured. Stronger controls (random-span patching, outside-window patching, activation norm diagnostics) remain desirable and are listed as future work. [E3, E4a, C3]
-Objection 4: “Tokenization confounds.”
-Span alignment checks skip misaligned directions. The paper reports skipped counts. This remains a validity condition. [E3, E4a, C3]
-Objection 5: “COH ablations reflect length.”
-Ablate-irrelevant controls for length reduction. Ablate-relevant degrades more. That is the intended diagnostic asymmetry. [E7]
-6.4. Relation to Kaplan, Braun, Wittgenstein, and Kant (without overreach)
-Terminological clarification (scope of "context"). Throughout this paper, "context" in the operational sections denotes linguistic co-text: the surrounding token sequence and discourse material available to the model at inference time. We do not claim access to Kaplanian extra-linguistic context parameters (e.g., speaker, time, place). Kaplan's framework is used here as a comparative stability ideal for implementation-level reasoning, not as the literal variable set manipulated by our interventions.
-Kaplan (1989) and Braun (1995): stability ideals, relational character, and the empirical pressure from SDH. Kaplan’s character/content framework assigns to each expression a fixed rule (character) that maps contexts to contents, treating context as a parameter that selects among content values; this is a theory of meaning rather than an implementation claim, and nothing in Kaplan entails a particular computational architecture. Although our DISAMB items concern lexical ambiguity rather than Kaplanian indexicals, Kaplan’s decomposition supplies a useful template for contrasting a stability‑ideal implementation—expression‑linked rules with context as a separable parameter—against relational implementation pictures. The point is not that Kaplan’s framework directly predicts lexical-disambiguation circuitry, but that it offers a generic factorization—stable type-level rule plus context parameterization—against which token-privileged mechanistic pictures can be contrasted. The contrast here is not Kaplan vs Braun as semantic theories, but token‑privileged vs relational implementation glosses that one might overlay on Kaplan-style factorization. Nothing here assumes that a stability ideal must be implemented token-locally; the empirical pressure from SDH is directed at token‑privileged or token‑atomic mechanistic glosses, not at Kaplan’s semantic framework itself. A natural token‑privileged gloss of the stability ideal is that, if an expression’s contribution is implemented as something like an expression‑linked controller, the ambiguous token position should be a privileged causal site for disambiguation, with surrounding context modulating that site rather than participating symmetrically in causal control. Under this gloss, the SDH stress test (§5.7) would predict robust positive target–control deltas: patching the ambiguous span should yield systematically stronger donor‑directed effects than patching nearby off‑target positions, because causal control would be comparatively anchored to the expression’s own site. Braun (1995), by contrast, challenges treating character as an intrinsic, purely type-level property independent of broader syntactic and contextual structure, and emphasizes structured relations among an expression, its co‑text, and the discourse situation. On a relational gloss, the mechanistic prediction differs: disambiguation‑relevant causal control should often be distributed across positions that participate in the relational structure, not uniquely localized at the ambiguous token.
-
-The SDH results bear on this contrast. At fixed depth and within the tested local neighborhood (position_window=8, exclusion buffers ±2), seven of eight models show target–control deltas near zero or negative; only Qwen2.5‑3B exhibits a robust positive delta (Table 3). The stratified analysis (Table 3b) sharpens the point: measured specificity depends strongly on control selection strategy—some strategies yield systematically negative deltas, while same_index_relaxed yields positive deltas across most models. This pattern exerts pressure on token‑privileged glosses at the tested depth and within the tested window: it suggests that whatever controls disambiguation there is not uniquely anchored to the target span. A relational reading predicts exactly this possibility, because positions other than the ambiguous token can participate in the integration that controls disambiguation behavior. At the same time, the strategy sensitivity also signals a methodological warning: “neutral” controls are nontrivial in templated contexts, and some strategies may systematically select informationally salient positions (a hypothesis that can be directly tested by analyzing which tokens/roles are chosen under each strategy).
-
-Two caveats constrain the inference. First, the SDH test operates at a single fixed depth (depth_frac=0.25), not at each model’s empirically best layer from a full sweep; specificity may differ at other depths. Second, the result establishes local non‑exclusivity within the tested window, not global diffusion; positions outside the tested neighborhood are not measured in this submission (§6.5, F4). Within these bounds, the empirical pattern aligns more naturally with Braun‑style relational emphases than with token‑atomic locality: at the tested depth, disambiguation‑relevant causal control is often not uniquely anchored to the ambiguous token position, but appears distributed across a local neighborhood in a way that is sensitive to the relational structure of the context. This does not refute Kaplan’s semantic framework; it constrains token‑atomic mechanistic glosses on stability ideals and motivates more explicit modeling of how context is integrated and routed in transformer computation.
-Wittgenstein (1953) and Cavell (1979): meaning as use, and why context is constitutive rather than auxiliary.
-On a Wittgensteinian view, “meaning is use” (PI §43): the contribution of an expression is fixed by the role it plays in rule-governed linguistic activity, not by a context-independent semantic atom carried by the word-type. In that sense, context is not merely an external input that selects among pre-existing meanings; it is part of what constitutes the use that makes an utterance intelligible in the first place (a point Cavell develops by stressing that understanding is embedded in forms of life and criteria for correct application). Read with this discipline, AoM is explicitly a *use-profile* rather than a metaphysical semantics: DISAMB and CF probe whether a model’s preferences track controlled changes in use-conditions (surrounding cues; meaning-altering vs meaning-preserving edits), and COH probes whether the model maintains use-constraints across discourse rather than responding only to length or recency. The patching results then provide a mechanistic analogue of the Wittgensteinian moral: the proximate controllers of these use-sensitivities are not static word-types but contextualized token-in-context states, and the SDH stress test further suggests that—at least at the tested depth and within the tested neighborhood—causal control is often distributed across relationally relevant positions rather than uniquely localized at the ambiguous token. This does **not** establish the specifically Wittgensteinian normative dimension (public criteria, correction, rule-following as a social practice): our operationalization remains text-internal and non-interactive. The narrower claim is that, within the model, the *appearance* of meaning-like competence is implemented through context-dependent integration that is empirically isolable by controlled interventions on internal state.
-Kant: phenomena and methodological modesty
-AoM/CPT/SDH is a phenomena-first program: measure competence signatures and causal controllers without claiming to settle meaning “in itself.”
-6.5. Falsifiers and limits
-CPT is falsifiable in this framework (F1–F2). SDH is falsifiable as a local distribution claim once outside-window controls are implemented (F4).
-Current limits:
-* prototype operationalization with small, templated suites: DISAMB (52 pairs) and the current CF/COH sets are intentionally controlled for identifiability in a first-pass causal test. This strengthens internal validity but limits claims about naturalistic generalization; larger and less templated corpora are required in the next phase.
-* DISAMB templates contain surface cues (keyword baseline 0.615), though keyword-failure stratification shows accuracy remains high on the 40/52 pairs where the heuristic fails; further adversarial hardening would strengthen generality. [E2a, E1, C5, E11b]
-* CF causal patching now includes substitution-invariant controls (N=20) and is relevance-controlled by design; the expected shift > invariant separation holds for 3/4 tested checkpoints but fails for Qwen2.5‑1.5B (d ≈ 0). A criterion-based sensitivity analysis excluding poorly calibrated noun-synonym controls (§5.8.2) partially lifts the 1.5B null (d → 0.28) but does not resolve it. The invariant set is small; strengthening and broadening invariant controls is a concrete next step. [C10, E10e]
-* limited seeds in reported AoM+CPT sweeps; [E2a, E1, E3, E4a]
-6.6. Burden shift and the context trilemma
-The AoM program is intended to change what must be argued, not to settle metaphysics. The results in this paper provide (i) behavioral evidence for a consistent (suite-conditional) pattern of context-sensitivity across DISAMB/CF/COH under controlled manipulations, and (ii) causal evidence that internal token-in-context states at specific depths exert donor-directed control over AoM-relevant preference margins under activation patching, with sham baselines near zero and structured depth profiles. SDH adds a further mechanistic constraint: at a fixed tested depth and within a local neighborhood, causal control is often not uniquely localized to the ambiguous token position. These findings do not establish meaning proper, but they do make purely dismissive “mere surface” moves less informative: to maintain a meaning-beyond-AoM position while conceding AoM-like competence, one must identify an additional property that is (1) competence-relevant, (2) plausibly absent here, and (3) associated with detectable signatures that could in principle be measured.
-However, the force of this burden-shift is **conditional** on closing the remaining validation gaps in the present experimental regime. In this revision: DISAMB templates contain surface cues (keyword baseline 0.615), though stratified analysis shows models retain high accuracy on the keyword-failure subset; COH patching now replicates across all four models with large constraint–irrelevant asymmetries (d > 1.2); and CF patching is now relevance-controlled by design (shift vs substitution-invariant), with the expected separation holding for 3/4 checkpoints but failing for Qwen2.5‑1.5B. As remaining gaps are closed—by broadening and hardening the invariant control set, extending COH patching with fluent natural-language distractor replacements (in addition to padding), and adding outside-window SDH controls—the AoM evidence would increasingly constrain meaning-beyond-AoM proposals to be explicit about what more is required and how it would show up empirically.
-The present results remain compatible with multiple interpretations: (A) context-dependent semantics realized by distributed relational states; (B) robust competence without traditional semantics; (C) compressed, practice-derived competence without normativity. This paper does not adjudicate among (A)–(C). It aims to supply a shared empirical substrate—operational competence signatures plus causal-control and spatial-structure constraints—on which the five positions surveyed by Søgaard (2025) can make more discriminating commitments.
-
-7. Conclusion
-This paper defines appearance of meaning (AoM) as an operational competence profile under controlled context variation and states CPT as a causal-control hypothesis for transformer architectures.
-GPT‑2 and Qwen2.5 models achieve AoM composites from 0.8489 to 0.9026 on these suites. [E2a, E1]
-CPT-style activation patching yields donor-directed effects with sham baselines near zero and mid-depth peaks (≈29–50% depth across the evaluated checkpoints, using 0-indexed layers and depth_frac=layer/(L-1)). [E3, E4a]
-A fixed-layer target-specificity stress test across eight models evaluates SDH. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-Specificity is heterogeneous: in most models tested, donor-directed control at (\ell^*) is not uniquely localized to the target span within the tested local window (position_window=8, buffers ±2). [E5a, E5b, E5c, E5d, E5e, E5f]
-Only Qwen2.5‑3B shows a robust positive specificity delta under this protocol. [E5a, E5b, E5c, E5d, E5e, E5f]
-Control selection strategy materially affects measured specificity and must be reported. [C4, E5a, E5b, E5c, E5d, E5e, E5f]
-This submission is therefore a JoLLLI-oriented theory-plus-protocol paper: it establishes an operational target and causal test framework under tightly controlled templates, while leaving exhaustive mechanistic decomposition and broad naturalistic stress-testing to follow-on work.
-Several concrete extensions follow from documented limitations, listed in priority order.
-First priority: characterizing and hardening CF relevance control under patching. A shift vs substitution-invariant comparison is now implemented (N=60 shift, N=20 invariant; zero skips); the expected separation holds for three checkpoints (d = 0.68–1.18) but fails for Qwen2.5‑1.5B (d ≈ 0). Next steps include expanding the invariant set beyond synonym substitutions, reporting type-stratified separations, and testing whether the 1.5B null persists under alternative shift subsets or alternative invariant constructions.
-Second: replacing padding-based COH pseudo-ablations with fluent natural-language distractor replacements to test robustness to the distribution-shift concern. (COH pseudo-ablation patching now covers all four models with large constraint–irrelevant asymmetries; the padding caveat remains the primary open robustness question for this component.)
-Third: hardening the DISAMB suite against cue leakage and adding outside-window controls for SDH would strengthen the most protocol-conditional components.
+Statements and Declarations
+Funding: This research received no external funding (self-funded).
+Competing interests: The author declares no competing interests.
+Data availability: Replication package, datasets, run manifests, and deterministic provenance (hardware, commits, hashes, checkpoint revisions) are available at https://github.com/Satori-1618/AoM_CPT and in the archived replication bundle linked from the repository.
+Code availability: Evaluation code, table-generation scripts, and release-gate tooling are available in the same repository and archived replication bundle.
+AI assistance: LLM tools were used for coding and language-editing support (including Anthropic Claude Code and OpenAI GPT-5/Codex variants). Hypotheses, analyses, result interpretation, and all final scientific claims were authored and verified by the human author.
 
 References
 Belinkov, Y., & Glass, J. (2019). Analysis Methods in Neural Language Processing: A Survey. TACL / arXiv versions.
@@ -459,19 +290,10 @@ Veltman, F. (1996). Defaults in Update Semantics. Journal of Philosophical Logic
 Vig, J., Gehrmann, S., Belinkov, Y., Qian, S., Nevo, D., Singer, Y., & Shieber, S. (2020). Investigating Gender Bias in Language Models Using Causal Mediation Analysis. NeurIPS 2020.
 Wang, K., Variengien, A., Conmy, A., Shlegeris, B., & Steinhardt, J. (2023). Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 Small. ICLR 2023. arXiv:2211.00593.
 Wittgenstein, L. (1953). Philosophical Investigations. Blackwell.
-Model cards / checkpoints (provenance, parameterization, licensing) via Hugging Face:
-* https://huggingface.co/openai-community/gpt2
-* https://huggingface.co/Qwen/Qwen2.5-0.5B
-* https://huggingface.co/Qwen/Qwen2.5-1.5B
-* https://huggingface.co/Qwen/Qwen2.5-3B
-* https://huggingface.co/Qwen/Qwen3-4B
-* https://huggingface.co/meta-llama/Llama-3.2-1B
-* https://huggingface.co/meta-llama/Llama-3.2-3B
-* https://huggingface.co/meta-llama/Meta-Llama-3.1-8B
 
 Tables and Figures
 Table 1. Behavioral AoM metrics across models
-Table 1. Behavioral AoM metrics for GPT‑2 and Qwen2.5 models on the hardened `paper_hardened_v2` suites. DISAMB accuracy is computed over minimal pairs (52 pairs, pair-bootstrap). CF reports shift-direction accuracy on shift items only (N=60 in the canonical `aom_eval.csv` artifact); invariant (N=60) and graded (N=20) items are reported via split metrics and perturbation-magnitude fields. COH reports constraint accuracy in the main condition (80 items); matched ablation controls are length-matched variants across three conditions (240 contexts total). Brackets denote 95% bootstrap confidence intervals (1000 replicates; seed=42). [E2a, E1, C6, C7]
+Table 1. Behavioral AoM metrics for GPT‑2 and Qwen2.5 on hardened suites: DISAMB (52 pairs), CF shift-direction on shift items (N=60), and COH main/ablation accuracies (80 items; 240 contexts including controls). Brackets denote 95% bootstrap confidence intervals. [E2a, E1, C6, C7]
 Model	AoM composite	DISAMB acc (CI)	CF shift-dir acc (CI)	COH main acc (CI)	COH ablate-irrelevant (CI)	COH ablate-relevant (CI)
 openai-community/gpt2 (124M)	0.869	0.856 [0.788, 0.914]	0.850 [0.750, 0.933]	0.900 [0.838, 0.963]	0.888 [0.812, 0.950]	0.588 [0.487, 0.700]
 Qwen/Qwen2.5-0.5B	0.849	0.913 [0.856, 0.962]	0.733 [0.617, 0.833]	0.900 [0.838, 0.963]	0.888 [0.825, 0.950]	0.362 [0.263, 0.475]
@@ -480,14 +302,20 @@ Qwen/Qwen2.5-3B	0.903	0.933 [0.885, 0.981]	1.000 [1.000, 1.000]	0.775 [0.688, 0.
 Keyword baseline (DISAMB suite): 0.615 [0.558, 0.673] (pair-bootstrap CI aligned to DISAMB bootstrap unit). [E2a, E1, C5]
 
 Table 2. CPT-style activation patching aggregates
-Table 2. CPT-style context-swap activation patching aggregates on the disambiguation suite (GPT‑2 and Qwen2.5). “Mean max effect” averages (over directions) (\max_\ell \operatorname{effect}_\ell) as defined in §4.6. Flip rate reports donor-directed flips at the empirically best layer. Sham patching replaces with the receiver’s own states (no-op). Block counts (L) are inferred from the per-layer effect columns in the cited artifacts (L = 1 + max{i : cpt_effect_layer_i is finite}). [E3, E4a, C3]
+Table 2. CPT context-swap patching aggregates on DISAMB for GPT‑2 and Qwen2.5 (104 donor→receiver directions per model; zero skips). “Mean max effect” averages max_ℓ(effect_ℓ), with `effect_ℓ` defined in §2.1 and aggregate construction in Appendix C.1; sham is receiver→receiver no-op. [E3, E4a, C3]
 Model	Patched / total (skipped)	Mean max effect (CI)	Flip rate @ best layer (CI)	Mean argmax layer	Sham mean max effect (CI)
 GPT‑2 (124M; 12 blocks)	104/104 (0)	0.395 [0.301, 0.501]	0.000 [0.000, 0.000]	5.47	2.43×10⁻⁶ [1.23×10⁻⁶, 3.76×10⁻⁶]
 Qwen2.5‑0.5B (24 blocks)	104/104 (0)	1.651 [1.241, 2.128]	0.058 [0.019, 0.106]	8.19	7.59×10⁻⁶ [6.13×10⁻⁶, 9.09×10⁻⁶]
 Qwen2.5‑1.5B (28 blocks)	104/104 (0)	1.807 [1.461, 2.230]	0.115 [0.058, 0.183]	7.72	5.67×10⁻⁶ [3.69×10⁻⁶, 7.87×10⁻⁶]
 Qwen2.5‑3B (36 blocks)	104/104 (0)	1.686 [1.304, 2.117]	0.048 [0.010, 0.087]	13.53	1.61×10⁻⁵ [1.42×10⁻⁵, 1.79×10⁻⁵]
+
+Figure 1. CPT layerwise donor-directed effect profile summary
+Figure 1. Mean donor-directed CPT effect by relative depth for the four AoM+CPT sweep models. Curves show early-to-mid peaks and near-zero sham baselines across checkpoints. [E3, E4a, C3]
+Figure 2. Causal specificity contrasts across components
+Figure 2. Causal specificity contrasts: CF shift vs substitution controls (left) and COH constraint vs irrelevant spans (right). CF shows shift>control in 3/4 checkpoints; COH separation is robust across all four (see Table 4). [E10e, E10c, E10d, C9, C10]
+
 Table 3. SDH target-specificity stress test (fixed layer)
-Table 3. Target-specificity results at fixed layer (\ell^*=\operatorname{round}(0.25\times(L-1))) with position_window=8 and exclusion buffers ±2. (E_{\text{target}}) and (E_{\text{ctrl}}) are donor-directed effects (\operatorname{effect}{\ell^*}) (margin shifts; §4.6). (\Delta = E{\text{target}}-E_{\text{ctrl}}). Win rate is (\Pr[\Delta_i>0]). [E5a, E5b, E5c, E5d, E5e, E5f, C4]
+Table 3. SDH fixed-depth specificity results at ℓ* = round(0.25 × (L−1)), with `position_window=8` and exclusion buffers ±2. Δ = E_target − E_ctrl and win rate = P(Δ_i>0). N directions per model = 100; strategy-stratified diagnostics are in supplement. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
 Model	Layers	ℓ*	E_target (CI)	E_ctrl (CI)	Δ (CI)	Win rate (CI)
 GPT‑2 (124M)	12	3	0.44 [0.28, 0.61]	0.95 [0.64, 1.27]	-0.51 [-0.85, -0.20]	0.41 [0.32, 0.50]
 Qwen2.5‑0.5B	24	6	1.25 [0.98, 1.55]	1.37 [0.95, 1.87]	-0.13 [-0.65, 0.36]	0.52 [0.42, 0.62]
@@ -497,31 +325,16 @@ Qwen3‑4B	36	9	1.59 [1.09, 2.12]	1.76 [1.06, 2.56]	-0.17 [-1.04, 0.65]	0.52 [0.
 Llama‑3.2‑1B	16	4	1.07 [0.73, 1.38]	1.23 [0.82, 1.68]	-0.16 [-0.70, 0.33]	0.50 [0.40, 0.59]
 Llama‑3.2‑3B	28	7	1.10 [0.78, 1.48]	1.27 [0.80, 1.75]	-0.17 [-0.79, 0.43]	0.52 [0.42, 0.61]
 Llama‑3.1‑8B	32	8	0.80 [0.57, 1.07]	1.33 [0.84, 1.89]	-0.52 [-1.13, 0.02]	0.50 [0.40, 0.59]
-Table 3b. SDH specificity deltas by control selection strategy
-Table 3b. (\Delta) stratified by control selection strategy. Each entry reports mean (\Delta) with 95% CI and N of directions for that strategy. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
-Model	matched_token Δ	same_index Δ	same_index_relaxed Δ
-GPT‑2 (124M)	-0.74 [-1.17, -0.21] (N=30)	-0.70 [-1.62, 0.18] (N=30)	-0.20 [-0.51, 0.07] (N=40)
-Qwen2.5‑0.5B	-0.49 [-0.98, 0.00] (N=30)	-1.02 [-2.64, 0.45] (N=30)	+0.82 [0.37, 1.23] (N=40)
-Qwen2.5‑1.5B	-0.30 [-0.84, 0.27] (N=30)	-1.31 [-3.30, 0.50] (N=30)	+0.80 [0.17, 1.48] (N=40)
-Qwen2.5‑3B	+0.41 [-0.56, 1.33] (N=30)	-0.17 [-2.06, 1.71] (N=30)	+2.00 [1.06, 3.00] (N=40)
-Qwen3‑4B	+0.59 [-0.41, 1.75] (N=30)	-2.20 [-4.77, -0.01] (N=30)	+0.77 [0.02, 1.45] (N=40)
-Llama‑3.2‑1B	-0.17 [-0.83, 0.51] (N=30)	-1.24 [-2.75, 0.20] (N=30)	+0.65 [0.21, 1.10] (N=40)
-Llama‑3.2‑3B	-0.26 [-0.87, 0.38] (N=30)	-1.63 [-3.30, -0.06] (N=30)	+0.99 [0.46, 1.62] (N=40)
-Llama‑3.1‑8B	-0.36 [-0.99, 0.17] (N=30)	-1.99 [-3.75, -0.36] (N=30)	+0.45 [0.12, 0.84] (N=40)
+Table 4. COH and CF causal patching contrasts (merged)
+Table 4. Merged relevance-controlled contrasts for COH pseudo-ablations (constraint vs irrelevant) and CF intervention-span patching (shift vs substitution controls). COH uses N=160 total (80 per contrast); CF uses N=80 total (60 shift, 20 controls), with zero skips. All rows are sham-controlled with near-zero sham baselines; brackets denote 95% bootstrap confidence intervals. [E10c, E10d, E10e, C9, C10]
 
-Table 4. Causal patching across AoM components
-Table 4. DISAMB context-swap patching rows are reproduced from Table 2 for comparison. COH rows report pseudo-ablation patching on the hardened coherence suite across all four models; for COH, Mean Max Effect is the overall mean across constraint- and irrelevant-span patching conditions, and Cohen's d is for the constraint–irrelevant asymmetry. CF rows report intervention-span patching on shift items (N=60) versus substitution-invariant controls (N=20) under `span_mode=left_aligned_truncated`; for CF, Mean Max Effect reports the shift stratum mean, and Cohen's d is the shift–invariant separation computed over per-case max-over-layers effects. Sham baselines are near zero at the shown precision. Brackets denote 95% bootstrap confidence intervals. [E3, E4a, E10e, E10c, E10d]
-| Experiment | Model | Mean Max Effect (CI) | Sham Baseline | Key Contrast | Cohen's d | N Used / Total | Control Status |
-|---|---|---|---|---|---|---|---|
-| DISAMB context-swap | GPT‑2 | 0.395 [0.301, 0.501] | 2.43×10⁻⁶ | effect vs sham | — | 104/104 | Sham-controlled |
-| DISAMB context-swap | Qwen2.5‑0.5B | 1.651 [1.241, 2.128] | 7.59×10⁻⁶ | effect vs sham | — | 104/104 | Sham-controlled |
-| DISAMB context-swap | Qwen2.5‑1.5B | 1.807 [1.461, 2.230] | 5.67×10⁻⁶ | effect vs sham | — | 104/104 | Sham-controlled |
-| DISAMB context-swap | Qwen2.5‑3B | 1.686 [1.304, 2.117] | 1.61×10⁻⁵ | effect vs sham | — | 104/104 | Sham-controlled |
-| COH pseudo-ablation | GPT‑2 | 0.753 [0.651, 0.858] | 0.000 | constraint 1.094 vs irrelevant 0.411 (Δ = 0.683) | 1.266 | 160/160 | Sham + relevance-controlled |
-| COH pseudo-ablation | Qwen2.5‑0.5B | 1.010 [0.837, 1.193] | 0.009 | constraint 1.687 vs irrelevant 0.332 (Δ = 1.355) | 1.526 | 160/160 | Sham + relevance-controlled |
-| COH pseudo-ablation | Qwen2.5‑1.5B | 1.150 [0.964, 1.355] | 0.019 | constraint 1.838 vs irrelevant 0.463 (Δ = 1.375) | 1.368 | 160/160 | Sham + relevance-controlled |
-| COH pseudo-ablation | Qwen2.5‑3B | 0.869 [0.725, 1.025] | 0.010 | constraint 1.403 vs irrelevant 0.336 (Δ = 1.067) | 1.377 | 160/160 | Sham + relevance-controlled |
-| CF intervention-span | GPT‑2 | 0.701 [0.574, 0.850] | 0.000 | shift 0.701 vs invariant 0.133 (Δ = 0.568) | 1.179 | 80/80 (60+20) | Sham + relevance-controlled |
-| CF intervention-span | Qwen2.5‑0.5B | 1.478 [1.072, 1.911] | 0.000 | shift 1.478 vs invariant 0.402 (Δ = 1.076) | 0.677 | 80/80 (60+20) | Sham + relevance-controlled |
-| CF intervention-span | Qwen2.5‑1.5B | 0.491 [0.370, 0.632] | 0.000 | shift 0.491 vs invariant 0.496 (Δ = −0.005) | −0.009 | 80/80 (60+20) | Sham + relevance-controlled |
-| CF intervention-span | Qwen2.5‑3B | 1.515 [1.151, 1.929] | 0.000 | shift 1.515 vs invariant 0.356 (Δ = 1.159) | 0.798 | 80/80 (60+20) | Sham + relevance-controlled |
+| Experiment | Model | Target effect (CI) | Control effect (CI) | Δ | Cohen’s d | Sham |
+|---|---|---|---|---:|---:|---:|
+| COH | GPT‑2 | 1.094 [0.970, 1.219] | 0.411 [0.305, 0.515] | 0.683 | 1.266 | 0.000 |
+| COH | Qwen2.5‑0.5B | 1.687 [1.452, 1.945] | 0.332 [0.255, 0.428] | 1.355 | 1.526 | 0.009 |
+| COH | Qwen2.5‑1.5B | 1.838 [1.595, 2.133] | 0.463 [0.354, 0.593] | 1.375 | 1.368 | 0.019 |
+| COH | Qwen2.5‑3B | 1.403 [1.195, 1.627] | 0.336 [0.276, 0.400] | 1.067 | 1.377 | 0.010 |
+| CF | GPT‑2 | 0.701 [0.574, 0.850] | 0.133 [0.031, 0.260] | 0.568 | 1.179 | 0.000 |
+| CF | Qwen2.5‑0.5B | 1.478 [1.072, 1.911] | 0.402 [0.123, 0.873] | 1.076 | 0.677 | 0.000 |
+| CF | Qwen2.5‑1.5B | 0.491 [0.370, 0.632] | 0.496 [0.224, 0.797] | -0.005 | -0.009 | 0.000 |
+| CF | Qwen2.5‑3B | 1.515 [1.151, 1.929] | 0.356 [0.070, 0.777] | 1.159 | 0.798 | 0.000 |
