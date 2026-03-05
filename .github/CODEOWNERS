@@ -1,0 +1,8 @@
+# Default code owners
+* @Satori-1618
+
+# Paper and evidence contract
+AoM_JoLLLI/* @Satori-1618
+
+# Runtime and release scripts
+scripts/* @Satori-1618

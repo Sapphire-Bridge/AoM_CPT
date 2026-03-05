@@ -11,7 +11,9 @@ ARCHIVE="aom_replication_bundle.tar.gz"
 REVISION=""
 TOKENIZER_REVISION=""
 LOCAL_FILES_ONLY=0
+REPRO_MODE="auto"
 SKIP_RUN=0
+SKIP_RUN_SET=0
 SKIP_TABLES=0
 
 usage() {
@@ -29,12 +31,14 @@ Options:
   --revision REV               HF model revision pin passed to run_paper
   --tokenizer-revision REV     HF tokenizer revision pin passed to run_paper
   --local-files-only           pass --local_files_only to run_paper
+  --repro-mode MODE            auto | full_recompute | frozen_artifacts (default: auto)
   --skip-run                   do not run scripts/run_paper.py
   --skip-tables                do not run strict table regeneration
   -h, --help                   show this help
 
 Examples:
-  bash scripts/build_replication_bundle.sh --mode submission_full_strong --revision <hf_commit>
+  bash scripts/build_replication_bundle.sh --mode submission_full_strong --repro-mode full_recompute
+  bash scripts/build_replication_bundle.sh --mode submission_full_strong --repro-mode frozen_artifacts --results-dir results_submission_full
   bash scripts/build_replication_bundle.sh --mode m1max --revision <hf_commit>
   bash scripts/build_replication_bundle.sh --skip-run --results-dir results/paper_m1max --tables-dir tables_submission_full
 EOF
@@ -101,8 +105,14 @@ while [[ $# -gt 0 ]]; do
       LOCAL_FILES_ONLY=1
       shift
       ;;
+    --repro-mode)
+      [[ $# -ge 2 ]] || die "Missing value for --repro-mode"
+      REPRO_MODE="$2"
+      shift 2
+      ;;
     --skip-run)
       SKIP_RUN=1
+      SKIP_RUN_SET=1
       shift
       ;;
     --skip-tables)
@@ -123,6 +133,19 @@ case "$MODE" in
   smoke|m1max|a100|submission_full_strong) ;;
   *) die "Invalid --mode: $MODE (expected smoke|m1max|a100|submission_full_strong)" ;;
 esac
+
+case "$REPRO_MODE" in
+  auto|full_recompute|frozen_artifacts) ;;
+  *) die "Invalid --repro-mode: $REPRO_MODE (expected auto|full_recompute|frozen_artifacts)" ;;
+esac
+
+if [[ "$REPRO_MODE" == "full_recompute" ]]; then
+  [[ "$SKIP_RUN_SET" -eq 0 ]] || die "--repro-mode full_recompute cannot be combined with --skip-run"
+  SKIP_RUN=0
+fi
+if [[ "$REPRO_MODE" == "frozen_artifacts" ]]; then
+  SKIP_RUN=1
+fi
 
 RESULTS_DIR_ABS="$(cd "$(dirname "$RESULTS_DIR")" && pwd)/$(basename "$RESULTS_DIR")"
 TABLES_DIR_ABS="$(cd "$(dirname "$TABLES_DIR")" && pwd)/$(basename "$TABLES_DIR")"
@@ -232,6 +255,8 @@ fi
 
 bundle_paths=(
   "README.md"
+  "LICENSE"
+  "CITATION.cff"
   "PAPER_MODES.md"
   "PAPER_VERIFICATION_GUIDE.md"
   "AoM_JoLLLI"
@@ -261,6 +286,22 @@ bundle_paths=(
   "data_paper_hardened_v2"
   "$results_rel"
 )
+
+if [[ -f "$ROOT/CHANGELOG.md" ]]; then
+  bundle_paths+=("CHANGELOG.md")
+fi
+if [[ -f "$ROOT/CONTRIBUTING.md" ]]; then
+  bundle_paths+=("CONTRIBUTING.md")
+fi
+if [[ -f "$ROOT/SECURITY.md" ]]; then
+  bundle_paths+=("SECURITY.md")
+fi
+if [[ -f "$ROOT/.zenodo.json" ]]; then
+  bundle_paths+=(".zenodo.json")
+fi
+if [[ -d "$ROOT/docs/release" ]]; then
+  bundle_paths+=("docs/release")
+fi
 
 if [[ -f "$ROOT/SOURCE_GIT_COMMIT.txt" ]]; then
   bundle_paths+=("SOURCE_GIT_COMMIT.txt")

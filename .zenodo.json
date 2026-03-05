@@ -1,0 +1,20 @@
+{
+  "title": "AoM Prototype (Appearance of Meaning)",
+  "description": "Research companion repository for AoM behavioral and CPT causal-intervention evaluations, including reproducibility scripts and evidence-contract checks.",
+  "creators": [
+    {
+      "name": "Borck, Felix",
+      "affiliation": "Goethe University"
+    }
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
+  "keywords": [
+    "NLP",
+    "language models",
+    "causal interventions",
+    "activation patching",
+    "reproducibility"
+  ]
+}
