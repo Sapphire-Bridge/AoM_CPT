@@ -21,6 +21,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--aom_eval_csv", type=str, default="")
     p.add_argument("--cf_patching_csv", type=str, default="")
     p.add_argument("--coh_patching_csv", type=str, default="")
+    p.add_argument("--sdh_csv", type=str, default="")
     p.add_argument(
         "--skip_missing",
         action="store_true",
@@ -93,34 +94,44 @@ def main() -> None:
     out_dir = Path(str(args.out_dir))
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    jobs: List[Tuple[str, Path, Path, Path]] = [
+    jobs: List[Tuple[str, Path, Path, Path, Path | None]] = [
         (
             "aom_eval",
             ROOT / "tables" / "table_aom_eval.py",
             _resolve_default_csv(args.aom_eval_csv, results_dir=results_dir, default_name="aom_eval.csv"),
             out_dir / "aom_eval.tex",
+            None,
         ),
         (
             "cf_patching",
             ROOT / "tables" / "table_cf_patching.py",
             _resolve_default_csv(args.cf_patching_csv, results_dir=results_dir, default_name="cf_patching.csv"),
             out_dir / "cf_patching.tex",
+            None,
         ),
         (
             "coh_patching",
             ROOT / "tables" / "table_coh_patching.py",
             _resolve_default_csv(args.coh_patching_csv, results_dir=results_dir, default_name="coh_patching.csv"),
             out_dir / "coh_patching.tex",
+            None,
+        ),
+        (
+            "sdh_specificity",
+            ROOT / "tables" / "table_sdh_specificity.py",
+            _resolve_default_csv(args.sdh_csv, results_dir=results_dir, default_name="cpt_specificity_disamb_only.csv"),
+            out_dir / "sdh_specificity.tex",
+            out_dir / "sdh_specificity.md",
         ),
     ]
 
-    selected: List[Tuple[str, Path, Path, Path]] = []
+    selected: List[Tuple[str, Path, Path, Path, Path | None]] = []
     bundle_id_by_job: dict[str, str] = {}
     git_commit_by_job: dict[str, str] = {}
     bootstrap_n_by_job: dict[str, str] = {}
     bootstrap_seed_by_job: dict[str, str] = {}
     ci_by_job: dict[str, str] = {}
-    for name, script, in_csv, out_tex in jobs:
+    for name, script, in_csv, out_tex, out_md in jobs:
         if not script.exists():
             raise FileNotFoundError(f"Missing table script: {str(script)}")
         if not in_csv.exists():
@@ -161,7 +172,7 @@ def main() -> None:
                 print(msg, file=sys.stderr, flush=True)
                 continue
             raise ValueError(msg) from e
-        selected.append((name, script, in_csv, out_tex))
+        selected.append((name, script, in_csv, out_tex, out_md))
 
     used_bundle_ids = {v for v in bundle_id_by_job.values() if str(v).strip()}
     if len(used_bundle_ids) > 1:
@@ -183,18 +194,18 @@ def main() -> None:
     if len(used_ci) > 1:
         raise ValueError(f"Mismatched ci across table inputs: {ci_by_job!r}")
 
-    for name, script, in_csv, out_tex in selected:
-        _run(
-            [
-                sys.executable,
-                str(script),
-                "--in_csv",
-                str(in_csv),
-                "--out_tex",
-                str(out_tex),
-            ],
-            dry_run=bool(args.dry_run),
-        )
+    for name, script, in_csv, out_tex, out_md in selected:
+        cmd = [
+            sys.executable,
+            str(script),
+            "--in_csv",
+            str(in_csv),
+            "--out_tex",
+            str(out_tex),
+        ]
+        if out_md is not None:
+            cmd.extend(["--out_md", str(out_md)])
+        _run(cmd, dry_run=bool(args.dry_run))
 
     print(f"Wrote tables to {str(out_dir)}", flush=True)
 

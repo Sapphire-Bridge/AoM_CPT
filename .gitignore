@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 results_submission*/
 tables_submission*/
+tables_generated/
 results_submission_full/
 tables_submission_full/
 results_quickcheck/

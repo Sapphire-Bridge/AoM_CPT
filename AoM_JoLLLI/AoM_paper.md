@@ -318,17 +318,20 @@ Figure 1. Mean donor-directed CPT effect by relative depth for the four AoM+CPT 
 Figure 2. Relevance-controlled contrasts across components
 Figure 2. Relevance-controlled contrasts: CF shift vs substitution controls (left) and COH constraint vs irrelevant spans (right). CF shows shift>control in 3/4 checkpoints; COH separation is robust across all four (see Table 4). [E10e, E10c, E10d, C9, C10]
 
+<!-- BEGIN GENERATED TABLE: sdh_specificity -->
 Table 3. SDH target-minus-nearby-matched-span deltas (fixed layer)
 Table 3. SDH fixed-depth target-minus-nearby-matched-span results at ℓ* = round(0.25 × (L−1)) under the canonical `matched_token` control, with `position_window=8` and exclusion buffers ±2. Reported effects are signed donor-directed margin shifts; Δ = E_target − E_ctrl and win rate = P(Δ_i > 0). N directions per model = 104. This table reports one control-selection path and should not be read as a strategy-comparison table. [E5a, E5b, E5c, E5d, E5e, E5f, C4]
-Model	Layers	ℓ*	E_target (CI)	E_ctrl, matched span (CI)	Δ = E_target − E_ctrl (CI)	Win rate (CI)
-GPT‑2 (124M)	12	3	0.09 [-0.05, 0.23]	0.38 [0.13, 0.72]	-0.29 [-0.66, 0.00]	0.52 [0.42, 0.62]
-Qwen2.5‑0.5B	24	6	0.73 [0.39, 1.11]	0.07 [0.00, 0.17]	+0.66 [0.28, 1.06]	0.64 [0.55, 0.73]
-Qwen2.5‑1.5B	28	7	0.62 [0.29, 0.93]	0.08 [-0.05, 0.23]	+0.54 [0.20, 0.86]	0.66 [0.58, 0.75]
-Qwen2.5‑3B	36	9	1.06 [0.71, 1.49]	0.09 [-0.01, 0.20]	+0.97 [0.57, 1.41]	0.73 [0.64, 0.82]
-Qwen3‑4B	36	9	0.87 [0.52, 1.20]	-0.05 [-0.15, 0.04]	+0.92 [0.58, 1.24]	0.79 [0.71, 0.87]
-Llama‑3.2‑1B	16	4	0.38 [0.13, 0.65]	0.12 [0.02, 0.24]	+0.26 [-0.03, 0.55]	0.61 [0.52, 0.69]
-Llama‑3.2‑3B	28	7	0.21 [0.02, 0.41]	0.00 [-0.06, 0.05]	+0.21 [0.00, 0.43]	0.69 [0.61, 0.78]
-Llama‑3.1‑8B	32	8	0.31 [0.14, 0.47]	-0.02 [-0.09, 0.04]	+0.33 [0.18, 0.49]	0.72 [0.63, 0.81]
+| Model | Layers | ℓ* | E_target (CI) | E_ctrl, matched span (CI) | Δ = E_target − E_ctrl (CI) | Win rate (CI) |
+|---|---:|---:|---|---|---|---|
+| GPT‑2 (124M) | 12 | 3 | 0.09 [-0.05, 0.23] | 0.38 [0.13, 0.72] | -0.29 [-0.66, 0.00] | 0.52 [0.42, 0.62] |
+| Qwen2.5‑0.5B | 24 | 6 | 0.73 [0.39, 1.11] | 0.07 [0.00, 0.17] | +0.66 [0.28, 1.06] | 0.64 [0.55, 0.73] |
+| Qwen2.5‑1.5B | 28 | 7 | 0.62 [0.29, 0.93] | 0.08 [-0.05, 0.23] | +0.54 [0.20, 0.86] | 0.66 [0.58, 0.75] |
+| Qwen2.5‑3B | 36 | 9 | 1.06 [0.71, 1.49] | 0.09 [-0.01, 0.20] | +0.97 [0.57, 1.41] | 0.73 [0.64, 0.82] |
+| Qwen3‑4B | 36 | 9 | 0.87 [0.52, 1.20] | -0.05 [-0.15, 0.04] | +0.92 [0.58, 1.24] | 0.79 [0.71, 0.87] |
+| Llama‑3.2‑1B | 16 | 4 | 0.38 [0.13, 0.65] | 0.12 [0.02, 0.24] | +0.26 [-0.03, 0.55] | 0.61 [0.52, 0.69] |
+| Llama‑3.2‑3B | 28 | 7 | 0.21 [0.02, 0.41] | 0.00 [-0.06, 0.05] | +0.21 [0.00, 0.43] | 0.69 [0.61, 0.78] |
+| Llama‑3.1‑8B | 32 | 8 | 0.31 [0.14, 0.47] | -0.02 [-0.09, 0.04] | +0.33 [0.18, 0.49] | 0.72 [0.63, 0.81] |
+<!-- END GENERATED TABLE: sdh_specificity -->
 Table 4. COH and CF causal patching contrasts (merged)
 Table 4. Merged relevance-controlled contrasts for COH pseudo-ablations (constraint vs irrelevant) and CF intervention-span patching (shift vs substitution controls). COH uses N=160 total (80 per contrast); CF uses N=80 total (60 shift, 20 controls), with zero skips. All rows are sham-controlled with near-zero sham baselines; brackets denote 95% bootstrap confidence intervals. [E10c, E10d, E10e, C9, C10]
 
