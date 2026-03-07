@@ -91,7 +91,7 @@ The “surface statistics” objection (Bender & Koller 2020) motivates explicit
 4. Methods
 This section states only the load-bearing protocol choices for internal validity; full formal and implementation details are in Appendices A–D.
 4.1. Models evaluated
-For AoM+CPT sweeps we evaluate GPT‑2 (124M) and Qwen2.5-{0.5B, 1.5B, 3B}; for SDH we add Qwen3‑4B and Llama‑3.{2‑1B, 2‑3B, 1‑8B}. Runs use deterministic `model.eval()` log-probability scoring (no sampling). [E2a, E1, E3, E4a, E5a, E5b, E5c, E5d, E5e, E5f]
+For AoM+CPT sweeps we evaluate GPT‑2 (124M; Radford et al. 2019) and Qwen2.5-{0.5B, 1.5B, 3B} (Qwen Team 2024); for SDH we add Qwen3‑4B (Yang et al. 2025) and Llama‑3.{2‑1B, 2‑3B, 1‑8B} (Grattafiori et al. 2024; Meta 2024). Runs use deterministic `model.eval()` log-probability scoring (no sampling). [E2a, E1, E3, E4a, E5a, E5b, E5c, E5d, E5e, E5f]
 4.2. Datasets
 We use three controlled suites chosen for intervention identifiability: DISAMB (52 pairs), CF (shift/invariant/graded), and COH (80 items plus matched ablations). Schemas and validation are in Appendix B. [C1, E2a, E1]
 4.3. Scoring, uncertainty, and controls
@@ -268,6 +268,7 @@ Ethayarajh, K. (2019). How Contextual are Contextualized Word Representations? a
 Elhage, N., et al. (2021). A Mathematical Framework for Transformer Circuits. Technical report / arXiv versions.
 Geiger, A., Lu, H., Icard, T., & Potts, C. (2021). Causal Abstractions of Neural Networks. NeurIPS 2021. https://openreview.net/forum?id=RmuXDtjDhG
 Groenendijk, J., & Stokhof, M. (1991). Dynamic Predicate Logic. Linguistics and Philosophy.
+Grattafiori, A., Dubey, A., Jauhri, A., et al. (2024). The Llama 3 Herd of Models. arXiv:2407.21783. https://doi.org/10.48550/arXiv.2407.21783
 Heim, I., & Kratzer, A. (1998). Semantics in Generative Grammar. Blackwell.
 Jannai, D., Meron, A., Lenz, B., Levine, Y., & Shoham, Y. (2023). Human or Not? A Gamified Approach to the Turing Test. arXiv:2305.20010.
 Kaplan, D. (1989). Demonstratives. In Almog, Perry, & Wettstein (Eds.), Themes from Kaplan (pp. 481–563). Oxford University Press.
@@ -277,11 +278,13 @@ Lappin, S. (2024). Assessing the Strengths and Weaknesses of Large Language Mode
 Li, B. Z., Nye, M., & Andreas, J. (2021). Implicit Representations of Meaning in Neural Language Models. ACL-IJCNLP 2021.
 Lindsey, J., et al. (2025). On the Biology of a Large Language Model. Transformer Circuits. https://transformer-circuits.pub/2025/attribution-graphs/biology.html
 Mahowald, K., Ivanova, A. A., Blank, I. A., Kanwisher, N., Tenenbaum, J. B., & Fedorenko, E. (2024). Dissociating language and thought in large language models. Trends in Cognitive Sciences, 28(6), 517–540.
+Meta. (2024). Llama-3.2-1B model card. Hugging Face. https://huggingface.co/meta-llama/Llama-3.2-1B
 Meng, K., et al. (2022). Locating and Editing Factual Associations in GPT. (ROME; arXiv / workshop versions).
 Milliere, R., & Buckner, C. (2024a). A Philosophical Introduction to Language Models—Part I: Continuity With Classic Debates. arXiv:2401.03910.
 Milliere, R., & Buckner, C. (2024b). A Philosophical Introduction to Language Models—Part II: The Way Forward. arXiv:2405.03207.
 Mollo, D. C., & Milliere, R. (2023). The Vector Grounding Problem. arXiv:2304.01481. (Forthcoming in Philosophy and the Mind Sciences.)
 Piantadosi, S. T., & Hill, F. (2022). Meaning without reference in large language models. arXiv / preprint versions.
+Qwen Team. (2024). Qwen2.5 Technical Report. arXiv:2412.15115. https://doi.org/10.48550/arXiv.2412.15115
 Radford, A., Wu, J., Child, R., Luan, D., Amodei, D., & Sutskever, I. (2019). Language Models are Unsupervised Multitask Learners. OpenAI (GPT‑2 technical report).
 Rogers, A., Kovaleva, O., & Rumshisky, A. (2020). A Primer in BERTology: What We Know About How BERT Works. TACL.
 Søgaard, A. (2025). Do Language Models Have Semantics? On the Five Positions. ACL 2025. https://aclanthology.org/2025.acl-long.1258.pdf
@@ -290,6 +293,7 @@ Veltman, F. (1996). Defaults in Update Semantics. Journal of Philosophical Logic
 Vig, J., Gehrmann, S., Belinkov, Y., Qian, S., Nevo, D., Singer, Y., & Shieber, S. (2020). Investigating Gender Bias in Language Models Using Causal Mediation Analysis. NeurIPS 2020.
 Wang, K., Variengien, A., Conmy, A., Shlegeris, B., & Steinhardt, J. (2023). Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 Small. ICLR 2023. arXiv:2211.00593.
 Wittgenstein, L. (1953). Philosophical Investigations. Blackwell.
+Yang, A., Li, A., Yang, B., et al. (2025). Qwen3 Technical Report. arXiv:2505.09388. https://doi.org/10.48550/arXiv.2505.09388
 
 Tables and Figures
 Table 1. Behavioral AoM metrics across models
