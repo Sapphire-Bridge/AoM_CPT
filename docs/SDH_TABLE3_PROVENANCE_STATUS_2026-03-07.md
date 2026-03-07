@@ -21,4 +21,5 @@
 - The current frozen SDH artifact snapshot does not match the submitted manuscript Table 3 story.
 - The current frozen SDH artifact snapshot reports `N=104` directions per model and, within the reported run, uses only the `matched_token` control path.
 - This snapshot refers to the local `results_submission_full/` artifact set hash-frozen in `docs/SUBMISSION_SNAPSHOT_2026-03-07.md`; it is not git-tracked at the submission commit.
+- The recovered CSV rows currently carry artifact-origin commit `ea24714787ac14d6641f15fc08483a463dfb70b9`; manuscript/docs-only release commits layered on top of this snapshot should therefore use the frozen-artifact packaging path rather than `STRICT_SHA=1`.
 - Because no exact older SDH CSV or archived result directory matching the submitted `N=100` / strategy-stratified story has been recovered yet, revision text in this repo is scoped to the current frozen artifact snapshot rather than to the unrecovered submitted SDH analysis.

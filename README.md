@@ -216,6 +216,8 @@ Release-ready 8h gate (exact copy-paste command, from repo root):
 TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=1 ALLOW_DIRTY=0 RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz bash scripts/release_gate_fast_8h.sh
 ```
 
+Use `STRICT_SHA=1` only when the release commit also regenerated the result CSVs. Manuscript/docs-only releases over the current frozen artifact snapshot will fail that check by design, because the CSV `git_commit` fields preserve the originating artifact commit.
+
 For frozen-artifact packaging from existing validated outputs:
 
 ```bash
@@ -226,6 +228,8 @@ bash scripts/build_replication_bundle.sh \
   --tables-dir tables_submission_full \
   --archive aom_replication_bundle.tar.gz
 ```
+
+For the current public revision path, this `frozen_artifacts` command is the correct packaging route.
 
 ## Paper-mode runner (smoke / M1Max / A100)
 

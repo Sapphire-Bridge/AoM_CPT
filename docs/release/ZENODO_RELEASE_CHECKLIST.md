@@ -2,7 +2,9 @@
 
 ## 1) Prepare validated artifacts
 
-From a clean worktree:
+Choose one release path from a clean worktree.
+
+Full recompute / artifact-refresh release (artifacts regenerated at the release commit):
 
 ```bash
 TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=1 ALLOW_DIRTY=0 \
@@ -10,6 +12,19 @@ RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full \
 ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz \
 bash scripts/release_gate_fast_8h.sh
 ```
+
+Frozen-artifact release (manuscript/docs release over an already validated artifact snapshot):
+
+```bash
+bash scripts/build_replication_bundle.sh \
+  --mode submission_full_strong \
+  --repro-mode frozen_artifacts \
+  --results-dir results_submission_full \
+  --tables-dir tables_submission_full \
+  --archive aom_replication_bundle_fast8h.tar.gz
+```
+
+Use the frozen-artifact path when the release commit does not equal the originating `git_commit` recorded in the CSV artifacts. In that case `STRICT_SHA=1` will fail by design.
 
 This produces:
 
