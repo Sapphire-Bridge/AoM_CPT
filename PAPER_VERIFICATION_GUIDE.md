@@ -26,7 +26,7 @@ What it does:
 1) `git archive` export to a fresh clean-room directory
 2) creates a venv and installs portable pip dependencies from `requirements.txt` by default
 3) runs the selected suite (`smoke` here) plus packaging
-4) runs evidence checks (`scripts/check_evidence_contract*.py`) + `pytest -q`
+4) runs mode-appropriate evidence/pytest checks (`smoke` runs evidence-ID checks; `submission_full_strong` additionally runs artifact-field checks)
 5) builds a replication tarball
 
 After smoke passes, use the same clean-room path for the full canonical artifact recompute:

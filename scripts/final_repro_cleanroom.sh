@@ -32,7 +32,7 @@ Workflow:
 1) Export a fresh repo snapshot from --git-rev into --clean-dir.
 2) (Optional) create venv + install requirements (`requirements.txt` by default).
 3) Run scripts/build_replication_bundle.sh in the clean repo.
-4) (Optional) run evidence-contract checks/tests in the clean repo.
+4) (Optional) run mode-appropriate checks/tests in the clean repo.
 
 Usage:
   bash scripts/final_repro_cleanroom.sh [options]
@@ -308,10 +308,16 @@ fi
 if [[ "$SKIP_CHECKS" -eq 0 ]]; then
   echo "[run] $PY_RUN scripts/check_evidence_contract.py"
   (cd "$CLEAN_REPO" && "$PY_RUN" scripts/check_evidence_contract.py)
-  echo "[run] $PY_RUN scripts/check_evidence_contract_fields.py"
-  (cd "$CLEAN_REPO" && "$PY_RUN" scripts/check_evidence_contract_fields.py)
-  echo "[run] $PY_RUN -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py"
-  (cd "$CLEAN_REPO" && "$PY_RUN" -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py)
+  echo "[run] $PY_RUN -m pytest -q tests/test_evidence_contract_ids.py"
+  (cd "$CLEAN_REPO" && "$PY_RUN" -m pytest -q tests/test_evidence_contract_ids.py)
+  if [[ "$MODE" == "submission_full_strong" ]]; then
+    echo "[run] $PY_RUN scripts/check_evidence_contract_fields.py"
+    (cd "$CLEAN_REPO" && "$PY_RUN" scripts/check_evidence_contract_fields.py)
+    echo "[run] $PY_RUN -m pytest -q tests/test_evidence_contract_fields.py"
+    (cd "$CLEAN_REPO" && "$PY_RUN" -m pytest -q tests/test_evidence_contract_fields.py)
+  else
+    echo "[info] skipping artifact-field evidence checks for mode=$MODE (requires submission_full_strong artifacts)"
+  fi
 fi
 
 ARCHIVE_ABS="$CLEAN_REPO/$ARCHIVE_REL"

@@ -28,6 +28,7 @@ bash scripts/final_repro_cleanroom.sh \
 ```
 
 `final_repro_cleanroom.sh` defaults to dependency mode `portable`, which installs `requirements.txt`. This is the recommended public path for fresh-clone smoke validation.
+In `--mode smoke`, the clean-room run validates the portable environment, smoke pipeline, bundle build, and lightweight evidence-ID checks. Full artifact-field evidence checks remain tied to `submission_full_strong`.
 
 For the full canonical paper artifact recompute after smoke passes:
 
@@ -240,6 +241,7 @@ bash scripts/final_repro_cleanroom.sh \
 ```
 
 By default, `final_repro_cleanroom.sh` uses dependency mode `portable` and installs from `requirements.txt`. Use `--deps-mode lock` only for reference environment replay.
+`--mode smoke` runs lightweight evidence-ID checks; `--mode submission_full_strong` additionally runs field-level evidence-contract validation against the canonical artifact set.
 
 Release-ready 8h gate (exact copy-paste command, from repo root):
 
