@@ -30,3 +30,22 @@ jobs:
       - name: Pytest Evidence Suite
         run: |
           pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
+
+  cleanroom-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Portable clean-room smoke
+        run: |
+          bash scripts/final_repro_cleanroom.sh \
+            --mode smoke \
+            --repro-mode full_recompute \
+            --clean-dir /tmp/aom_smoke_ci

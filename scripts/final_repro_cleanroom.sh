@@ -10,6 +10,7 @@ PYTHON_BIN="python3"
 USE_VENV=1
 VENV_NAME=".venv"
 INSTALL_DEPS=1
+DEPS_MODE="portable"
 LOCAL_FILES_ONLY=0
 HF_REVISION=""
 HF_TOKENIZER_REVISION=""
@@ -29,7 +30,7 @@ Run an end-to-end clean-room reproducibility test from a pinned git commit.
 
 Workflow:
 1) Export a fresh repo snapshot from --git-rev into --clean-dir.
-2) (Optional) create venv + install requirements.
+2) (Optional) create venv + install requirements (`requirements.txt` by default).
 3) Run scripts/build_replication_bundle.sh in the clean repo.
 4) (Optional) run evidence-contract checks/tests in the clean repo.
 
@@ -43,7 +44,10 @@ Options:
   --python BIN                 python executable (default: python3)
   --no-venv                    do not create/use virtualenv
   --venv-name NAME             venv directory name inside clean repo (default: .venv)
-  --no-install                 skip pip install -r requirements.txt
+  --no-install                 skip pip install from the selected dependency file
+  --deps-mode MODE             dependency install mode: portable | lock (default: portable)
+                               portable -> requirements.txt (recommended fresh-clone public path)
+                               lock     -> requirements.lock.txt (opt-in reference replay)
   --local-files-only           pass --local_files_only to run_paper
   --revision REV               HF model revision pin passed through to run_paper
   --tokenizer-revision REV     HF tokenizer revision pin passed through to run_paper
@@ -60,6 +64,11 @@ Options:
 
 Examples:
   bash scripts/final_repro_cleanroom.sh \
+    --mode smoke \
+    --repro-mode full_recompute \
+    --clean-dir /tmp/aom_smoke_check
+
+  bash scripts/final_repro_cleanroom.sh \
     --mode m1max \
     --git-rev HEAD \
     --revision <hf_commit> \
@@ -69,6 +78,10 @@ Examples:
     --mode submission_full_strong \
     --repro-mode full_recompute \
     --clean-dir /tmp/aom_final_release
+
+  bash scripts/final_repro_cleanroom.sh \
+    --mode smoke \
+    --deps-mode lock
 EOF
 }
 
@@ -115,6 +128,11 @@ while [[ $# -gt 0 ]]; do
     --no-install)
       INSTALL_DEPS=0
       shift
+      ;;
+    --deps-mode)
+      [[ $# -ge 2 ]] || die "Missing value for --deps-mode"
+      DEPS_MODE="$2"
+      shift 2
       ;;
     --local-files-only)
       LOCAL_FILES_ONLY=1
@@ -191,6 +209,11 @@ case "$REPRO_MODE" in
   *) die "Invalid --repro-mode: $REPRO_MODE (expected auto|full_recompute|frozen_artifacts)" ;;
 esac
 
+case "$DEPS_MODE" in
+  portable|lock) ;;
+  *) die "Invalid --deps-mode: $DEPS_MODE (expected portable|lock)" ;;
+esac
+
 need_cmd git
 need_cmd tar
 need_cmd "$PYTHON_BIN"
@@ -231,9 +254,14 @@ fi
 
 if [[ "$INSTALL_DEPS" -eq 1 ]]; then
   REQ_FILE="$CLEAN_REPO/requirements.txt"
-  if [[ -f "$CLEAN_REPO/requirements.lock.txt" ]]; then
+  if [[ "$DEPS_MODE" == "lock" ]]; then
+    [[ -f "$CLEAN_REPO/requirements.lock.txt" ]] || die "Requested --deps-mode lock but clean export is missing requirements.lock.txt"
     REQ_FILE="$CLEAN_REPO/requirements.lock.txt"
+    echo "[info] dependency mode: lock"
+  else
+    echo "[info] dependency mode: portable"
   fi
+  echo "[info] installing from: $(basename "$REQ_FILE")"
   echo "[run] $PY_RUN -m pip install -r $(basename "$REQ_FILE")"
   "$PY_RUN" -m pip install -r "$REQ_FILE"
 fi

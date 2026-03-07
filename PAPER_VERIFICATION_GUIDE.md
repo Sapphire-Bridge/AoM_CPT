@@ -13,20 +13,41 @@ Canonical paper sources in this repo:
 
 ## One-command clean-room reproduction (recommended)
 
-This runs from a pinned git commit without relying on your local working tree state:
+This runs from a pinned git commit without relying on your local working tree state. Recommended first check from a fresh clone:
 
 ```bash
-bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
+bash scripts/final_repro_cleanroom.sh \
+  --mode smoke \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_smoke_check
 ```
 
 What it does:
 1) `git archive` export to a fresh clean-room directory
-2) creates a venv and installs pinned dependencies (prefers `requirements.lock.txt` when present)
-3) runs the canonical submission suite + strict tables
+2) creates a venv and installs portable pip dependencies from `requirements.txt` by default
+3) runs the selected suite (`smoke` here) plus packaging
 4) runs evidence checks (`scripts/check_evidence_contract*.py`) + `pytest -q`
 5) builds a replication tarball
 
-Use `bash scripts/final_repro_cleanroom.sh --help` for options like `--git-rev`, `--clean-dir`, `--repro-mode`, `--local-files-only`, and HF revision flags.
+After smoke passes, use the same clean-room path for the full canonical artifact recompute:
+
+```bash
+bash scripts/final_repro_cleanroom.sh \
+  --mode submission_full_strong \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_full_check
+```
+
+Reference lock snapshots are opt-in only:
+
+```bash
+bash scripts/final_repro_cleanroom.sh \
+  --mode smoke \
+  --deps-mode lock \
+  --clean-dir /tmp/aom_smoke_check_lock
+```
+
+Use `bash scripts/final_repro_cleanroom.sh --help` for options like `--git-rev`, `--clean-dir`, `--repro-mode`, `--deps-mode`, `--local-files-only`, and HF revision flags.
 
 ### Repro mode semantics
 
@@ -48,15 +69,19 @@ bash scripts/build_replication_bundle.sh \
 
 ## In-place reproduction (manual)
 
-### 0) Install (pinned environment)
+### 0) Install (portable public environment)
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.lock.txt
+pip install -r requirements.txt
 ```
 
-If you prefer a smaller top-level install set, `requirements.txt` is pinned but not transitively locked.
+Reference lock snapshot for exact environment replay (opt-in only):
+
+```bash
+pip install -r requirements.lock.txt
+```
 
 ### 1) Verify the hardened dataset bundle (hashes + stable bundle ID)
 

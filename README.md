@@ -16,18 +16,35 @@ The repository companion manuscript is:
 - Abstract: in the manuscript section `Abstract (≈200 words)` near the top of the file
 - Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
 
-## One-command reproduction (canonical paper artifacts)
+## Portable clean-room reproduction (recommended first check)
 
-Regenerate the paper-cited artifacts (results + manifests + strict tables):
+For a fresh-clone public smoke validation, run the portable clean-room path:
 
 ```bash
-bash scripts/run_submission_full_strong.sh
+bash scripts/final_repro_cleanroom.sh \
+  --mode smoke \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_smoke_check
 ```
 
-For a clean-room verification pass from a fresh exported commit:
+`final_repro_cleanroom.sh` defaults to dependency mode `portable`, which installs `requirements.txt`. This is the recommended public path for fresh-clone smoke validation.
+
+For the full canonical paper artifact recompute after smoke passes:
 
 ```bash
-bash scripts/final_repro_cleanroom.sh
+bash scripts/final_repro_cleanroom.sh \
+  --mode submission_full_strong \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_full_check
+```
+
+Reference environment replay is opt-in only:
+
+```bash
+bash scripts/final_repro_cleanroom.sh \
+  --mode smoke \
+  --deps-mode lock \
+  --clean-dir /tmp/aom_smoke_check_lock
 ```
 
 ## Reproducibility modes
@@ -69,18 +86,18 @@ Reference runtime captured in `results_submission_full/RUN_MANIFEST.json`:
 - `tokenizers==0.22.1`
 - `numpy==1.26.4`
 
-Environment setup:
+Portable public environment setup (recommended for fresh-clone installs):
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.lock.txt
+pip install -r requirements.txt
 ```
 
-If you prefer the slimmer top-level pin set instead of the full lock snapshot:
+Reference lock snapshot (opt-in exact environment replay; less portable across machines):
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.lock.txt
 ```
 
 ## Canonical dataset manifest
@@ -204,11 +221,25 @@ Regenerate the paper-cited artifact set (AoM eval + specificity + CF/COH patchin
 bash scripts/run_submission_full_strong.sh
 ```
 
-Clean-room / “one command” reproducibility check (exports a clean repo snapshot, installs pinned deps from `requirements.lock.txt`, runs the suite, runs evidence checks, and builds a replication bundle):
+Portable clean-room smoke validation (recommended first command from a fresh clone):
 
 ```bash
-bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
+bash scripts/final_repro_cleanroom.sh \
+  --mode smoke \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_smoke_check
 ```
+
+Portable clean-room full recompute of the canonical paper artifact set:
+
+```bash
+bash scripts/final_repro_cleanroom.sh \
+  --mode submission_full_strong \
+  --repro-mode full_recompute \
+  --clean-dir /tmp/aom_full_check
+```
+
+By default, `final_repro_cleanroom.sh` uses dependency mode `portable` and installs from `requirements.txt`. Use `--deps-mode lock` only for reference environment replay.
 
 Release-ready 8h gate (exact copy-paste command, from repo root):
 
