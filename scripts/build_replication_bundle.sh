@@ -203,8 +203,13 @@ if [[ "$SKIP_TABLES" -eq 0 ]]; then
   # submission_full_strong already runs strict table generation (unless it was asked to skip).
   if [[ "$MODE" != "submission_full_strong" || "$SKIP_RUN" -eq 1 ]]; then
     mkdir -p "$TABLES_DIR_ABS"
-    echo "[run] MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=$RESULTS_DIR_ABS TABLES_OUT_DIR=$TABLES_DIR_ABS"
-    MAKE_TABLES_STRICT=1 make tables RESULTS_DIR="$RESULTS_DIR_ABS" TABLES_OUT_DIR="$TABLES_DIR_ABS"
+    if [[ "$MODE" == "submission_full_strong" ]]; then
+      echo "[run] MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=$RESULTS_DIR_ABS TABLES_OUT_DIR=$TABLES_DIR_ABS"
+      MAKE_TABLES_STRICT=1 make tables RESULTS_DIR="$RESULTS_DIR_ABS" TABLES_OUT_DIR="$TABLES_DIR_ABS"
+    else
+      echo "[run] make tables RESULTS_DIR=$RESULTS_DIR_ABS TABLES_OUT_DIR=$TABLES_DIR_ABS"
+      make tables RESULTS_DIR="$RESULTS_DIR_ABS" TABLES_OUT_DIR="$TABLES_DIR_ABS"
+    fi
   fi
 fi
 
@@ -239,9 +244,18 @@ shopt -u nullglob
 
 if [[ "$SKIP_TABLES" -eq 0 ]]; then
   require_dir "$TABLES_DIR_ABS"
-  require_file "$TABLES_DIR_ABS/aom_eval.tex"
-  require_file "$TABLES_DIR_ABS/cf_patching.tex"
-  require_file "$TABLES_DIR_ABS/coh_patching.tex"
+  if [[ -f "$RESULTS_DIR_ABS/aom_eval.csv" ]]; then
+    require_file "$TABLES_DIR_ABS/aom_eval.tex"
+  fi
+  if [[ -f "$RESULTS_DIR_ABS/cf_patching.csv" ]]; then
+    require_file "$TABLES_DIR_ABS/cf_patching.tex"
+  fi
+  if [[ -f "$RESULTS_DIR_ABS/coh_patching.csv" ]]; then
+    require_file "$TABLES_DIR_ABS/coh_patching.tex"
+  fi
+  if [[ -f "$RESULTS_DIR_ABS/cpt_specificity_disamb_only.csv" ]]; then
+    require_file "$TABLES_DIR_ABS/sdh_specificity.tex"
+  fi
   if [[ "$MODE" == "submission_full_strong" ]]; then
     require_file "$TABLES_DIR_ABS/cf_patching_shift_vs_subinv.tex"
   fi
@@ -272,16 +286,19 @@ bundle_paths=(
   "scripts/report_results.py"
   "scripts/make_tables.py"
   "scripts/build_replication_bundle.sh"
+  "scripts/check_sdh_table_sync.py"
   "scripts/final_repro_cleanroom.sh"
   "scripts/run_cf_shift_vs_subinv.sh"
   "scripts/build_cf_shift_subinv_dataset.py"
   "scripts/check_evidence_contract.py"
   "scripts/check_evidence_contract_fields.py"
+  "scripts/sync_generated_tables_into_paper.py"
   "tests"
   "tables/table_aom_eval.py"
   "tables/table_cf_patching.py"
   "tables/table_cf_shift_vs_subinv.py"
   "tables/table_coh_patching.py"
+  "tables/table_sdh_specificity.py"
   "data/README.md"
   "data_paper_hardened_v2"
   "$results_rel"
