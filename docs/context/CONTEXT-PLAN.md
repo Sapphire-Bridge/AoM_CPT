@@ -19,7 +19,7 @@ Mandatory rule:
 
 ## Non-negotiables
 
-- No invention: every concrete claim must be traceable to code or checked-in artifacts.
+- No invention: every concrete claim must be traceable to code or versioned artifacts.
 - Security/provenance first: document gates for model loading, dataset integrity, and manifest redaction before feature details.
 - Stable identifiers only: use file paths, line anchors, CLI flags, field names, and module symbols.
 - Keep docs skimmable: avoid narrative prose; keep sectioned bullets.

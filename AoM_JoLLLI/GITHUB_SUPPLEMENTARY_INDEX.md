@@ -4,7 +4,7 @@ This file documents materials intentionally moved out of the printed manuscript 
 
 ## Included in supplementary materials
 
-1. SDH provenance/status note for Table 3 and the checked-in matched-token artifact.
+1. SDH provenance/status note for Table 3 and the current frozen matched-token artifact snapshot.
 2. Full dataset schemas, template examples, and validation-check detail for DISAMB/CF/COH.
 3. CF span-alignment protocol checks and interpretive-scope notes for the Qwen2.5-1.5B null.
 4. Full deterministic provenance listings (hardware/software, git commits, dataset hashes, checkpoint revisions).

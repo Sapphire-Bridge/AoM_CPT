@@ -5,7 +5,7 @@ Scope: `AoM_JoLLLI/`, root docs, and `docs/context/` hits for:
 
 - `mean_max_effect` / display-label variant `Mean max effect`
 - `mean_argmax_layer` / display-label variant `Mean argmax layer`
-- `best layer`
+- `argmax-layer wording`
 - `peak layer`
 - `strongest layer`
 - `semantic specificity`
@@ -26,7 +26,7 @@ Method notes:
 
 ## Findings
 
-1. High: the SDH manuscript/table interpretation does not match the canonical checked-in artifact.
+1. High: the SDH manuscript/table interpretation does not match the canonical frozen artifact snapshot.
 - `AoM_JoLLLI/AoM_paper.md:121-122`, `AoM_JoLLLI/AoM_paper.md:170`, `AoM_JoLLLI/AoM_paper.md:322`, and Table 3 rows at `AoM_JoLLLI/AoM_paper.md:324-331` describe SDH as mostly near-zero/negative, with only `Qwen2.5-3B` robustly positive and `N=100` directions per model.
 - The cited artifact `results_submission_full/cpt_specificity_disamb_only.csv` instead records `cpt_spec_n_directions_target_patched=104` for every model and positive `cpt_spec_mean_signed_delta` for every non-`gpt2` row:
   - `gpt2`: `-0.2897`
@@ -45,12 +45,12 @@ Method notes:
   - `cpt_spec_n_directions_ctrl_patched_matched_token=104`
   - `cpt_spec_n_directions_ctrl_patched_same_index=0`
   - `cpt_spec_n_directions_ctrl_patched_same_index_relaxed=0`
-- So the checked-in canonical run does not show strategy composition varying within the cited artifact. If supplementary runs exist, the manuscript should cite them directly instead of implying that Table 3 is strategy-mixed.
+- So the current frozen canonical run does not show strategy composition varying within the cited artifact. If supplementary runs exist, the manuscript should cite them directly instead of implying that Table 3 is strategy-mixed.
 
-3. Medium: `best layer` wording is ambiguous relative to the implemented metric.
+3. Medium: `argmax-layer wording` is ambiguous relative to the implemented metric.
 - `AoM_JoLLLI/AoM_paper.md:227`, `AoM_JoLLLI/AoM_paper.md:310`
 - The implementation computes a per-direction argmax layer (`l_i*`) and then reports `cpt_mean_argmax_layer` as the mean of those per-direction maxima. `flip_rate_at_best_layer` also uses each direction's own maximizing layer.
-- Readers can easily misread `best layer` as one shared model-level optimum.
+- Readers can easily misread the phrasing as one shared model-level optimum.
 
 4. Medium: `specificity` is used for distinct constructs that are not the same thing.
 - `AoM_JoLLLI/AoM_paper.md:318-319` labels CF and COH relevance-controlled contrasts as `causal specificity`, even though SDH `target-specificity` is a different protocol and artifact family.
@@ -92,7 +92,7 @@ Method notes:
 - [ ] `AoM_JoLLLI/AoM_paper.md:34`
   - Terms: `specificity`
   - Risk: Medium
-  - Note: the contribution claim depends on the SDH interpretation that conflicts with the checked-in SDH artifact.
+  - Note: the contribution claim depends on the SDH interpretation that conflicts with the current frozen SDH artifact snapshot.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:58-61`
   - Terms: `specificity`
@@ -130,7 +130,7 @@ Method notes:
   - Note: contradicted by `cpt_specificity_disamb_only.csv`, which shows positive deltas for most non-`gpt2` models.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:122`
-  - Terms: `specificity`, `best layer`
+  - Terms: `specificity`, `argmax-layer wording`
   - Risk: High
   - Note: the strategy-sensitivity clause is unsupported by the canonical artifact; the `best sweep layer` wording is also easy to overread given the per-direction argmax implementation.
 
@@ -172,7 +172,7 @@ Method notes:
 - [ ] `AoM_JoLLLI/AoM_paper.md:170`
   - Terms: `specificity`
   - Risk: High
-  - Note: "near zero or negative under some control-selection strategies" is not supported by the canonical SDH artifact set checked in here.
+  - Note: "near zero or negative under some control-selection strategies" is not supported by the canonical SDH artifact set documented here.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:191`
   - Terms: `Qwen`
@@ -190,14 +190,14 @@ Method notes:
   - Note: future-work sentence, not an empirical overclaim.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:227`
-  - Terms: `mean max effect`, `best layer`
+  - Terms: `mean max effect`, `argmax-layer wording`
   - Risk: Medium
-  - Note: metric definition is accurate, but `best layer` should be clarified as per-direction rather than global.
+  - Note: metric definition is accurate, but the argmax-layer phrasing should be clarified as per-direction rather than global.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:235`
   - Terms: `specificity`
   - Risk: High
-  - Note: protocol definition is fine, but the "strategy-stratified diagnostics" clause overstates what the canonical artifact actually contains.
+  - Note: protocol definition is fine, but the "multi-strategy diagnostics" clause overstates what the canonical artifact actually contains.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:243`
   - Terms: `mean max effect` (table context immediately below)
@@ -227,9 +227,9 @@ Method notes:
   - Note: caption is faithful to the metric construction.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:310-314` — Table 2
-  - Terms: `best layer`, `Mean argmax layer`, `Mean max effect`, `Qwen`
+  - Terms: `argmax-layer wording`, `Mean argmax layer`, `Mean max effect`, `Qwen`
   - Risk: Medium
-  - Note: numbers match `aom_eval.csv`, but `best layer` can be misread as a single shared optimum.
+  - Note: numbers match `aom_eval.csv`, but the phrasing can be misread as a single shared optimum.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:318` — Figure 2 title
   - Terms: `specificity`
@@ -244,7 +244,7 @@ Method notes:
 - [ ] `AoM_JoLLLI/AoM_paper.md:321-322` — Table 3 title + caption
   - Terms: `specificity`
   - Risk: High
-  - Note: `N directions per model = 100` conflicts with `cpt_spec_n_directions_target_patched=104` in the canonical CSV.
+  - Note: the earlier `N=100` caption conflicts with `cpt_spec_n_directions_target_patched=104` in the canonical CSV.
 
 - [ ] `AoM_JoLLLI/AoM_paper.md:321-331` — Table 3
   - Terms: `specificity`, `Qwen`
@@ -285,7 +285,7 @@ Method notes:
 - [ ] `AoM_JoLLLI/AoM_evidence_contract.md:37` — `E3`
   - Terms: `mean_max_effect`, `mean_argmax_layer`
   - Risk: Low
-  - Note: this row correctly frames `cpt_mean_argmax_layer` as a depth proxy, not a literal universal best layer.
+  - Note: this row correctly frames `cpt_mean_argmax_layer` as a depth proxy, not a literal universal argmax layer.
 
 - [ ] `AoM_JoLLLI/AoM_evidence_contract.md:38` — `E4a`
   - Terms: `Qwen`

@@ -133,7 +133,7 @@
 - `tests/test_evidence_contract_fields.py` skips when no compatible results dir is found (`tests/test_evidence_contract_fields.py:37`).
 - `run_paper.py smoke` builds a tiny local model/tokenizer for fully offline tests (`scripts/run_paper.py:655`).
 - `run_paper.py a100` forbids patching with `device_map`; split runs if needed (`scripts/run_paper.py:911`).
-- There is no checked-in CI workflow file in this scan; local scripts are the primary verification contract.
+- There is no versioned CI workflow file in this scan; local scripts are the primary verification contract.
 
 ## Risks / Limitations
 
