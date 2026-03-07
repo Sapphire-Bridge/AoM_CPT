@@ -13,6 +13,7 @@ INSTALL_DEPS=1
 LOCAL_FILES_ONLY=0
 HF_REVISION=""
 HF_TOKENIZER_REVISION=""
+REPRO_MODE="auto"
 RESULTS_REL="results_submission_full"
 TABLES_REL="tables_submission_full"
 ARCHIVE_REL="aom_replication_bundle.tar.gz"
@@ -46,6 +47,7 @@ Options:
   --local-files-only           pass --local_files_only to run_paper
   --revision REV               HF model revision pin passed through to run_paper
   --tokenizer-revision REV     HF tokenizer revision pin passed through to run_paper
+  --repro-mode MODE            auto | full_recompute | frozen_artifacts (default: auto)
   --results-rel PATH           results directory (repo-relative in clean repo)
   --tables-rel PATH            tables directory (repo-relative in clean repo)
   --archive-rel PATH           replication archive path (repo-relative in clean repo)
@@ -65,6 +67,7 @@ Examples:
 
   bash scripts/final_repro_cleanroom.sh \
     --mode submission_full_strong \
+    --repro-mode full_recompute \
     --clean-dir /tmp/aom_final_release
 EOF
 }
@@ -127,6 +130,11 @@ while [[ $# -gt 0 ]]; do
       HF_TOKENIZER_REVISION="$2"
       shift 2
       ;;
+    --repro-mode)
+      [[ $# -ge 2 ]] || die "Missing value for --repro-mode"
+      REPRO_MODE="$2"
+      shift 2
+      ;;
     --results-rel)
       [[ $# -ge 2 ]] || die "Missing value for --results-rel"
       RESULTS_REL="$2"
@@ -176,6 +184,11 @@ done
 case "$MODE" in
   smoke|m1max|a100|submission_full_strong) ;;
   *) die "Invalid --mode: $MODE (expected smoke|m1max|a100|submission_full_strong)" ;;
+esac
+
+case "$REPRO_MODE" in
+  auto|full_recompute|frozen_artifacts) ;;
+  *) die "Invalid --repro-mode: $REPRO_MODE (expected auto|full_recompute|frozen_artifacts)" ;;
 esac
 
 need_cmd git
@@ -238,6 +251,9 @@ bundle_cmd=(
   "$ARCHIVE_REL"
 )
 
+if [[ "$REPRO_MODE" != "auto" ]]; then
+  bundle_cmd+=(--repro-mode "$REPRO_MODE")
+fi
 if [[ "$LOCAL_FILES_ONLY" -eq 1 ]]; then
   bundle_cmd+=(--local-files-only)
 fi

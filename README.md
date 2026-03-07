@@ -30,6 +30,35 @@ For a clean-room verification pass from a fresh exported commit:
 bash scripts/final_repro_cleanroom.sh
 ```
 
+## Reproducibility modes
+
+Replication bundling supports two explicit modes:
+
+- `full_recompute`: rerun model evaluations/patching before building the archive.
+- `frozen_artifacts`: reuse an already generated `results/` + `tables/` set and only validate/package.
+
+Full recompute bundle build:
+
+```bash
+bash scripts/build_replication_bundle.sh \
+  --mode submission_full_strong \
+  --repro-mode full_recompute \
+  --results-dir results_submission_full \
+  --tables-dir tables_submission_full \
+  --archive aom_replication_bundle.tar.gz
+```
+
+Frozen-artifact verification + packaging:
+
+```bash
+bash scripts/build_replication_bundle.sh \
+  --mode submission_full_strong \
+  --repro-mode frozen_artifacts \
+  --results-dir results_submission_full \
+  --tables-dir tables_submission_full \
+  --archive aom_replication_bundle.tar.gz
+```
+
 ## Environment (reference release runtime)
 
 Reference runtime captured in `results_submission_full/RUN_MANIFEST.json`:
@@ -178,13 +207,24 @@ bash scripts/run_submission_full_strong.sh
 Clean-room / “one command” reproducibility check (exports a clean repo snapshot, installs pinned deps from `requirements.lock.txt`, runs the suite, runs evidence checks, and builds a replication bundle):
 
 ```bash
-bash scripts/final_repro_cleanroom.sh
+bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
 ```
 
 Release-ready 8h gate (exact copy-paste command, from repo root):
 
 ```bash
-TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=0 ALLOW_DIRTY=0 RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz bash scripts/release_gate_fast_8h.sh
+TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=1 ALLOW_DIRTY=0 RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz bash scripts/release_gate_fast_8h.sh
+```
+
+For frozen-artifact packaging from existing validated outputs:
+
+```bash
+bash scripts/build_replication_bundle.sh \
+  --mode submission_full_strong \
+  --repro-mode frozen_artifacts \
+  --results-dir results_submission_full \
+  --tables-dir tables_submission_full \
+  --archive aom_replication_bundle.tar.gz
 ```
 
 ## Paper-mode runner (smoke / M1Max / A100)
@@ -220,6 +260,14 @@ Generate LaTeX tables from `results/` artifacts:
 ```bash
 make tables
 ```
+
+## Public release metadata
+
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Security policy: [`SECURITY.md`](SECURITY.md)
+- Zenodo checklist: [`docs/release/ZENODO_RELEASE_CHECKLIST.md`](docs/release/ZENODO_RELEASE_CHECKLIST.md)
+- Zenodo metadata scaffold: [`.zenodo.json`](.zenodo.json)
 
 ## License
 

@@ -16,7 +16,7 @@ Canonical paper sources in this repo:
 This runs from a pinned git commit without relying on your local working tree state:
 
 ```bash
-bash scripts/final_repro_cleanroom.sh
+bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
 ```
 
 What it does:
@@ -26,7 +26,23 @@ What it does:
 4) runs evidence checks (`scripts/check_evidence_contract*.py`) + `pytest -q`
 5) builds a replication tarball
 
-Use `bash scripts/final_repro_cleanroom.sh --help` for options like `--git-rev`, `--clean-dir`, `--local-files-only`, and HF revision flags.
+Use `bash scripts/final_repro_cleanroom.sh --help` for options like `--git-rev`, `--clean-dir`, `--repro-mode`, `--local-files-only`, and HF revision flags.
+
+### Repro mode semantics
+
+- `full_recompute`: reruns model evaluations/patching then builds the archive.
+- `frozen_artifacts`: reuses an existing artifact set and only validates/packages.
+
+Frozen-artifact example:
+
+```bash
+bash scripts/build_replication_bundle.sh \
+  --mode submission_full_strong \
+  --repro-mode frozen_artifacts \
+  --results-dir results_submission_full \
+  --tables-dir tables_submission_full \
+  --archive aom_replication_bundle.tar.gz
+```
 
 ---
 
@@ -112,6 +128,12 @@ python scripts/check_evidence_contract_fields.py --results_dir results_submissio
 pytest -q
 ```
 
+### 5) Release-gate command (strict SHA)
+
+```bash
+TOTAL_BUDGET_SEC=28800 FIELDS_TIMEOUT_SEC=1200 STRICT_SHA=1 ALLOW_DIRTY=0 RESULTS_DIR=results_submission_full TABLES_DIR=tables_submission_full ARCHIVE_NAME=aom_replication_bundle_fast8h.tar.gz bash scripts/release_gate_fast_8h.sh
+```
+
 ---
 
 ## Notes on pinning models and determinism
@@ -125,3 +147,11 @@ pytest -q
 ## Troubleshooting
 
 - If `import torch` fails with an OpenMP shared-memory error (e.g. `OMP: Error #179: Function Can't open SHM2 failed`), run in a less-restricted environment or consult your system’s OpenMP runtime settings (this is environment-specific and not a repo bug).
+
+---
+
+## Zenodo handoff
+
+After creating a validated replication bundle and tagged GitHub release, follow:
+
+- `docs/release/ZENODO_RELEASE_CHECKLIST.md`
