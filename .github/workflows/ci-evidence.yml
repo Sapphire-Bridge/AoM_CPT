@@ -1,0 +1,32 @@
+name: CI Evidence Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Evidence ID Consistency
+        run: python scripts/check_evidence_contract.py
+
+      - name: Pytest Evidence Suite
+        run: |
+          pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py

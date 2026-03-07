@@ -1,0 +1,86 @@
+name: Manual Replication Bundle
+
+on:
+  workflow_dispatch:
+    inputs:
+      repro_mode:
+        description: "Repro path"
+        required: true
+        default: full_recompute
+        type: choice
+        options:
+          - full_recompute
+          - frozen_artifacts
+      results_dir:
+        description: "Results directory"
+        required: true
+        default: results_submission_full
+        type: string
+      tables_dir:
+        description: "Tables directory"
+        required: true
+        default: tables_submission_full
+        type: string
+      archive_name:
+        description: "Archive filename"
+        required: true
+        default: aom_replication_bundle_manual.tar.gz
+        type: string
+      revision:
+        description: "Optional HF model revision pin"
+        required: false
+        default: ""
+        type: string
+      tokenizer_revision:
+        description: "Optional HF tokenizer revision pin"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 480
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmd=(
+            bash scripts/build_replication_bundle.sh
+            --mode submission_full_strong
+            --repro-mode "${{ inputs.repro_mode }}"
+            --results-dir "${{ inputs.results_dir }}"
+            --tables-dir "${{ inputs.tables_dir }}"
+            --archive "${{ inputs.archive_name }}"
+          )
+          if [[ -n "${{ inputs.revision }}" ]]; then
+            cmd+=(--revision "${{ inputs.revision }}")
+          fi
+          if [[ -n "${{ inputs.tokenizer_revision }}" ]]; then
+            cmd+=(--tokenizer-revision "${{ inputs.tokenizer_revision }}")
+          fi
+          echo "[run] ${cmd[*]}"
+          "${cmd[@]}"
+
+      - name: Upload Bundle Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: replication-bundle
+          path: |
+            ${{ inputs.archive_name }}
+            ${{ inputs.archive_name }}.sha256
+          if-no-files-found: error

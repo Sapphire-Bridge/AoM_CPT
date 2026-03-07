@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "AoM Prototype (Appearance of Meaning)"
+type: software
+authors:
+  - family-names: Borck
+    given-names: Felix
+    affiliation: "Goethe University"
+    email: "felix.borck@gmail.com"
+repository-code: "https://github.com/Satori-1618/AoM_CPT"
+url: "https://github.com/Satori-1618/AoM_CPT"
+license: MIT
+date-released: 2026-02-23
