@@ -1,10 +1,10 @@
 {
   "title": "AoM Prototype (Appearance of Meaning)",
-  "description": "Research companion repository for AoM behavioral and CPT causal-intervention evaluations, including reproducibility scripts and evidence-contract checks.",
+  "description": "Evaluation and intervention pipeline for the Appearance of Meaning (AoM) framework: behavioral suites (DISAMB/CF/COH), CPT-style activation patching, and target-specificity stress tests across GPT-2, Qwen2.5, Qwen3, and Llama model families. Includes sham-controlled patching, bootstrap uncertainty, and deterministic reproducibility infrastructure.",
   "creators": [
     {
       "name": "Borck, Felix",
-      "affiliation": "Goethe University"
+      "affiliation": "Goethe University Frankfurt"
     }
   ],
   "license": "MIT",

@@ -1,11 +1,6 @@
 # AoM Prototype (Appearance of Meaning)
 
-Research-prototype evaluator for AoM competences and CPT-style causal tests:
-
-- AoM-DISAMB: context-sensitive disambiguation (minimal pairs)
-- AoM-CF: minimal-pair intervention sensitivity (directional preference shift)
-- AoM-COH: discourse-level coherence / constraint tracking
-- CPT (optional): context-swap activation patching on internal states
+Evaluation and intervention pipeline for the Appearance of Meaning (AoM) framework: behavioral suites (DISAMB/CF/COH), CPT-style activation patching, and target-specificity stress tests across GPT-2, Qwen2.5, Qwen3, and Llama model families. Includes sham-controlled patching, bootstrap uncertainty, and deterministic reproducibility infrastructure.
 
 ## Paper
 
@@ -13,7 +8,8 @@ The repository companion manuscript is:
 
 - **The Appearance of Meaning: Context-Dependence and Semantic Competence in Transformer Architectures**
 - Manuscript: [`AoM_JoLLLI/AoM_paper.md`](AoM_JoLLLI/AoM_paper.md)
-- Abstract: in the manuscript section `Abstract (≈200 words)` near the top of the file
+- Zenodo preprint: <https://zenodo.org/records/18907020>
+- Abstract: in the manuscript section `Abstract` near the top of the file
 - Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
 
 ## One-command reproduction (canonical paper artifacts)
