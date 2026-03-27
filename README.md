@@ -1,18 +1,43 @@
-# AoM Prototype (Appearance of Meaning)
+# AoM_CPT
 
-Evaluation and intervention pipeline for the Appearance of Meaning (AoM) framework: behavioral suites (DISAMB/CF/COH), CPT-style activation patching, and target-specificity stress tests across GPT-2, Qwen2.5, Qwen3, and Llama model families. Includes sham-controlled patching, bootstrap uncertainty, and deterministic reproducibility infrastructure.
+Compact public companion repository for the Appearance of Meaning behavioral and CPT intervention framework.
+
+## What this repo is
+
+`AoM_CPT` is the public reproducibility and verification surface for the AoM behavioral and CPT intervention strand. It contains the manuscript and evidence contract, the hardened paper dataset bundle, the maintained smoke/full reproduction runners, and the packaging/check scripts used to verify paper-facing artifacts.
+
+## What this repo is not
+
+- It is not the full mechanics-focused research stack for every related AoM analysis.
+- It is not a complete archive of historical experiment layouts, exploratory scripts, or legacy config routes.
+- It is not the only repository you should use to infer the full breadth of supporting AoM work.
+
+## Relation to `AoM_mechanism`
+
+`AoM_CPT` is the narrower companion repository for the behavioral and CPT intervention strand. `AoM_mechanism` is the broader mechanics-focused artifact and verification repository with a larger mechanistic evidence surface.
+
+## How to check this repo
+
+A minimal reviewer pass is:
+
+1. install dependencies with `pip install -r requirements.lock.txt`
+2. run `python scripts/run_paper.py smoke`
+3. run `pytest -q`
+4. inspect `results/paper_smoke/aom_eval.csv`, `results/paper_smoke/results_report.md`, and `results/paper_smoke/RUN_MANIFEST.json`
+5. use [`PAPER_VERIFICATION_GUIDE.md`](PAPER_VERIFICATION_GUIDE.md) for the strict paper-facing verification path
 
 ## Paper
 
-The repository companion manuscript is:
+The repository companion manuscript and verification sources are:
 
 - **The Appearance of Meaning: Context-Dependence and Semantic Competence in Transformer Architectures**
 - Manuscript: [`AoM_JoLLLI/AoM_paper.md`](AoM_JoLLLI/AoM_paper.md)
+- Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
+- Verification guide: [`PAPER_VERIFICATION_GUIDE.md`](PAPER_VERIFICATION_GUIDE.md)
 - Zenodo preprint: <https://zenodo.org/records/18907020>
 - Abstract: in the manuscript section `Abstract` near the top of the file
-- Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
 
-## One-command reproduction (canonical paper artifacts)
+## Canonical paper reproduction
 
 Regenerate the paper-cited artifacts (results + manifests + strict tables):
 
@@ -23,7 +48,7 @@ bash scripts/run_submission_full_strong.sh
 For a clean-room verification pass from a fresh exported commit:
 
 ```bash
-bash scripts/final_repro_cleanroom.sh
+bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
 ```
 
 ## Reproducibility modes
@@ -55,9 +80,9 @@ bash scripts/build_replication_bundle.sh \
   --archive aom_replication_bundle.tar.gz
 ```
 
-## Environment (reference release runtime)
+## Environment (pinned release runtime)
 
-Reference runtime captured in `results_submission_full/RUN_MANIFEST.json`:
+The canonical full run records its effective runtime in `results_submission_full/RUN_MANIFEST.json` when you regenerate the paper artifact set. The pinned baseline used for the public release is:
 
 - Python `3.12.7`
 - `torch==2.5.1`
@@ -89,7 +114,13 @@ Use the hardened paper dataset bundle and manifest:
 
 ## Quickstart
 
-Run a small offline smoke test (random small GPT-2 config; no downloads):
+Run the minimal offline reviewer check (builds a tiny local model; no downloads):
+
+```bash
+python scripts/run_paper.py smoke
+```
+
+Run the default offline test suite:
 
 ```bash
 pytest -q
@@ -238,16 +269,9 @@ python scripts/run_paper.py m1max
 python scripts/run_paper.py a100 --attn_behavioral flash_attention_2
 ```
 
-## CF / COH causal patching runners
+## Standalone causal patching CLIs
 
-Separate CLIs implement the causal interventions for AoM-CF and AoM-COH:
-
-```bash
-python aom_cf_patching.py --config configs/cf_patching_gpt2_paper.yaml
-python aom_coh_patching.py --config configs/coh_patching_gpt2_paper.yaml
-```
-
-These write `results/*.csv` plus `results/*.manifest.json` with provenance (git commit, HF commit hash, versions, argv hash, dataset SHA-256s, wall time, seeds).
+`aom_cf_patching.py` and `aom_coh_patching.py` remain available for experimentation, but the maintained public verification path goes through `scripts/run_paper.py`, `scripts/run_submission_full_strong.sh`, and `scripts/final_repro_cleanroom.sh`.
 
 ## Tables
 

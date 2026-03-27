@@ -1,13 +1,62 @@
-# Paper verification guide (AoM Prototype repo)
+# Paper verification guide (AoM_CPT)
 
-This guide is for reviewers and collaborators who want to (a) regenerate the **paper-cited artifacts** end-to-end from a clean checkout and (b) verify that manuscript evidence tags resolve to concrete files/fields.
+This guide documents the current verification surface of this repository only.
+It does not attempt to describe every historical script, local experiment path, or earlier exploratory layout.
 
-Canonical paper sources in this repo:
+This repository is the compact AoM/CPT reproducibility surface. Use this guide for the current paper-facing verification path.
+
+## Primary sources in this repo
+
 - Manuscript: `AoM_JoLLLI/AoM_paper.md`
 - Claim ledger / evidence contract: `AoM_JoLLLI/AoM_evidence_contract.md`
+- Repo routing: `README.md`
+- Minimal reviewer runner: `scripts/run_paper.py`
 - Canonical submission runner: `scripts/run_submission_full_strong.sh`
-- Strict table regeneration: `make tables` / `scripts/make_tables.py`
-- Clean-room replay (one command): `scripts/final_repro_cleanroom.sh`
+- Clean-room reproduction: `scripts/final_repro_cleanroom.sh`
+- Artifact bundle / frozen-artifact verifier: `scripts/build_replication_bundle.sh`
+- Strict table generation: `scripts/make_tables.py`
+- Evidence ID check: `scripts/check_evidence_contract.py`
+- Evidence artifact/field check: `scripts/check_evidence_contract_fields.py`
+
+## Fast verification path
+
+Use this path to establish that the repository is coherent and runnable without regenerating the full paper artifact surface:
+
+1. install pinned dependencies:
+   `python -m venv .venv && source .venv/bin/activate && pip install -r requirements.lock.txt`
+2. run the offline smoke check:
+   `python scripts/run_paper.py smoke`
+3. run the default offline test suite:
+   `pytest -q`
+4. inspect:
+   `results/paper_smoke/aom_eval.csv`,
+   `results/paper_smoke/results_report.md`,
+   `results/paper_smoke/RUN_MANIFEST.json`
+
+## Strict reproduction path
+
+Use this path for paper-facing artifact regeneration and evidence verification:
+
+1. preferred clean-room path:
+   `bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute`
+2. in-place canonical run:
+   `bash scripts/run_submission_full_strong.sh`
+3. strict tables:
+   `MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=results_submission_full TABLES_OUT_DIR=tables_submission_full`
+4. evidence checks:
+   `python scripts/check_evidence_contract.py`
+   `python scripts/check_evidence_contract_fields.py --results_dir results_submission_full`
+   `python -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py`
+
+## Artifact surface to inspect
+
+After the strict run, inspect:
+
+- `results_submission_full/*.csv`
+- `results_submission_full/*.manifest.json`
+- `results_submission_full/results_report.md`
+- `results_submission_full/RUN_MANIFEST.json`
+- `tables_submission_full/*.tex`
 
 ---
 
@@ -23,7 +72,10 @@ What it does:
 1) `git archive` export to a fresh clean-room directory
 2) creates a venv and installs pinned dependencies (prefers `requirements.lock.txt` when present)
 3) runs the canonical submission suite + strict tables
-4) runs evidence checks (`scripts/check_evidence_contract*.py`) + `pytest -q`
+4) runs:
+   `python scripts/check_evidence_contract.py`
+   `python scripts/check_evidence_contract_fields.py`
+   `python -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py`
 5) builds a replication tarball
 
 Use `bash scripts/final_repro_cleanroom.sh --help` for options like `--git-rev`, `--clean-dir`, `--repro-mode`, `--local-files-only`, and HF revision flags.
@@ -96,16 +148,25 @@ This regenerates the paper-cited artifact set into the canonical output director
 bash scripts/run_submission_full_strong.sh
 ```
 
-Expected outputs:
-- `results_submission_full/aom_eval.csv` (+ `*.manifest.json`)
-- `results_submission_full/cpt_specificity_disamb_only.csv` (+ `*.manifest.json`)
-- `results_submission_full/cf_patching.csv` (+ `*.manifest.json`)
-- `results_submission_full/cf_patching_shift_vs_subinv.csv` (+ `*.manifest.json`)
+Expected paper-facing outputs:
+- `results_submission_full/aom_eval.csv`
+- `results_submission_full/aom_eval.manifest.json`
+- `results_submission_full/cpt_specificity_disamb_only.csv`
+- `results_submission_full/cpt_specificity_disamb_only.manifest.json`
+- `results_submission_full/cf_patching.csv`
+- `results_submission_full/cf_patching.manifest.json`
+- `results_submission_full/cf_patching_shift_vs_subinv.csv`
+- `results_submission_full/cf_patching_shift_vs_subinv.manifest.json`
 - `results_submission_full/CF_SHIFT_SUBINV_RUN_MANIFEST.json`
-- `results_submission_full/coh_patching.csv` (merged from per-model COH patching runs; see the `coh_patching_qwen*.manifest.json` files)
-- `results_submission_full/coh_patching_qwen.csv` (+ `*.manifest.json`)
-- `results_submission_full/coh_patching_qwen15.csv` (+ `*.manifest.json`)
-- `results_submission_full/coh_patching_qwen3b.csv` (+ `*.manifest.json`)
+- `results_submission_full/coh_patching.csv` (merged from `coh_patching_gpt2.csv`, `coh_patching_qwen.csv`, `coh_patching_qwen15.csv`, and `coh_patching_qwen3b.csv`; the merged CSV has no companion manifest)
+- `results_submission_full/coh_patching_gpt2.csv`
+- `results_submission_full/coh_patching_gpt2.manifest.json`
+- `results_submission_full/coh_patching_qwen.csv`
+- `results_submission_full/coh_patching_qwen.manifest.json`
+- `results_submission_full/coh_patching_qwen15.csv`
+- `results_submission_full/coh_patching_qwen15.manifest.json`
+- `results_submission_full/coh_patching_qwen3b.csv`
+- `results_submission_full/coh_patching_qwen3b.manifest.json`
 - `results_submission_full/results_report.md`
 - `results_submission_full/RUN_MANIFEST.json`
 - `tables_submission_full/*.tex`
@@ -125,7 +186,7 @@ Strict mode fails fast if required inputs/provenance are missing or inconsistent
 ```bash
 python scripts/check_evidence_contract.py
 python scripts/check_evidence_contract_fields.py --results_dir results_submission_full
-pytest -q
+python -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
 ```
 
 ### 5) Release-gate command (strict SHA)
