@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 
 from aom.io import write_jsonl
 from aom.repro import collect_versions, get_git_commit_hash
+from aom.repro_metadata import collect_dependency_install_provenance_from_env, verification_profile_for_mode
 
 
 M1MAX_MODELS: list[str] = [
@@ -465,8 +466,10 @@ class PaperRun:
 def _write_run_manifest(run: PaperRun) -> None:
     req_txt = ROOT / "requirements.txt"
     req_lock = ROOT / "requirements.lock.txt"
+    req_pip_lock = ROOT / "requirements.pip.lock.txt"
     out = {
         "mode": str(run.mode),
+        "verification_profile": verification_profile_for_mode(run.mode),
         "generated_at_utc": _utc_now_iso(),
         "git_commit": _try_git_commit(),
         "results_dir": str(run.results_dir),
@@ -474,8 +477,10 @@ def _write_run_manifest(run: PaperRun) -> None:
         "runtime_versions": collect_versions(),
         "requirements_txt_sha256": "" if not req_txt.exists() else _sha256_file(req_txt),
         "requirements_lock_sha256": "" if not req_lock.exists() else _sha256_file(req_lock),
+        "requirements_pip_lock_sha256": "" if not req_pip_lock.exists() else _sha256_file(req_pip_lock),
         "commands": [list(cmd) for cmd in run.commands],
     }
+    out.update(collect_dependency_install_provenance_from_env())
     _write_json(run.results_dir / "RUN_MANIFEST.json", out)
 
 

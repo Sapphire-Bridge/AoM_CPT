@@ -10,6 +10,7 @@ PYTHON_BIN="python3"
 USE_VENV=1
 VENV_NAME=".venv"
 INSTALL_DEPS=1
+STRICT_PIP_VERSION="24.2"
 LOCAL_FILES_ONLY=0
 HF_REVISION=""
 HF_TOKENIZER_REVISION=""
@@ -43,7 +44,7 @@ Options:
   --python BIN                 python executable (default: python3)
   --no-venv                    do not create/use virtualenv
   --venv-name NAME             venv directory name inside clean repo (default: .venv)
-  --no-install                 skip pip install -r requirements.txt
+  --no-install                 skip pip install from the selected dependency surface
   --local-files-only           pass --local_files_only to run_paper
   --revision REV               HF model revision pin passed through to run_paper
   --tokenizer-revision REV     HF tokenizer revision pin passed through to run_paper
@@ -229,13 +230,44 @@ if [[ "$USE_VENV" -eq 1 ]]; then
   PY_RUN="$CLEAN_REPO/$VENV_NAME/bin/python"
 fi
 
+DEPENDENCY_INSTALL_FILE="${AOM_DEPENDENCY_INSTALL_FILE:-}"
+DEPENDENCY_INSTALL_PROFILE="${AOM_DEPENDENCY_INSTALL_PROFILE:-}"
+DEPENDENCY_INSTALL_SHA256="${AOM_DEPENDENCY_INSTALL_SHA256:-}"
+RUNNER_OS="${AOM_RUNNER_OS:-}"
+BASE_IMAGE="${AOM_BASE_IMAGE:-}"
+
 if [[ "$INSTALL_DEPS" -eq 1 ]]; then
   REQ_FILE="$CLEAN_REPO/requirements.txt"
-  if [[ -f "$CLEAN_REPO/requirements.lock.txt" ]]; then
-    REQ_FILE="$CLEAN_REPO/requirements.lock.txt"
+  DEPENDENCY_INSTALL_PROFILE="reviewer_pip"
+  if [[ "$MODE" == "submission_full_strong" ]]; then
+    REQ_FILE="$CLEAN_REPO/requirements.pip.lock.txt"
+    [[ -f "$REQ_FILE" ]] || die "Strict clean-room reproduction requires requirements.pip.lock.txt"
+    DEPENDENCY_INSTALL_PROFILE="strict_pip_lock"
+    echo "[run] $PY_RUN -m pip install --upgrade pip==$STRICT_PIP_VERSION"
+    "$PY_RUN" -m pip install --upgrade "pip==$STRICT_PIP_VERSION"
+    if [[ -z "$RUNNER_OS" ]]; then
+      RUNNER_OS="$("$PY_RUN" -c 'import platform; print(platform.platform())')"
+    fi
+    if [[ -z "$BASE_IMAGE" ]]; then
+      BASE_IMAGE="local-cleanroom"
+    fi
   fi
   echo "[run] $PY_RUN -m pip install -r $(basename "$REQ_FILE")"
   "$PY_RUN" -m pip install -r "$REQ_FILE"
+  DEPENDENCY_INSTALL_FILE="$(basename "$REQ_FILE")"
+  DEPENDENCY_INSTALL_SHA256="$("$PY_RUN" - "$REQ_FILE" <<'PY'
+import hashlib
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+h = hashlib.sha256()
+with path.open("rb") as f:
+    for chunk in iter(lambda: f.read(1024 * 1024), b""):
+        h.update(chunk)
+print(h.hexdigest())
+PY
+)"
 fi
 
 bundle_cmd=(
@@ -272,18 +304,59 @@ fi
 
 echo "[run] ${bundle_cmd[*]}"
 if [[ "$USE_VENV" -eq 1 ]]; then
-  (cd "$CLEAN_REPO" && PATH="$CLEAN_REPO/$VENV_NAME/bin:$PATH" "${bundle_cmd[@]}")
+  (
+    cd "$CLEAN_REPO" &&
+    PATH="$CLEAN_REPO/$VENV_NAME/bin:$PATH" \
+    AOM_DEPENDENCY_INSTALL_FILE="$DEPENDENCY_INSTALL_FILE" \
+    AOM_DEPENDENCY_INSTALL_PROFILE="$DEPENDENCY_INSTALL_PROFILE" \
+    AOM_DEPENDENCY_INSTALL_SHA256="$DEPENDENCY_INSTALL_SHA256" \
+    AOM_RUNNER_OS="$RUNNER_OS" \
+    AOM_BASE_IMAGE="$BASE_IMAGE" \
+    "${bundle_cmd[@]}"
+  )
 else
-  (cd "$CLEAN_REPO" && "${bundle_cmd[@]}")
+  (
+    cd "$CLEAN_REPO" &&
+    AOM_DEPENDENCY_INSTALL_FILE="$DEPENDENCY_INSTALL_FILE" \
+    AOM_DEPENDENCY_INSTALL_PROFILE="$DEPENDENCY_INSTALL_PROFILE" \
+    AOM_DEPENDENCY_INSTALL_SHA256="$DEPENDENCY_INSTALL_SHA256" \
+    AOM_RUNNER_OS="$RUNNER_OS" \
+    AOM_BASE_IMAGE="$BASE_IMAGE" \
+    "${bundle_cmd[@]}"
+  )
 fi
 
 if [[ "$SKIP_CHECKS" -eq 0 ]]; then
   echo "[run] $PY_RUN scripts/check_evidence_contract.py"
-  (cd "$CLEAN_REPO" && "$PY_RUN" scripts/check_evidence_contract.py)
+  (
+    cd "$CLEAN_REPO" &&
+    AOM_DEPENDENCY_INSTALL_FILE="$DEPENDENCY_INSTALL_FILE" \
+    AOM_DEPENDENCY_INSTALL_PROFILE="$DEPENDENCY_INSTALL_PROFILE" \
+    AOM_DEPENDENCY_INSTALL_SHA256="$DEPENDENCY_INSTALL_SHA256" \
+    AOM_RUNNER_OS="$RUNNER_OS" \
+    AOM_BASE_IMAGE="$BASE_IMAGE" \
+    "$PY_RUN" scripts/check_evidence_contract.py
+  )
   echo "[run] $PY_RUN scripts/check_evidence_contract_fields.py"
-  (cd "$CLEAN_REPO" && "$PY_RUN" scripts/check_evidence_contract_fields.py)
+  (
+    cd "$CLEAN_REPO" &&
+    AOM_DEPENDENCY_INSTALL_FILE="$DEPENDENCY_INSTALL_FILE" \
+    AOM_DEPENDENCY_INSTALL_PROFILE="$DEPENDENCY_INSTALL_PROFILE" \
+    AOM_DEPENDENCY_INSTALL_SHA256="$DEPENDENCY_INSTALL_SHA256" \
+    AOM_RUNNER_OS="$RUNNER_OS" \
+    AOM_BASE_IMAGE="$BASE_IMAGE" \
+    "$PY_RUN" scripts/check_evidence_contract_fields.py
+  )
   echo "[run] $PY_RUN -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py"
-  (cd "$CLEAN_REPO" && "$PY_RUN" -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py)
+  (
+    cd "$CLEAN_REPO" &&
+    AOM_DEPENDENCY_INSTALL_FILE="$DEPENDENCY_INSTALL_FILE" \
+    AOM_DEPENDENCY_INSTALL_PROFILE="$DEPENDENCY_INSTALL_PROFILE" \
+    AOM_DEPENDENCY_INSTALL_SHA256="$DEPENDENCY_INSTALL_SHA256" \
+    AOM_RUNNER_OS="$RUNNER_OS" \
+    AOM_BASE_IMAGE="$BASE_IMAGE" \
+    "$PY_RUN" -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
+  )
 fi
 
 ARCHIVE_ABS="$CLEAN_REPO/$ARCHIVE_REL"

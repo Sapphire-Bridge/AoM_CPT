@@ -20,11 +20,11 @@ Compact public companion repository for the Appearance of Meaning behavioral and
 
 A minimal reviewer pass is:
 
-1. install dependencies with `pip install -r requirements.lock.txt`
+1. create/activate a venv, then install dependencies with `python -m pip install -r requirements.txt`
 2. run `python scripts/run_paper.py smoke`
-3. run `pytest -q`
+3. run `python -m pytest -q`
 4. inspect `results/paper_smoke/aom_eval.csv`, `results/paper_smoke/results_report.md`, and `results/paper_smoke/RUN_MANIFEST.json`
-5. use [`PAPER_VERIFICATION_GUIDE.md`](PAPER_VERIFICATION_GUIDE.md) for the strict paper-facing verification path
+5. use [`PAPER_VERIFICATION_GUIDE.md`](PAPER_VERIFICATION_GUIDE.md) for the strict paper-facing verification path; field-level evidence-contract checks apply to full `results_submission_full/` artifacts, not the smoke run
 
 ## Paper
 
@@ -82,27 +82,32 @@ bash scripts/build_replication_bundle.sh \
 
 ## Environment (pinned release runtime)
 
-The canonical full run records its effective runtime in `results_submission_full/RUN_MANIFEST.json` when you regenerate the paper artifact set. The pinned baseline used for the public release is:
+The canonical full run records its effective runtime in `results_submission_full/RUN_MANIFEST.json` when you regenerate the paper artifact set. The strict paper-facing reproduction envelope is:
 
+- Ubuntu `24.04`
 - Python `3.12.7`
+- `pip==24.2`
 - `torch==2.5.1`
 - `transformers==4.57.3`
 - `tokenizers==0.22.1`
 - `numpy==1.26.4`
 
-Environment setup:
+Dependency surfaces:
+
+- Reviewer / CI surface: `requirements.txt`
+- Strict clean-room / paper reproduction surface: `requirements.pip.lock.txt`
+- Provenance-only reference snapshot: `requirements.lock.txt`
+
+Strict paper-facing environment setup:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.lock.txt
+python -m pip install --upgrade pip==24.2
+python -m pip install -r requirements.pip.lock.txt
 ```
 
-If you prefer the slimmer top-level pin set instead of the full lock snapshot:
-
-```bash
-pip install -r requirements.txt
-```
+`requirements.lock.txt` is a reference-machine snapshot retained for provenance recording. It contains Conda-only packages such as `anaconda-anon-usage` and `conda`, so it is not the pip install surface.
 
 ## Canonical dataset manifest
 
@@ -123,7 +128,7 @@ python scripts/run_paper.py smoke
 Run the default offline test suite:
 
 ```bash
-pytest -q
+python -m pytest -q
 ```
 
 Generate a larger templated dataset (starting point; you should still curate for publication):
@@ -231,7 +236,7 @@ Regenerate the paper-cited artifact set (AoM eval + specificity + CF/COH patchin
 bash scripts/run_submission_full_strong.sh
 ```
 
-Clean-room / “one command” reproducibility check (exports a clean repo snapshot, installs pinned deps from `requirements.lock.txt`, runs the suite, runs evidence checks, and builds a replication bundle):
+Clean-room / “one command” reproducibility check (exports a clean repo snapshot, installs the strict pip lock from `requirements.pip.lock.txt`, runs the suite, runs evidence checks, and builds a replication bundle):
 
 ```bash
 bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute

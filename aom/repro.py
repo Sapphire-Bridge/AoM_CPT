@@ -38,6 +38,7 @@ def _safe_version(module_name: str) -> str:
 def collect_versions() -> dict[str, str]:
     return {
         "python": str(sys.version.split()[0]),
+        "pip": _safe_version("pip"),
         "platform": str(platform.platform()),
         "numpy": _safe_version("numpy"),
         "torch": _safe_version("torch"),

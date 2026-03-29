@@ -263,6 +263,7 @@ commands = [line.strip() for line in command_log.read_text(encoding="utf-8").spl
 
 from aom.data.dataset_manifest import sha256_file
 from aom.repro import collect_versions
+from aom.repro_metadata import collect_dependency_install_provenance_from_env, verification_profile_for_mode
 
 def _rel_under_root(p: Path) -> str:
     try:
@@ -272,6 +273,7 @@ def _rel_under_root(p: Path) -> str:
 
 manifest = {
     "mode": "cf_shift_vs_subinv",
+    "verification_profile": verification_profile_for_mode("cf_shift_vs_subinv"),
     "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     "git_commit": str(git_commit),
     "results_csv_path": _rel_under_root(csv_path),
@@ -283,6 +285,7 @@ manifest = {
     "runtime_versions": collect_versions(),
     "commands": commands,
 }
+manifest.update(collect_dependency_install_provenance_from_env())
 (results_dir / "CF_SHIFT_SUBINV_RUN_MANIFEST.json").write_text(
     json.dumps(manifest, indent=2, sort_keys=True) + "\n",
     encoding="utf-8",

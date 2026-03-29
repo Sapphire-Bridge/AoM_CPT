@@ -8,7 +8,7 @@ on:
 
 jobs:
   evidence:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -17,16 +17,36 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.12.7"
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Evidence ID Consistency
         run: python scripts/check_evidence_contract.py
 
       - name: Pytest Evidence Suite
         run: |
-          pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
+          python -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
+
+  strict-lock-drift:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.7"
+
+      - name: Regenerate strict pip lock
+        run: |
+          bash scripts/refresh_requirements_pip_lock.sh --python python --output /tmp/requirements.pip.lock.txt
+
+      - name: Check strict pip lock drift
+        run: |
+          diff -u requirements.pip.lock.txt /tmp/requirements.pip.lock.txt

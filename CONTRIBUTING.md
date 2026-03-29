@@ -9,7 +9,14 @@ This repository is a research companion for AoM/CPT experiments and paper artifa
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.lock.txt
+python -m pip install -r requirements.txt
+```
+
+For strict paper-facing clean-room reproduction, use the fixed pip lock instead:
+
+```bash
+python -m pip install --upgrade pip==24.2
+python -m pip install -r requirements.pip.lock.txt
 ```
 
 ## Development Rules
@@ -27,7 +34,7 @@ pip install -r requirements.lock.txt
 Run all of:
 
 ```bash
-pytest -q
+python -m pytest -q
 python scripts/check_evidence_contract.py
 python scripts/check_evidence_contract_fields.py --results_dir results_submission_full
 MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=results_submission_full TABLES_OUT_DIR=tables_submission_full

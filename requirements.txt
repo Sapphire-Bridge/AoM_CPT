@@ -1,7 +1,9 @@
-# Pinned runtime + dev dependencies for reproducible paper runs.
+# Pinned top-level reviewer / CI dependencies for reproducible paper runs with venv + pip.
 #
-# For a fully locked environment snapshot (including transitive deps from the reference machine),
-# see `requirements.lock.txt`.
+# Strict paper-facing clean-room reproduction uses `requirements.pip.lock.txt`.
+# `requirements.lock.txt` is a provenance snapshot from a reference machine and includes
+# Conda-only packages (for example `anaconda-anon-usage` and `conda`), so it is not used
+# as the pip install surface.
 torch==2.5.1
 transformers==4.57.3
 tokenizers==0.22.1

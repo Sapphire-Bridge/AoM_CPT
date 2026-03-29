@@ -39,7 +39,7 @@ on:
 
 jobs:
   bundle:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 480
     steps:
       - name: Checkout
@@ -48,17 +48,24 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.12.7"
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          test -f requirements.pip.lock.txt
+          python -m pip install --upgrade "pip==24.2"
+          python -m pip install -r requirements.pip.lock.txt
 
       - name: Build Bundle
         shell: bash
         run: |
           set -euo pipefail
+          lock_sha="$(sha256sum requirements.pip.lock.txt | awk '{print $1}')"
+          export AOM_DEPENDENCY_INSTALL_FILE="requirements.pip.lock.txt"
+          export AOM_DEPENDENCY_INSTALL_PROFILE="strict_pip_lock"
+          export AOM_DEPENDENCY_INSTALL_SHA256="$lock_sha"
+          export AOM_RUNNER_OS="ubuntu-24.04"
+          export AOM_BASE_IMAGE="github-actions:ubuntu-24.04"
           cmd=(
             bash scripts/build_replication_bundle.sh
             --mode submission_full_strong

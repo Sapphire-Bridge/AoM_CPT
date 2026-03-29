@@ -23,15 +23,16 @@ This repository is the compact AoM/CPT reproducibility surface. Use this guide f
 Use this path to establish that the repository is coherent and runnable without regenerating the full paper artifact surface:
 
 1. install pinned dependencies:
-   `python -m venv .venv && source .venv/bin/activate && pip install -r requirements.lock.txt`
+   `python -m venv .venv && source .venv/bin/activate && python -m pip install -r requirements.txt`
 2. run the offline smoke check:
    `python scripts/run_paper.py smoke`
 3. run the default offline test suite:
-   `pytest -q`
+   `python -m pytest -q`
 4. inspect:
    `results/paper_smoke/aom_eval.csv`,
    `results/paper_smoke/results_report.md`,
    `results/paper_smoke/RUN_MANIFEST.json`
+5. expect the field-level evidence-contract test to skip unless a full `results_submission_full/` artifact set is present
 
 ## Strict reproduction path
 
@@ -70,7 +71,7 @@ bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute
 
 What it does:
 1) `git archive` export to a fresh clean-room directory
-2) creates a venv and installs pinned dependencies (prefers `requirements.lock.txt` when present)
+2) creates a venv, pins `pip==24.2`, and installs `requirements.pip.lock.txt`
 3) runs the canonical submission suite + strict tables
 4) runs:
    `python scripts/check_evidence_contract.py`
@@ -105,10 +106,17 @@ bash scripts/build_replication_bundle.sh \
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.lock.txt
+python -m pip install --upgrade pip==24.2
+python -m pip install -r requirements.pip.lock.txt
 ```
 
-If you prefer a smaller top-level install set, `requirements.txt` is pinned but not transitively locked.
+Dependency surfaces:
+
+- Reviewer / smoke validation: `requirements.txt`
+- Strict paper-facing reproduction: `requirements.pip.lock.txt`
+- Provenance-only reference snapshot: `requirements.lock.txt`
+
+`requirements.lock.txt` contains Conda-only packages such as `anaconda-anon-usage` and `conda`, so it is not the pip install surface.
 
 ### 1) Verify the hardened dataset bundle (hashes + stable bundle ID)
 

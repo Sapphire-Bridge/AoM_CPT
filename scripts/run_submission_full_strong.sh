@@ -417,21 +417,26 @@ def _rel_under_root(p: Path) -> str:
 
 
 from aom.repro import collect_versions
+from aom.repro_metadata import STRICT_VERIFICATION_PROFILE, collect_dependency_install_provenance_from_env
 
 req_txt = repo_root / "requirements.txt"
+req_pip_lock = repo_root / "requirements.pip.lock.txt"
 req_lock = repo_root / "requirements.lock.txt"
 
 manifest = {
     "mode": "submission_full_strong",
+    "verification_profile": STRICT_VERIFICATION_PROFILE,
     "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     "git_commit": str(git_commit),
     "results_dir": _rel_under_root(results_dir),
     "dataset_manifest_path": _rel_under_root(dataset_manifest),
     "runtime_versions": collect_versions(),
     "requirements_txt_sha256": "" if not req_txt.exists() else _sha256_file(req_txt),
+    "requirements_pip_lock_sha256": "" if not req_pip_lock.exists() else _sha256_file(req_pip_lock),
     "requirements_lock_sha256": "" if not req_lock.exists() else _sha256_file(req_lock),
     "commands": commands,
 }
+manifest.update(collect_dependency_install_provenance_from_env())
 (results_dir / "RUN_MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 PY
 

@@ -12,8 +12,9 @@
 - Generated outputs are expected in `results*/`, `tables*/`, `submission/`, and `dist/`.
 
 ## Build, Test, and Development Commands
-- `python -m venv .venv && source .venv/bin/activate && pip install -r requirements.lock.txt`: create a pinned environment.
-- `pytest -q`: run the default offline smoke/evidence tests.
+- `python -m venv .venv && source .venv/bin/activate && python -m pip install -r requirements.txt`: create the reviewer / CI environment.
+- `python -m pip install --upgrade pip==24.2 && python -m pip install -r requirements.pip.lock.txt`: create the strict paper-facing clean-room environment.
+- `python -m pytest -q`: run the default offline smoke/evidence tests.
 - `python scripts/run_paper.py smoke`: end-to-end smoke run (no model downloads required).
 - `bash scripts/run_submission_full_strong.sh`: regenerate canonical submission artifacts in `results_submission_full/` and `tables_submission_full/`.
 - `MAKE_TABLES_STRICT=1 make tables RESULTS_DIR=results_submission_full TABLES_OUT_DIR=tables_submission_full`: strict table rebuild; fails on missing/inconsistent inputs.
@@ -27,8 +28,8 @@
 
 ## Testing Guidelines
 - Framework: `pytest` with files named `tests/test_*.py` and test functions `test_*`.
-- `tests/test_evidence_contract_fields.py` requires a results directory containing `RUN_MANIFEST.json`; set `AOM_RESULTS_DIR=/path/to/results` if needed.
-- For changes to metrics, manifests, or paper claims, run `pytest -q` and both evidence-check scripts before opening a PR.
+- `tests/test_evidence_contract_fields.py` requires a strict-results directory containing `RUN_MANIFEST.json`; set `AOM_RESULTS_DIR=/path/to/results_submission_full` if needed.
+- For changes to metrics, manifests, or paper claims, run `python -m pytest -q` and both evidence-check scripts before opening a PR.
 
 ## Commit & Pull Request Guidelines
 - Follow existing commit style: short, imperative, descriptive subjects (for example, `Freeze paper submission and release gate`).
