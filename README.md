@@ -259,7 +259,7 @@ bash scripts/build_replication_bundle.sh \
   --archive aom_replication_bundle.tar.gz
 ```
 
-## Paper-mode runner (smoke / M1Max / A100)
+## Paper-mode runner (smoke / M1Max / CUDA preset)
 
 This repo includes a convenience runner that generates a hardened “paper dataset” (with CF shams + COH controls) and runs reproducible evaluation presets:
 
@@ -270,9 +270,13 @@ python scripts/run_paper.py smoke
 # Long local run tuned for Apple Silicon (MPS)
 python scripts/run_paper.py m1max
 
-# Full run intended for CUDA GPUs (e.g. A100s)
+# Full high-memory CUDA preset (historical preset name: `a100`)
 python scripts/run_paper.py a100 --attn_behavioral flash_attention_2
 ```
+
+The `a100` mode name is a retained preset label for the high-memory CUDA path. Successful NVIDIA runs on other hardware should be reported as CUDA validation on the tested GPU, not as A100-specific validation.
+
+Additional ad hoc CUDA validation was performed on an NVIDIA RTX A4500 using cached Hugging Face artifacts and `aom_eval.py` with `--device cuda`; the behavioral evaluation completed successfully for a 10-model non-8B subset. This is a CUDA operability check only. It does not replace the documented reviewer path (`python scripts/run_paper.py smoke`) or the strict paper-facing path (`bash scripts/final_repro_cleanroom.sh --repro-mode full_recompute`).
 
 ## Standalone causal patching CLIs
 
