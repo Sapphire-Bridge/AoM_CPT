@@ -63,7 +63,7 @@ def test_evidence_contract_fields_resolve_when_results_present() -> None:
     else:
         try:
             results_dir = _find_auto_results_dir()
-        except AssertionError as e:
+        except ValueError as e:
             pytest.fail(str(e))
         if results_dir is None:
             pytest.skip(
@@ -100,3 +100,12 @@ def test_auto_results_dir_accepts_legacy_strict_mode(monkeypatch: pytest.MonkeyP
     )
     monkeypatch.setattr(sys.modules[__name__], "_AUTO_RESULTS_DIR_CANDIDATES", (strict_dir,))
     assert _find_auto_results_dir() == strict_dir
+
+
+def test_explicit_non_strict_profile_overrides_legacy_mode() -> None:
+    assert not manifest_has_strict_verification_profile(
+        {
+            "mode": "submission_full_strong",
+            "verification_profile": "reviewer_smoke",
+        }
+    )

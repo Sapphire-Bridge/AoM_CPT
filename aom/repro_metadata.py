@@ -32,8 +32,8 @@ def verification_profile_for_mode(mode: str) -> str:
 
 def manifest_has_strict_verification_profile(manifest: Mapping[str, Any]) -> bool:
     profile = str(manifest.get("verification_profile", "") or "").strip()
-    if profile == STRICT_VERIFICATION_PROFILE:
-        return True
+    if profile:
+        return profile == STRICT_VERIFICATION_PROFILE
     legacy_mode = str(manifest.get("mode", "") or "").strip()
     return legacy_mode in _LEGACY_STRICT_MODES
 

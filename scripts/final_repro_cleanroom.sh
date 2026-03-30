@@ -246,7 +246,7 @@ if [[ "$INSTALL_DEPS" -eq 1 ]]; then
     echo "[run] $PY_RUN -m pip install --upgrade pip==$STRICT_PIP_VERSION"
     "$PY_RUN" -m pip install --upgrade "pip==$STRICT_PIP_VERSION"
     if [[ -z "$RUNNER_OS" ]]; then
-      RUNNER_OS="$("$PY_RUN" -c 'import platform; print(platform.platform())')"
+      RUNNER_OS="local-cleanroom"
     fi
     if [[ -z "$BASE_IMAGE" ]]; then
       BASE_IMAGE="local-cleanroom"

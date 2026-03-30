@@ -7,6 +7,25 @@ on:
       - main
 
 jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    outputs:
+      strict_lock: ${{ steps.filter.outputs.strict_lock }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect strict-lock surface changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            strict_lock:
+              - 'requirements.txt'
+              - 'requirements.pip.lock.txt'
+              - 'scripts/refresh_requirements_pip_lock.sh'
+              - '.github/workflows/ci-evidence.yml'
+
   evidence:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -32,6 +51,8 @@ jobs:
           python -m pytest -q tests/test_evidence_contract_ids.py tests/test_evidence_contract_fields.py
 
   strict-lock-drift:
+    needs: changes
+    if: needs.changes.outputs.strict_lock == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
