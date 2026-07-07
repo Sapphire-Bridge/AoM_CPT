@@ -1,0 +1,405 @@
+{
+  "behavioral_by_model": {
+    "google/gemma-3-4b-pt": {
+      "assert_sides": [
+        "base",
+        "cf"
+      ],
+      "behavior_model": "google/gemma-3-4b-pt",
+      "behavior_revision": "",
+      "behavior_tokenizer_revision": "",
+      "bias_info": {
+        "contexts": {
+          "class_swap:t1": {
+            "label_bias": {
+              "large": -12.10678219787592,
+              "small": -10.803532965034638
+            },
+            "prompt_scores": [
+              {
+                "prompt": "For an object, 100 cm is",
+                "scores": {
+                  "large": -12.10678219787592,
+                  "small": -10.803532965034638
+                }
+              }
+            ],
+            "prompts": [
+              "For an object, 100 cm is"
+            ]
+          },
+          "class_swap:t2": {
+            "label_bias": {
+              "large": -9.737883522518272,
+              "small": -8.69926578253871
+            },
+            "prompt_scores": [
+              {
+                "prompt": "As object sizes go, 100 cm is",
+                "scores": {
+                  "large": -9.737883522518272,
+                  "small": -8.69926578253871
+                }
+              }
+            ],
+            "prompts": [
+              "As object sizes go, 100 cm is"
+            ]
+          },
+          "class_swap:t3": {
+            "label_bias": {
+              "large": -9.706925150625702,
+              "small": -8.127644210908205
+            },
+            "prompt_scores": [
+              {
+                "prompt": "Compared with a typical object, 100 cm is",
+                "scores": {
+                  "large": -9.706925150625702,
+                  "small": -8.127644210908205
+                }
+              }
+            ],
+            "prompts": [
+              "Compared with a typical object, 100 cm is"
+            ]
+          },
+          "conflict_swap:t1": {
+            "label_bias": {
+              "large": -11.35404412746945,
+              "small": -9.608405715444977
+            },
+            "prompt_scores": [
+              {
+                "prompt": "For this object, the class is object. The stated reference is 100 cm. Its measured length is 100 cm, so it is",
+                "scores": {
+                  "large": -11.35404412746945,
+                  "small": -9.608405715444977
+                }
+              }
+            ],
+            "prompts": [
+              "For this object, the class is object. The stated reference is 100 cm. Its measured length is 100 cm, so it is"
+            ]
+          },
+          "conflict_swap:t2": {
+            "label_bias": {
+              "large": -10.881674489071823,
+              "small": -9.451304688042223
+            },
+            "prompt_scores": [
+              {
+                "prompt": "This item is an object. The comparison standard is 100 cm. The item measures 100 cm and is",
+                "scores": {
+                  "large": -10.881674489071823,
+                  "small": -9.451304688042223
+                }
+              }
+            ],
+            "prompts": [
+              "This item is an object. The comparison standard is 100 cm. The item measures 100 cm and is"
+            ]
+          },
+          "conflict_swap:t3": {
+            "label_bias": {
+              "large": -16.27992146773589,
+              "small": -14.606424491405217
+            },
+            "prompt_scores": [
+              {
+                "prompt": "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:",
+                "scores": {
+                  "large": -16.27992146773589,
+                  "small": -14.606424491405217
+                }
+              }
+            ],
+            "prompts": [
+              "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:"
+            ]
+          },
+          "penumbra_standard:t1": {
+            "label_bias": {
+              "large": -15.387454826255254,
+              "small": -12.943532289846681
+            },
+            "prompt_scores": [
+              {
+                "prompt": "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
+                "scores": {
+                  "large": -15.387454826255254,
+                  "small": -12.943532289846681
+                }
+              }
+            ],
+            "prompts": [
+              "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is"
+            ]
+          },
+          "penumbra_standard:t2": {
+            "label_bias": {
+              "large": -12.140146842934877,
+              "small": -10.648689984287898
+            },
+            "prompt_scores": [
+              {
+                "prompt": "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is",
+                "scores": {
+                  "large": -12.140146842934877,
+                  "small": -10.648689984287898
+                }
+              }
+            ],
+            "prompts": [
+              "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is"
+            ]
+          },
+          "penumbra_standard:t3": {
+            "label_bias": {
+              "large": -12.181537389983355,
+              "small": -10.482027022589719
+            },
+            "prompt_scores": [
+              {
+                "prompt": "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
+                "scores": {
+                  "large": -12.181537389983355,
+                  "small": -10.482027022589719
+                }
+              }
+            ],
+            "prompts": [
+              "This object is measured at 100 cm. Relative to a 100 cm standard, it is"
+            ]
+          },
+          "standard_swap:t1": {
+            "label_bias": {
+              "large": -15.387454826255254,
+              "small": -12.943532289846681
+            },
+            "prompt_scores": [
+              {
+                "prompt": "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
+                "scores": {
+                  "large": -15.387454826255254,
+                  "small": -12.943532289846681
+                }
+              }
+            ],
+            "prompts": [
+              "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is"
+            ]
+          },
+          "standard_swap:t2": {
+            "label_bias": {
+              "large": -12.140146842934877,
+              "small": -10.648689984287898
+            },
+            "prompt_scores": [
+              {
+                "prompt": "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is",
+                "scores": {
+                  "large": -12.140146842934877,
+                  "small": -10.648689984287898
+                }
+              }
+            ],
+            "prompts": [
+              "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is"
+            ]
+          },
+          "standard_swap:t3": {
+            "label_bias": {
+              "large": -12.181537389983355,
+              "small": -10.482027022589719
+            },
+            "prompt_scores": [
+              {
+                "prompt": "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
+                "scores": {
+                  "large": -12.181537389983355,
+                  "small": -10.482027022589719
+                }
+              }
+            ],
+            "prompts": [
+              "This object is measured at 100 cm. Relative to a 100 cm standard, it is"
+            ]
+          }
+        },
+        "label_bias": {
+          "large": -12.457125756137003,
+          "small": -10.787089703901879
+        },
+        "label_bias_by_context": {
+          "class_swap:t1": {
+            "large": -12.10678219787592,
+            "small": -10.803532965034638
+          },
+          "class_swap:t2": {
+            "large": -9.737883522518272,
+            "small": -8.69926578253871
+          },
+          "class_swap:t3": {
+            "large": -9.706925150625702,
+            "small": -8.127644210908205
+          },
+          "conflict_swap:t1": {
+            "large": -11.35404412746945,
+            "small": -9.608405715444977
+          },
+          "conflict_swap:t2": {
+            "large": -10.881674489071823,
+            "small": -9.451304688042223
+          },
+          "conflict_swap:t3": {
+            "large": -16.27992146773589,
+            "small": -14.606424491405217
+          },
+          "penumbra_standard:t1": {
+            "large": -15.387454826255254,
+            "small": -12.943532289846681
+          },
+          "penumbra_standard:t2": {
+            "large": -12.140146842934877,
+            "small": -10.648689984287898
+          },
+          "penumbra_standard:t3": {
+            "large": -12.181537389983355,
+            "small": -10.482027022589719
+          },
+          "standard_swap:t1": {
+            "large": -15.387454826255254,
+            "small": -12.943532289846681
+          },
+          "standard_swap:t2": {
+            "large": -12.140146842934877,
+            "small": -10.648689984287898
+          },
+          "standard_swap:t3": {
+            "large": -12.181537389983355,
+            "small": -10.482027022589719
+          }
+        },
+        "source": "context_neutral_defaults"
+      },
+      "conflict_gate_policy": "siblings",
+      "filtered_jsonl": "data_size_standard/penumbra_v3_gemma3_gate/size_standard.filtered.google_gemma_3_4b_pt.jsonl",
+      "filtered_summary": "data_size_standard/penumbra_v3_gemma3_gate/size_standard.filtered.google_gemma_3_4b_pt.summary.json",
+      "first_rejections": [
+        "size-standard_swap-ant-S102-V101-small_to_large-mborderline-t1",
+        "size-standard_swap-ant-S120-V110-small_to_large-mborderline-t1",
+        "size-standard_swap-ant-S900-V300-small_to_large-mclear-t1",
+        "size-standard_swap-ant-S999-V150-small_to_large-mextreme-t1",
+        "size-standard_swap-human-S102-V101-small_to_large-mborderline-t1",
+        "size-standard_swap-human-S120-V110-small_to_large-mborderline-t1",
+        "size-standard_swap-human-S90-V30-small_to_large-mclear-t1",
+        "size-standard_swap-human-S900-V300-small_to_large-mclear-t1",
+        "size-standard_swap-human-S999-V150-small_to_large-mextreme-t1",
+        "size-standard_swap-elephant-S200-V150-small_to_large-mclear-t1"
+      ],
+      "gate_mode": "bias_corrected",
+      "gate_side_prediction_counts": {
+        "base|penumbra_standard|large|large": 205,
+        "base|penumbra_standard|large|small": 65,
+        "base|penumbra_standard|small|large": 91,
+        "base|penumbra_standard|small|small": 179,
+        "base|standard_swap|small|large": 59,
+        "base|standard_swap|small|small": 85,
+        "cf|penumbra_standard|large|large": 205,
+        "cf|penumbra_standard|large|small": 65,
+        "cf|penumbra_standard|small|large": 91,
+        "cf|penumbra_standard|small|small": 179,
+        "cf|standard_swap|large|large": 128,
+        "cf|standard_swap|large|small": 16
+      },
+      "hf_model_commit_hash": "cc012e0a6d0787b4adcc0fa2c4da74402494554d",
+      "hf_tokenizer_revision_effective": "",
+      "kept_by_family": {
+        "penumbra_standard": 452,
+        "standard_swap": 64
+      },
+      "local_files_only": true,
+      "margins_csv": "data_size_standard/penumbra_v3_gemma3_gate/size_standard.margins.google_gemma_3_4b_pt.csv",
+      "min_gate_margin": 0.1,
+      "min_kept_by_family": {
+        "penumbra_standard": 100,
+        "standard_swap": 10
+      },
+      "model_slug": "google_gemma_3_4b_pt",
+      "n_input_rows": 684,
+      "n_kept_rows": 516,
+      "n_rejected_rows": 168,
+      "penumbra_soft_abs_log_ratio": 0.15,
+      "raw_side_prediction_counts": {
+        "base|penumbra_standard|large|large": 19,
+        "base|penumbra_standard|large|small": 251,
+        "base|penumbra_standard|small|large": 3,
+        "base|penumbra_standard|small|small": 267,
+        "base|standard_swap|small|small": 144,
+        "cf|penumbra_standard|large|large": 19,
+        "cf|penumbra_standard|large|small": 251,
+        "cf|penumbra_standard|small|large": 3,
+        "cf|penumbra_standard|small|small": 267,
+        "cf|standard_swap|large|large": 29,
+        "cf|standard_swap|large|small": 115
+      },
+      "rejected_by_family": {
+        "penumbra_standard": 88,
+        "standard_swap": 80
+      },
+      "rejection_counts": {
+        "base_gate_margin_below_0.1": 12,
+        "base_gate_pred_large_expected_small": 83,
+        "base_gate_pred_small_expected_large": 16,
+        "cf_gate_margin_below_0.1": 11,
+        "cf_gate_pred_large_expected_small": 24,
+        "cf_gate_pred_small_expected_large": 32
+      },
+      "score_determinacy": false,
+      "source_size_path": "data_size_standard/size_standard_penumbra_v3_gemma3.jsonl",
+      "tokenizer_models_checked": [
+        "gpt2",
+        "Qwen/Qwen2.5-3B",
+        "google/gemma-3-4b-pt"
+      ],
+      "torch_dtype": "bfloat16"
+    }
+  },
+  "filter_manifest": "data_size_standard/penumbra_v3_gemma3_gate/size_standard.filter_manifest.json",
+  "manifest": {
+    "error_policy": "raise",
+    "invalid_samples": [],
+    "n_rows_invalid": 0,
+    "n_rows_total": 684,
+    "n_rows_valid": 684,
+    "path": "data_size_standard/size_standard_penumbra_v3_gemma3.jsonl",
+    "role": "size_standard",
+    "schema_name": "CounterfactualPair",
+    "schema_version": null,
+    "sha256": "e442fd248532f9b9de49ba364c8cea7f62ec66a5877285f3426b7a5287fcbe88",
+    "size_bytes": 1481899
+  },
+  "n_rows_loaded": 684,
+  "size_path": "data_size_standard/size_standard_penumbra_v3_gemma3.jsonl",
+  "tokenizers": {
+    "Qwen/Qwen2.5-3B": {
+      "n_cases": 684,
+      "n_cases_skipped_span_mismatch": 0,
+      "n_skips": 0,
+      "skip_reason_counts": {}
+    },
+    "google/gemma-3-4b-pt": {
+      "n_cases": 684,
+      "n_cases_skipped_span_mismatch": 0,
+      "n_skips": 0,
+      "skip_reason_counts": {}
+    },
+    "gpt2": {
+      "n_cases": 684,
+      "n_cases_skipped_span_mismatch": 0,
+      "n_skips": 0,
+      "skip_reason_counts": {}
+    }
+  }
+}

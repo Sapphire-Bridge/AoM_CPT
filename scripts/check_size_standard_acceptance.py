@@ -27,6 +27,11 @@ from aom.utils import configure_logprob_computation, get_best_device
 
 DEFAULT_TOKENIZERS = ["gpt2", "Qwen/Qwen2.5-0.5B", "Qwen/Qwen2.5-1.5B", "Qwen/Qwen2.5-3B"]
 DEFAULT_BEHAVIOR_MODELS = ["Qwen/Qwen2.5-3B"]
+DETERMINACY_CHOICES = {
+    "def_small": [" definitely small", " clearly small"],
+    "borderline": [" borderline", " neither clearly small nor large"],
+    "def_large": [" definitely large", " clearly large"],
+}
 CONTEXT_BIAS_PROMPTS: dict[str, list[str]] = {
     "standard_swap:t1": [
         "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
@@ -54,6 +59,15 @@ CONTEXT_BIAS_PROMPTS: dict[str, list[str]] = {
     ],
     "conflict_swap:t3": [
         "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:",
+    ],
+    "penumbra_standard:t1": [
+        "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
+    ],
+    "penumbra_standard:t2": [
+        "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is",
+    ],
+    "penumbra_standard:t3": [
+        "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
     ],
 }
 
@@ -188,6 +202,31 @@ def _parse_min_kept_by_family(raw: list[str] | None) -> dict[str, int]:
     return out
 
 
+def _side_abs_log_ratio(md: Mapping[str, Any], side_name: str) -> float | None:
+    key = "cf_abs_log_ratio" if str(side_name) == "cf" else "abs_log_ratio"
+    fallback = "cf_log_ratio" if str(side_name) == "cf" else "log_ratio"
+    raw = md.get(key, md.get(fallback, None))
+    if raw is None or raw == "":
+        return None
+    try:
+        return abs(float(raw))
+    except Exception:
+        return None
+
+
+def _is_soft_penumbra_side(md: Mapping[str, Any], side_name: str, threshold: float) -> bool:
+    if str(md.get("family", "")) != "penumbra_standard":
+        return False
+    target_abs = md.get("target_abs_log_ratio", None)
+    if target_abs not in (None, ""):
+        try:
+            return abs(float(target_abs)) <= float(threshold)
+        except Exception:
+            pass
+    abs_log = _side_abs_log_ratio(md, side_name)
+    return abs_log is not None and abs(float(abs_log)) <= float(threshold)
+
+
 def _score_prompt(
     *,
     loaded: LoadedModel,
@@ -297,6 +336,20 @@ def parse_args() -> argparse.Namespace:
         default=0.0,
         help="Minimum absolute corrected margin for asserted gate decisions. Default: 0.0.",
     )
+    p.add_argument(
+        "--penumbra_soft_abs_log_ratio",
+        type=float,
+        default=0.15,
+        help=(
+            "For penumbra_standard rows with abs(log(value/standard)) at or below this threshold, "
+            "record margins but do not reject by argmax. Default: 0.15."
+        ),
+    )
+    p.add_argument(
+        "--score_determinacy",
+        action="store_true",
+        help="Also write definitely-small/borderline/definitely-large continuation scores to the margins CSV.",
+    )
     p.add_argument("--emit_filtered_jsonl", type=str, default="")
     p.add_argument("--emit_filtered_summary", type=str, default="")
     p.add_argument("--filter_manifest_path", type=str, default="")
@@ -373,6 +426,8 @@ def main() -> None:
         min_gate_margin = float(getattr(args, "min_gate_margin", 0.0))
         if min_gate_margin < 0:
             raise ValueError("--min_gate_margin must be >= 0")
+        if float(args.penumbra_soft_abs_log_ratio) < 0:
+            raise ValueError("--penumbra_soft_abs_log_ratio must be >= 0")
 
         raw_rows = _read_jsonl_rows(size_path)
         raw_by_id: dict[str, dict[str, Any]] = {}
@@ -462,6 +517,7 @@ def main() -> None:
                 gate_pred = _argmax_label(gate_scores)
                 raw_margin = _margin(raw_scores, str(expected))
                 gate_margin = _margin(gate_scores, str(expected))
+                side_abs_log_ratio = _side_abs_log_ratio(md, side_name)
                 row: dict[str, Any] = {
                     "model": str(model_name),
                     "model_slug": str(model_slug),
@@ -481,6 +537,12 @@ def main() -> None:
                     "standard_cm": md.get("standard_cm", ""),
                     "cf_standard_cm": md.get("cf_standard_cm", ""),
                     "value_cm": md.get("value_cm", ""),
+                    "abs_log_ratio": "" if side_abs_log_ratio is None else float(side_abs_log_ratio),
+                    "penumbra_axis": str(md.get("penumbra_axis", "")),
+                    "penumbral_relation": str(md.get("penumbral_relation", "")),
+                    "value_pair_id": str(md.get("value_pair_id", "")),
+                    "rank_in_chain": str(md.get("rank_in_chain", "")),
+                    "monotonicity_direction": str(md.get("monotonicity_direction", "")),
                     "margin_bin": str(md.get("margin_bin", "")),
                     "expected_label": str(expected),
                     "pred_label": raw_pred,
@@ -492,6 +554,20 @@ def main() -> None:
                     row[f"score_{label}"] = float(raw_scores[label])
                     row[f"bias_{label}"] = float(side_label_bias.get(str(label), 0.0))
                     row[f"gate_score_{label}"] = float(gate_scores[label])
+                if bool(args.score_determinacy):
+                    det_scores = _score_prompt(
+                        loaded=loaded,
+                        prompt=str(prompt),
+                        choices=DETERMINACY_CHOICES,
+                        device=device,
+                    )
+                    det_pred = _argmax_label(det_scores)
+                    row["determinacy_pred_label"] = str(det_pred)
+                    row["determinacy_borderline_margin"] = float(
+                        det_scores["borderline"] - max(det_scores["def_small"], det_scores["def_large"])
+                    )
+                    for label in sorted(det_scores):
+                        row[f"det_score_{label}"] = float(det_scores[label])
                 reason: str | None = None
                 if bool(gate_asserted):
                     if gate_pred != str(expected):
@@ -512,7 +588,16 @@ def main() -> None:
                 item_side_rows: list[dict[str, Any]] = []
                 item_reasons: list[str] = []
                 for side_name, side in (("base", it.base), ("cf", it.cf)):
-                    gate_asserted = (side_name in sides_to_assert) and str(md.get("family", "")) != "conflict_swap"
+                    penumbra_soft = _is_soft_penumbra_side(
+                        md,
+                        side_name,
+                        threshold=float(args.penumbra_soft_abs_log_ratio),
+                    )
+                    gate_asserted = (
+                        (side_name in sides_to_assert)
+                        and str(md.get("family", "")) != "conflict_swap"
+                        and not bool(penumbra_soft)
+                    )
                     row, reason = score_gate_row(
                         item_id=str(it.item_id),
                         md=md,
@@ -521,6 +606,7 @@ def main() -> None:
                         side_name=str(side_name),
                         gate_asserted=bool(gate_asserted),
                     )
+                    row["penumbra_soft_gate"] = bool(penumbra_soft)
                     margin_rows.append(row)
                     item_side_rows.append(row)
                     side_counts[
@@ -626,6 +712,8 @@ def main() -> None:
                 "assert_sides": sorted(sides_to_assert),
                 "min_gate_margin": float(min_gate_margin),
                 "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
+                "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
+                "score_determinacy": bool(args.score_determinacy),
                 "conflict_gate_policy": "siblings",
                 "gate_mode": str(args.gate_mode),
                 "bias_info": bias_info,
@@ -650,6 +738,8 @@ def main() -> None:
                 "gate_mode": str(args.gate_mode),
                 "min_gate_margin": float(min_gate_margin),
                 "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
+                "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
+                "score_determinacy": bool(args.score_determinacy),
                 "conflict_gate_policy": "siblings",
                 "bias_info": bias_info,
             }
@@ -680,6 +770,8 @@ def main() -> None:
             "gate_mode": str(args.gate_mode),
             "assert_sides": sorted(sides_to_assert),
             "min_gate_margin": float(min_gate_margin),
+            "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
+            "score_determinacy": bool(args.score_determinacy),
             "conflict_gate_policy": "siblings",
             "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
             "tokenizer_models_checked": [str(x) for x in args.tokenizer_models],

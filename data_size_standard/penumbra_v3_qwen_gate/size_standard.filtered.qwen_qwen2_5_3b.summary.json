@@ -1,0 +1,415 @@
+{
+  "assert_sides": [
+    "base",
+    "cf"
+  ],
+  "behavior_model": "Qwen/Qwen2.5-3B",
+  "behavior_revision": "",
+  "behavior_tokenizer_revision": "",
+  "bias_info": {
+    "contexts": {
+      "class_swap:t1": {
+        "label_bias": {
+          "large": -10.378433167920447,
+          "small": -10.716191987404342
+        },
+        "prompt_scores": [
+          {
+            "prompt": "For an object, 100 cm is",
+            "scores": {
+              "large": -10.378433167920447,
+              "small": -10.716191987404342
+            }
+          }
+        ],
+        "prompts": [
+          "For an object, 100 cm is"
+        ]
+      },
+      "class_swap:t2": {
+        "label_bias": {
+          "large": -4.276613235473633,
+          "small": -3.0768022084313573
+        },
+        "prompt_scores": [
+          {
+            "prompt": "As object sizes go, 100 cm is",
+            "scores": {
+              "large": -4.276613235473633,
+              "small": -3.0768022084313573
+            }
+          }
+        ],
+        "prompts": [
+          "As object sizes go, 100 cm is"
+        ]
+      },
+      "class_swap:t3": {
+        "label_bias": {
+          "large": -9.195744990952432,
+          "small": -9.100182495106239
+        },
+        "prompt_scores": [
+          {
+            "prompt": "Compared with a typical object, 100 cm is",
+            "scores": {
+              "large": -9.195744990952432,
+              "small": -9.100182495106239
+            }
+          }
+        ],
+        "prompts": [
+          "Compared with a typical object, 100 cm is"
+        ]
+      },
+      "conflict_swap:t1": {
+        "label_bias": {
+          "large": -9.490518919616116,
+          "small": -9.520966855586803
+        },
+        "prompt_scores": [
+          {
+            "prompt": "For this object, the class is object. The stated reference is 100 cm. Its measured length is 100 cm, so it is",
+            "scores": {
+              "large": -9.490518919616116,
+              "small": -9.520966855586803
+            }
+          }
+        ],
+        "prompts": [
+          "For this object, the class is object. The stated reference is 100 cm. Its measured length is 100 cm, so it is"
+        ]
+      },
+      "conflict_swap:t2": {
+        "label_bias": {
+          "large": -7.970565674480954,
+          "small": -8.431523383144558
+        },
+        "prompt_scores": [
+          {
+            "prompt": "This item is an object. The comparison standard is 100 cm. The item measures 100 cm and is",
+            "scores": {
+              "large": -7.970565674480954,
+              "small": -8.431523383144558
+            }
+          }
+        ],
+        "prompts": [
+          "This item is an object. The comparison standard is 100 cm. The item measures 100 cm and is"
+        ]
+      },
+      "conflict_swap:t3": {
+        "label_bias": {
+          "large": -8.82928770641475,
+          "small": -8.140081719310524
+        },
+        "prompt_scores": [
+          {
+            "prompt": "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:",
+            "scores": {
+              "large": -8.82928770641475,
+              "small": -8.140081719310524
+            }
+          }
+        ],
+        "prompts": [
+          "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:"
+        ]
+      },
+      "penumbra_standard:t1": {
+        "label_bias": {
+          "large": -8.879150366178303,
+          "small": -9.77844235054148
+        },
+        "prompt_scores": [
+          {
+            "prompt": "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
+            "scores": {
+              "large": -8.879150366178303,
+              "small": -9.77844235054148
+            }
+          }
+        ],
+        "prompts": [
+          "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is"
+        ]
+      },
+      "penumbra_standard:t2": {
+        "label_bias": {
+          "large": -12.177554537138954,
+          "small": -12.759988690548127
+        },
+        "prompt_scores": [
+          {
+            "prompt": "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is",
+            "scores": {
+              "large": -12.177554537138954,
+              "small": -12.759988690548127
+            }
+          }
+        ],
+        "prompts": [
+          "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is"
+        ]
+      },
+      "penumbra_standard:t3": {
+        "label_bias": {
+          "large": -8.273313522830861,
+          "small": -8.612314633768012
+        },
+        "prompt_scores": [
+          {
+            "prompt": "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
+            "scores": {
+              "large": -8.273313522830861,
+              "small": -8.612314633768012
+            }
+          }
+        ],
+        "prompts": [
+          "This object is measured at 100 cm. Relative to a 100 cm standard, it is"
+        ]
+      },
+      "standard_swap:t1": {
+        "label_bias": {
+          "large": -8.879150366178303,
+          "small": -9.77844235054148
+        },
+        "prompt_scores": [
+          {
+            "prompt": "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is",
+            "scores": {
+              "large": -8.879150366178303,
+              "small": -9.77844235054148
+            }
+          }
+        ],
+        "prompts": [
+          "The reference for this object is 100 cm. The measured object is 100 cm. Therefore it is"
+        ]
+      },
+      "standard_swap:t2": {
+        "label_bias": {
+          "large": -12.177554537138954,
+          "small": -12.759988690548127
+        },
+        "prompt_scores": [
+          {
+            "prompt": "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is",
+            "scores": {
+              "large": -12.177554537138954,
+              "small": -12.759988690548127
+            }
+          }
+        ],
+        "prompts": [
+          "An object has a trial standard of 100 cm. Its measured length is 100 cm, so it is"
+        ]
+      },
+      "standard_swap:t3": {
+        "label_bias": {
+          "large": -8.273313522830861,
+          "small": -8.612314633768012
+        },
+        "prompt_scores": [
+          {
+            "prompt": "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
+            "scores": {
+              "large": -8.273313522830861,
+              "small": -8.612314633768012
+            }
+          }
+        ],
+        "prompts": [
+          "This object is measured at 100 cm. Relative to a 100 cm standard, it is"
+        ]
+      }
+    },
+    "label_bias": {
+      "large": -9.066766712262881,
+      "small": -9.273936666558255
+    },
+    "label_bias_by_context": {
+      "class_swap:t1": {
+        "large": -10.378433167920447,
+        "small": -10.716191987404342
+      },
+      "class_swap:t2": {
+        "large": -4.276613235473633,
+        "small": -3.0768022084313573
+      },
+      "class_swap:t3": {
+        "large": -9.195744990952432,
+        "small": -9.100182495106239
+      },
+      "conflict_swap:t1": {
+        "large": -9.490518919616116,
+        "small": -9.520966855586803
+      },
+      "conflict_swap:t2": {
+        "large": -7.970565674480954,
+        "small": -8.431523383144558
+      },
+      "conflict_swap:t3": {
+        "large": -8.82928770641475,
+        "small": -8.140081719310524
+      },
+      "penumbra_standard:t1": {
+        "large": -8.879150366178303,
+        "small": -9.77844235054148
+      },
+      "penumbra_standard:t2": {
+        "large": -12.177554537138954,
+        "small": -12.759988690548127
+      },
+      "penumbra_standard:t3": {
+        "large": -8.273313522830861,
+        "small": -8.612314633768012
+      },
+      "standard_swap:t1": {
+        "large": -8.879150366178303,
+        "small": -9.77844235054148
+      },
+      "standard_swap:t2": {
+        "large": -12.177554537138954,
+        "small": -12.759988690548127
+      },
+      "standard_swap:t3": {
+        "large": -8.273313522830861,
+        "small": -8.612314633768012
+      }
+    },
+    "source": "context_neutral_defaults"
+  },
+  "conflict_gate_policy": "siblings",
+  "filtered_jsonl": "data_size_standard/penumbra_v3_qwen_gate/size_standard.filtered.qwen_qwen2_5_3b.jsonl",
+  "filtered_summary": "data_size_standard/penumbra_v3_qwen_gate/size_standard.filtered.qwen_qwen2_5_3b.summary.json",
+  "first_rejections": [
+    "size-standard_swap-ant-S102-V101-small_to_large-mborderline-t1",
+    "size-standard_swap-ant-S120-V110-small_to_large-mborderline-t1",
+    "size-standard_swap-ant-S75-V61-small_to_large-mborderline-t1",
+    "size-standard_swap-ant-S150-V125-small_to_large-mborderline-t1",
+    "size-standard_swap-ant-S200-V150-small_to_large-mclear-t1",
+    "size-standard_swap-ant-S90-V30-small_to_large-mclear-t1",
+    "size-standard_swap-ant-S900-V300-small_to_large-mclear-t1",
+    "size-standard_swap-ant-S999-V150-small_to_large-mextreme-t1",
+    "size-standard_swap-human-S102-V101-small_to_large-mborderline-t1",
+    "size-standard_swap-human-S120-V110-small_to_large-mborderline-t1"
+  ],
+  "gate_mode": "bias_corrected",
+  "gate_side_prediction_counts": {
+    "base|class_swap|small|large": 6,
+    "base|class_swap|small|small": 39,
+    "base|conflict_swap|large|large": 29,
+    "base|conflict_swap|large|small": 31,
+    "base|conflict_swap|small|large": 29,
+    "base|conflict_swap|small|small": 31,
+    "base|penumbra_standard|large|large": 144,
+    "base|penumbra_standard|large|small": 126,
+    "base|penumbra_standard|small|large": 8,
+    "base|penumbra_standard|small|small": 262,
+    "base|standard_swap|small|large": 5,
+    "base|standard_swap|small|small": 139,
+    "cf|class_swap|large|large": 31,
+    "cf|class_swap|large|small": 14,
+    "cf|conflict_swap|large|large": 50,
+    "cf|conflict_swap|large|small": 10,
+    "cf|conflict_swap|small|large": 16,
+    "cf|conflict_swap|small|small": 44,
+    "cf|penumbra_standard|large|large": 144,
+    "cf|penumbra_standard|large|small": 126,
+    "cf|penumbra_standard|small|large": 8,
+    "cf|penumbra_standard|small|small": 262,
+    "cf|standard_swap|large|large": 81,
+    "cf|standard_swap|large|small": 63,
+    "sibling_class|conflict_swap|large|large": 50,
+    "sibling_class|conflict_swap|large|small": 10,
+    "sibling_class|conflict_swap|small|large": 16,
+    "sibling_class|conflict_swap|small|small": 44,
+    "sibling_standard|conflict_swap|large|large": 50,
+    "sibling_standard|conflict_swap|large|small": 10,
+    "sibling_standard|conflict_swap|small|large": 16,
+    "sibling_standard|conflict_swap|small|small": 44
+  },
+  "hf_model_commit_hash": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+  "hf_tokenizer_revision_effective": "",
+  "kept_by_family": {
+    "class_swap": 24,
+    "conflict_swap": 68,
+    "penumbra_standard": 482,
+    "standard_swap": 71
+  },
+  "local_files_only": true,
+  "margins_csv": "data_size_standard/penumbra_v3_qwen_gate/size_standard.margins.qwen_qwen2_5_3b.csv",
+  "min_gate_margin": 0.1,
+  "min_kept_by_family": {
+    "class_swap": 20,
+    "conflict_swap": 20,
+    "penumbra_standard": 250,
+    "standard_swap": 25
+  },
+  "model_slug": "qwen_qwen2_5_3b",
+  "n_input_rows": 849,
+  "n_kept_rows": 645,
+  "n_rejected_rows": 204,
+  "penumbra_soft_abs_log_ratio": 0.15,
+  "raw_side_prediction_counts": {
+    "base|class_swap|small|large": 8,
+    "base|class_swap|small|small": 37,
+    "base|conflict_swap|large|large": 29,
+    "base|conflict_swap|large|small": 31,
+    "base|conflict_swap|small|large": 29,
+    "base|conflict_swap|small|small": 31,
+    "base|penumbra_standard|large|large": 198,
+    "base|penumbra_standard|large|small": 72,
+    "base|penumbra_standard|small|large": 52,
+    "base|penumbra_standard|small|small": 218,
+    "base|standard_swap|small|large": 31,
+    "base|standard_swap|small|small": 113,
+    "cf|class_swap|large|large": 30,
+    "cf|class_swap|large|small": 15,
+    "cf|conflict_swap|large|large": 60,
+    "cf|conflict_swap|small|large": 6,
+    "cf|conflict_swap|small|small": 54,
+    "cf|penumbra_standard|large|large": 198,
+    "cf|penumbra_standard|large|small": 72,
+    "cf|penumbra_standard|small|large": 52,
+    "cf|penumbra_standard|small|small": 218,
+    "cf|standard_swap|large|large": 105,
+    "cf|standard_swap|large|small": 39,
+    "sibling_class|conflict_swap|large|large": 60,
+    "sibling_class|conflict_swap|small|large": 6,
+    "sibling_class|conflict_swap|small|small": 54,
+    "sibling_standard|conflict_swap|large|large": 60,
+    "sibling_standard|conflict_swap|small|large": 6,
+    "sibling_standard|conflict_swap|small|small": 54
+  },
+  "rejected_by_family": {
+    "class_swap": 21,
+    "conflict_swap": 52,
+    "penumbra_standard": 58,
+    "standard_swap": 73
+  },
+  "rejection_counts": {
+    "base_gate_margin_below_0.1": 6,
+    "base_gate_pred_large_expected_small": 13,
+    "base_gate_pred_small_expected_large": 26,
+    "cf_gate_margin_below_0.1": 9,
+    "cf_gate_pred_large_expected_small": 2,
+    "cf_gate_pred_small_expected_large": 103,
+    "sibling_class_gate_pred_large_expected_small": 16,
+    "sibling_class_gate_pred_small_expected_large": 10,
+    "sibling_standard_gate_pred_large_expected_small": 16,
+    "sibling_standard_gate_pred_small_expected_large": 10
+  },
+  "score_determinacy": false,
+  "source_size_path": "data_size_standard/size_standard_penumbra_v3.jsonl",
+  "tokenizer_models_checked": [
+    "gpt2",
+    "Qwen/Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-1.5B",
+    "Qwen/Qwen2.5-3B",
+    "google/gemma-3-4b-pt"
+  ],
+  "torch_dtype": "float16"
+}

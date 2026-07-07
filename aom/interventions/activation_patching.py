@@ -48,6 +48,16 @@ _ARCHITECTURE_REGISTRY: dict[
         lambda m: m.model.layers,  # type: ignore[attr-defined]
         lambda m: int(m.config.num_hidden_layers),
     ),
+    "gemma3": (
+        lambda m: hasattr(m, "language_model")
+        and hasattr(m.language_model, "layers")
+        and (
+            str(getattr(getattr(m, "config", None), "model_type", "")).lower() == "gemma3"
+            or "gemma3" in type(m).__name__.lower()
+        ),
+        lambda m: m.language_model.layers,  # type: ignore[attr-defined]
+        lambda m: int(m.language_model.config.num_hidden_layers),  # type: ignore[attr-defined]
+    ),
     "gemma": (
         lambda m: hasattr(m, "model")
         and hasattr(m.model, "layers")

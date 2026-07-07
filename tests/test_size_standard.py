@@ -32,6 +32,7 @@ from scripts.check_size_standard_acceptance import (
     _argmax_label,
     _corrected_scores,
     _parse_min_kept_by_family,
+    _is_soft_penumbra_side,
     _slug as acceptance_slug,
     filtered_jsonl_path,
 )
@@ -197,6 +198,7 @@ def test_generated_rows_load_and_protocol_builds_without_span_mismatch(tmp_path:
         assert len(cases) == len(items)
         assert all(len(c.receiver_span) == len(c.donor_span) for c in cases)
         assert {c.strata["patch_span"] for c in cases} == {"class_span", "standard_span"}
+        assert "penumbra_standard" in {c.strata["family"] for c in cases}
 
 
 def test_protocol_can_add_value_span_placebo_cases(tmp_path: Path) -> None:
@@ -205,7 +207,7 @@ def test_protocol_can_add_value_span_placebo_cases(tmp_path: Path) -> None:
         "digit": FakeFastTokenizer(digit_tokens=True),
     }
     rows, _summary = generate_size_standard_rows(tokenizers=tokenizers)
-    standard_rows = [r for r in rows if r["metadata"]["family"] == "standard_swap"]
+    standard_rows = [r for r in rows if r["metadata"]["family"] in {"standard_swap", "penumbra_standard"}]
     primary_standard_span_rows = [r for r in rows if r["metadata"]["patch_span"] == "standard_span"]
     jsonl_path = tmp_path / "size_standard.jsonl"
     _write_jsonl(jsonl_path, rows)
@@ -247,6 +249,10 @@ def test_class_swap_rows_are_number_free_and_standard_swap_rows_keep_standard_me
         assert "stated_standard_label" not in md
         assert "cf_stated_standard_label" not in md
         assert "standard_span" not in md["span_markers"]
+        assert "For a elephant" not in row["base"]["prompt"]
+        assert "For a ant" not in row["base"]["prompt"]
+        assert "For a elephant" not in row["cf"]["prompt"]
+        assert "For a ant" not in row["cf"]["prompt"]
 
     for row in standard_rows:
         md = row["metadata"]
@@ -255,6 +261,25 @@ def test_class_swap_rows_are_number_free_and_standard_swap_rows_keep_standard_me
         assert "cf_standard_cm" in md
         assert "log_ratio" in md
         assert "standard_span" in md["span_markers"]
+
+
+def test_penumbra_standard_rows_are_dense_soft_gate_candidates() -> None:
+    rows, summary = generate_size_standard_rows(tokenizers={"whole": FakeFastTokenizer(digit_tokens=False)})
+    pen_rows = [r for r in rows if r["metadata"]["family"] == "penumbra_standard"]
+    assert pen_rows
+    assert summary["counts_by_family"]["penumbra_standard"] == len(pen_rows)
+    assert {r["metadata"]["patch_span"] for r in pen_rows} == {"standard_span"}
+    assert {"small_to_large", "large_to_small"} <= {r["metadata"]["polarity"] for r in pen_rows}
+
+    near_rows = [r for r in pen_rows if float(r["metadata"]["abs_log_ratio"]) <= 0.15]
+    assert near_rows
+    for row in near_rows[:10]:
+        md = row["metadata"]
+        assert _is_soft_penumbra_side(md, "base", threshold=0.15)
+        assert _is_soft_penumbra_side(md, "cf", threshold=0.15)
+        assert md["penumbra_axis"] == "stated_standard"
+        assert md["penumbral_relation"] == "standard_straddle"
+        assert md["value_pair_id"]
 
 
 def test_model_prior_loader_and_required_prior_mode(tmp_path: Path) -> None:

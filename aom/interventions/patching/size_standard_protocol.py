@@ -139,7 +139,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 skips.append(CaseSkip(case_id=str(it.item_id), reason="readout_mismatch"))
                 continue
             family = str(md.get("family", ""))
-            if family not in {"standard_swap", "class_swap", "conflict_swap"}:
+            if family not in {"standard_swap", "class_swap", "conflict_swap", "penumbra_standard"}:
                 skips.append(CaseSkip(case_id=str(it.item_id), reason=f"invalid_family:{family}"))
                 continue
             patch_span = str(md.get("patch_span", ""))
@@ -147,7 +147,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 skips.append(CaseSkip(case_id=str(it.item_id), reason=f"invalid_patch_span:{patch_span}"))
                 continue
             expected_patch_span = None
-            if family == "standard_swap":
+            if family in {"standard_swap", "penumbra_standard"}:
                 expected_patch_span = "standard_span"
             elif family == "class_swap":
                 expected_patch_span = "class_span"
@@ -184,17 +184,30 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 "standard_cm",
                 "cf_standard_cm",
                 "value_cm",
+                "center_value_cm",
+                "model_prior_cm",
+                "cf_model_prior_cm",
                 "log_ratio",
                 "cf_log_ratio",
+                "abs_log_ratio",
+                "cf_abs_log_ratio",
+                "target_abs_log_ratio",
+                "distance_from_standard",
+                "cf_distance_from_standard",
                 "polarity",
                 "margin_bin",
+                "penumbra_axis",
+                "penumbral_relation",
+                "value_pair_id",
+                "rank_in_chain",
+                "monotonicity_direction",
                 "prior_congruence",
                 "unit",
                 "template_id",
             )
 
             case_specs: list[tuple[str, str, str]] = [(str(it.item_id), patch_span, "primary")]
-            if bool(self.config.include_value_placebo) and family == "standard_swap":
+            if bool(self.config.include_value_placebo) and family in {"standard_swap", "penumbra_standard"}:
                 case_specs.append((f"{it.item_id}__value_span_placebo", "value_span", "placebo"))
 
             for case_id, active_patch_span, case_type in case_specs:

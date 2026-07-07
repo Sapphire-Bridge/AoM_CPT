@@ -69,8 +69,8 @@ STANDARD_TEMPLATES: tuple[TemplateSpec, ...] = (
     ),
     TemplateSpec(
         template_id=2,
-        text="A {class_name} has a trial standard of {standard} cm. Its measured length is {value} cm, so it is",
-        class_left="A ",
+        text="{Article} {class_name} has a trial standard of {standard} cm. Its measured length is {value} cm, so it is",
+        class_left="{Article} ",
         class_right=" has",
         standard_left="trial standard of ",
         standard_right=" cm",
@@ -93,8 +93,8 @@ STANDARD_TEMPLATES: tuple[TemplateSpec, ...] = (
 CLASS_SWAP_TEMPLATES: tuple[ClassTemplateSpec, ...] = (
     ClassTemplateSpec(
         template_id=1,
-        text="For a {class_name}, {value} cm is",
-        class_left="For a ",
+        text="For class {class_name}, {value} cm is",
+        class_left="For class ",
         class_right=",",
         value_left=", ",
         value_right=" cm",
@@ -131,8 +131,8 @@ CONFLICT_TEMPLATES: tuple[TemplateSpec, ...] = (
     ),
     TemplateSpec(
         template_id=2,
-        text="This item is a {class_name}. The comparison standard is {standard} cm. The item measures {value} cm and is",
-        class_left="is a ",
+        text="This item's class is {class_name}. The comparison standard is {standard} cm. The item measures {value} cm and is",
+        class_left="class is ",
         class_right=".",
         standard_left="comparison standard is ",
         standard_right=" cm",
@@ -205,6 +205,12 @@ CONFLICT_STANDARD_PAIRS: tuple[tuple[int, int], ...] = (
 )
 
 
+# Dense standard-relative penumbra probes.  Centers are chosen away from
+# digit-count boundaries so standard-span swaps remain tokenizer-stable.
+PENUMBRA_STANDARD_CENTERS_CM: tuple[int, ...] = (50, 200, 500)
+PENUMBRA_ABS_LOG_RATIOS: tuple[float, ...] = (0.02, 0.05, 0.1, 0.15, 0.3, 0.5)
+
+
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
@@ -226,6 +232,31 @@ def _slug(s: str) -> str:
     s = str(s).strip().lower()
     s = re.sub(r"[^a-z0-9]+", "_", s)
     return s.strip("_") or "x"
+
+
+def _article_for(class_name: str, *, capitalize: bool = False) -> str:
+    first = str(class_name).strip().lower()[:1]
+    article = "an" if first in {"a", "e", "i", "o", "u"} else "a"
+    return article.capitalize() if bool(capitalize) else article
+
+
+def _format_context(
+    text: str,
+    *,
+    class_name: str,
+    standard: int | None = None,
+    value: int | None = None,
+) -> str:
+    kwargs: dict[str, Any] = {
+        "class_name": str(class_name),
+        "article": _article_for(str(class_name)),
+        "Article": _article_for(str(class_name), capitalize=True),
+    }
+    if standard is not None:
+        kwargs["standard"] = int(standard)
+    if value is not None:
+        kwargs["value"] = int(value)
+    return str(text).format(**kwargs)
 
 
 def _json_default(obj: Any) -> Any:
@@ -330,11 +361,11 @@ def _validate_equal_span_lengths(lengths: Mapping[str, Mapping[str, int]]) -> tu
 
 
 def _render_prompt(template: TemplateSpec, *, class_name: str, standard: int, value: int) -> str:
-    return template.text.format(class_name=class_name, standard=int(standard), value=int(value))
+    return _format_context(template.text, class_name=class_name, standard=int(standard), value=int(value))
 
 
 def _render_class_prompt(template: ClassTemplateSpec, *, class_name: str, value: int) -> str:
-    return template.text.format(class_name=class_name, value=int(value))
+    return _format_context(template.text, class_name=class_name, value=int(value))
 
 
 def _markers_for(
@@ -345,9 +376,21 @@ def _markers_for(
     value: int,
 ) -> dict[str, SpanMarker]:
     return {
-        "class_span": SpanMarker(str(class_name), template.class_left, template.class_right),
-        "standard_span": SpanMarker(str(int(standard)), template.standard_left, template.standard_right),
-        "value_span": SpanMarker(str(int(value)), template.value_left, template.value_right),
+        "class_span": SpanMarker(
+            str(class_name),
+            _format_context(template.class_left, class_name=class_name, standard=int(standard), value=int(value)),
+            _format_context(template.class_right, class_name=class_name, standard=int(standard), value=int(value)),
+        ),
+        "standard_span": SpanMarker(
+            str(int(standard)),
+            _format_context(template.standard_left, class_name=class_name, standard=int(standard), value=int(value)),
+            _format_context(template.standard_right, class_name=class_name, standard=int(standard), value=int(value)),
+        ),
+        "value_span": SpanMarker(
+            str(int(value)),
+            _format_context(template.value_left, class_name=class_name, standard=int(standard), value=int(value)),
+            _format_context(template.value_right, class_name=class_name, standard=int(standard), value=int(value)),
+        ),
     }
 
 
@@ -358,8 +401,16 @@ def _class_markers_for(
     value: int,
 ) -> dict[str, SpanMarker]:
     return {
-        "class_span": SpanMarker(str(class_name), template.class_left, template.class_right),
-        "value_span": SpanMarker(str(int(value)), template.value_left, template.value_right),
+        "class_span": SpanMarker(
+            str(class_name),
+            _format_context(template.class_left, class_name=class_name, value=int(value)),
+            _format_context(template.class_right, class_name=class_name, value=int(value)),
+        ),
+        "value_span": SpanMarker(
+            str(int(value)),
+            _format_context(template.value_left, class_name=class_name, value=int(value)),
+            _format_context(template.value_right, class_name=class_name, value=int(value)),
+        ),
     }
 
 
@@ -396,6 +447,31 @@ def _margin_bin(log_ratio: float) -> str:
     if x <= 1.5:
         return "clear"
     return "extreme"
+
+
+def _penumbra_margin_bin(abs_log_ratio: float) -> str:
+    x = abs(float(abs_log_ratio))
+    if x <= 0.07:
+        return "borderline"
+    if x <= 0.15:
+        return "near_boundary"
+    if x <= 0.35:
+        return "shoulder"
+    return "clear"
+
+
+def _penumbra_standard_specs() -> tuple[tuple[int, int, int, float], ...]:
+    specs: set[tuple[int, int, int, float]] = set()
+    for center in PENUMBRA_STANDARD_CENTERS_CM:
+        for abs_delta in PENUMBRA_ABS_LOG_RATIOS:
+            low_s = int(round(float(center) * math.exp(-float(abs_delta))))
+            high_s = int(round(float(center) * math.exp(float(abs_delta))))
+            if not (0 < low_s < int(center) < high_s):
+                continue
+            if len(str(low_s)) != len(str(high_s)):
+                continue
+            specs.add((int(low_s), int(high_s), int(center), float(abs_delta)))
+    return tuple(sorted(specs, key=lambda x: (x[2], x[3], x[0], x[1])))
 
 
 def _prior_congruence(standard: int, cls: ClassSpec) -> float | None:
@@ -644,6 +720,89 @@ def generate_size_standard_rows(
                     cf_marker=cf_markers["standard_span"],
                 )
 
+    for template in STANDARD_TEMPLATES:
+        for cls in CLASS_SPECS:
+            for low_s, high_s, value, target_abs_delta in _penumbra_standard_specs():
+                for base_s, cf_s, base_label, cf_label, polarity in (
+                    (high_s, low_s, "small", "large", "small_to_large"),
+                    (low_s, high_s, "large", "small", "large_to_small"),
+                ):
+                    observed_base_label = _expected_from_standard(value=value, standard=base_s)
+                    observed_cf_label = _expected_from_standard(value=value, standard=cf_s)
+                    if (observed_base_label, observed_cf_label) != (base_label, cf_label):
+                        skip_reasons["penumbra_standard_label_mismatch"] += 1
+                        continue
+                    base_prompt = _render_prompt(template, class_name=cls.name, standard=base_s, value=value)
+                    cf_prompt = _render_prompt(template, class_name=cls.name, standard=cf_s, value=value)
+                    edit_error = _single_edit_error(base_prompt, cf_prompt, str(base_s), str(cf_s))
+                    if edit_error is not None and not record_single_edit_skip(edit_error):
+                        continue
+                    base_markers = _markers_for(template, class_name=cls.name, standard=base_s, value=value)
+                    cf_markers = _markers_for(template, class_name=cls.name, standard=cf_s, value=value)
+                    log_ratio = float(math.log(float(value) / float(base_s)))
+                    cf_log_ratio = float(math.log(float(value) / float(cf_s)))
+                    abs_log_ratio = float(abs(log_ratio))
+                    value_pair_id = (
+                        f"penumbra-standard-C{value}-D{str(target_abs_delta).replace('.', 'p')}-"
+                        f"{_slug(cls.name)}-t{template.template_id}"
+                    )
+                    coarse_bin = _penumbra_margin_bin(abs_log_ratio)
+                    item_id = (
+                        f"size-penumbra_standard-{_slug(cls.name)}-C{value}-S{base_s}-to{cf_s}-"
+                        f"{polarity}-m{coarse_bin}-d{str(target_abs_delta).replace('.', 'p')}-t{template.template_id}"
+                    )
+                    metadata = {
+                        "family": "penumbra_standard",
+                        "patch_span": "standard_span",
+                        "label_source": "stated_standard_penumbra",
+                        "class_name": cls.name,
+                        "class_kind": cls.kind,
+                        "standard_cm": int(base_s),
+                        "cf_standard_cm": int(cf_s),
+                        "value_cm": int(value),
+                        "center_value_cm": int(value),
+                        "stated_standard_label": base_label,
+                        "cf_stated_standard_label": cf_label,
+                        "log_ratio": float(log_ratio),
+                        "cf_log_ratio": float(cf_log_ratio),
+                        "abs_log_ratio": float(abs_log_ratio),
+                        "cf_abs_log_ratio": float(abs(cf_log_ratio)),
+                        "target_abs_log_ratio": float(target_abs_delta),
+                        "distance_from_standard": float(log_ratio),
+                        "cf_distance_from_standard": float(cf_log_ratio),
+                        "polarity": str(polarity),
+                        "margin_bin": str(coarse_bin),
+                        "penumbra_axis": "stated_standard",
+                        "penumbral_relation": "standard_straddle",
+                        "value_pair_id": value_pair_id,
+                        "rank_in_chain": -1 if base_label == "small" else 1,
+                        "monotonicity_direction": "lower_standard_increases_bigness",
+                        "prior_congruence": _prior_congruence(base_s, cls),
+                        "cf_prior_congruence": _prior_congruence(cf_s, cls),
+                        "unit": "cm",
+                        "template_id": int(template.template_id),
+                        "base_item_id": item_id,
+                        "readout": READOUT_NAME,
+                        "span_markers": {
+                            "standard_span": {"base": base_markers["standard_span"].__dict__, "cf": cf_markers["standard_span"].__dict__},
+                            "class_span": {"base": base_markers["class_span"].__dict__, "cf": cf_markers["class_span"].__dict__},
+                            "value_span": {"base": base_markers["value_span"].__dict__, "cf": cf_markers["value_span"].__dict__},
+                        },
+                    }
+                    try_add(
+                        _row(
+                            item_id=item_id,
+                            base_prompt=base_prompt,
+                            base_label=base_label,
+                            cf_prompt=cf_prompt,
+                            cf_label=cf_label,
+                            metadata=metadata,
+                            contrast_labels=(base_label, cf_label),
+                        ),
+                        base_marker=base_markers["standard_span"],
+                        cf_marker=cf_markers["standard_span"],
+                    )
+
     for template in CLASS_SWAP_TEMPLATES:
         for base_class, cf_class, value in class_swap_specs:
             base_cls = classes_by_name[base_class]
@@ -875,6 +1034,7 @@ def generate_size_standard_rows(
         "model_priors_used": {str(k): float(v) for k, v in sorted((model_priors_cm or {}).items())},
         "class_swap_specs_used": [list(x) for x in class_swap_specs],
         "conflict_swap_specs_used": [list(x) for x in conflict_swap_specs],
+        "penumbra_standard_specs_used": [list(x) for x in _penumbra_standard_specs()],
         "skip_reason_counts": dict(sorted(skip_reasons.items())),
         "generation_error_counts": dict(sorted(generation_error_counts.items())),
         "tokenizer_span_length_examples": span_length_examples,

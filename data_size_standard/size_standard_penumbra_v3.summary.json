@@ -1,0 +1,341 @@
+{
+  "class_swap_specs_used": [
+    [
+      "ant",
+      "elephant",
+      2
+    ],
+    [
+      "ant",
+      "elephant",
+      5
+    ],
+    [
+      "ant",
+      "elephant",
+      12
+    ],
+    [
+      "ant",
+      "elephant",
+      32
+    ],
+    [
+      "ant",
+      "elephant",
+      83
+    ],
+    [
+      "ant",
+      "human",
+      2
+    ],
+    [
+      "ant",
+      "human",
+      4
+    ],
+    [
+      "ant",
+      "human",
+      9
+    ],
+    [
+      "ant",
+      "human",
+      22
+    ],
+    [
+      "ant",
+      "human",
+      53
+    ],
+    [
+      "human",
+      "elephant",
+      190
+    ],
+    [
+      "human",
+      "elephant",
+      207
+    ],
+    [
+      "human",
+      "elephant",
+      226
+    ],
+    [
+      "human",
+      "elephant",
+      246
+    ],
+    [
+      "human",
+      "elephant",
+      268
+    ]
+  ],
+  "conflict_swap_specs_used": [
+    [
+      "ant",
+      "elephant",
+      12,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "elephant",
+      32,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "elephant",
+      83,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "human",
+      22,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "human",
+      53,
+      10,
+      90
+    ],
+    [
+      "human",
+      "elephant",
+      190,
+      100,
+      200
+    ],
+    [
+      "human",
+      "elephant",
+      207,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      226,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      246,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      268,
+      100,
+      900
+    ]
+  ],
+  "counts_by_family": {
+    "class_swap": 45,
+    "conflict_swap": 120,
+    "penumbra_standard": 540,
+    "standard_swap": 144
+  },
+  "counts_by_patch_span": {
+    "class_span": 105,
+    "standard_span": 744
+  },
+  "generated_at_utc": "2026-07-07T19:45:17+00:00",
+  "generation_error_counts": {},
+  "generator": "scripts/generate_size_standard.py",
+  "git_commit": "d6ea321f70a281bd771b036e891d8c74f7ddf9d5",
+  "min_rows": 700,
+  "model_priors_used": {
+    "ant": 0.5,
+    "elephant": 300.0,
+    "human": 170.0
+  },
+  "n_rows": 849,
+  "penumbra_standard_specs_used": [
+    [
+      49,
+      51,
+      50,
+      0.02
+    ],
+    [
+      48,
+      53,
+      50,
+      0.05
+    ],
+    [
+      45,
+      55,
+      50,
+      0.1
+    ],
+    [
+      43,
+      58,
+      50,
+      0.15
+    ],
+    [
+      37,
+      67,
+      50,
+      0.3
+    ],
+    [
+      30,
+      82,
+      50,
+      0.5
+    ],
+    [
+      196,
+      204,
+      200,
+      0.02
+    ],
+    [
+      190,
+      210,
+      200,
+      0.05
+    ],
+    [
+      181,
+      221,
+      200,
+      0.1
+    ],
+    [
+      172,
+      232,
+      200,
+      0.15
+    ],
+    [
+      148,
+      270,
+      200,
+      0.3
+    ],
+    [
+      121,
+      330,
+      200,
+      0.5
+    ],
+    [
+      490,
+      510,
+      500,
+      0.02
+    ],
+    [
+      476,
+      526,
+      500,
+      0.05
+    ],
+    [
+      452,
+      553,
+      500,
+      0.1
+    ],
+    [
+      430,
+      581,
+      500,
+      0.15
+    ],
+    [
+      370,
+      675,
+      500,
+      0.3
+    ],
+    [
+      303,
+      824,
+      500,
+      0.5
+    ]
+  ],
+  "readout": "bigness_logscore_margin",
+  "skip_reason_counts": {
+    "span_len_mismatch:{\"gpt2\": {\"base\": 1, \"cf\": 2}}": 54,
+    "span_len_mismatch:{\"gpt2\": {\"base\": 2, \"cf\": 1}}": 54
+  },
+  "strict_generation": true,
+  "tokenizer_models_checked": [
+    "gpt2",
+    "Qwen/Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-1.5B",
+    "Qwen/Qwen2.5-3B",
+    "google/gemma-3-4b-pt"
+  ],
+  "tokenizer_span_length_examples": {
+    "class_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 1,
+        "cf": 1
+      },
+      "google/gemma-3-4b-pt": {
+        "base": 1,
+        "cf": 1
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    },
+    "standard_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 3,
+        "cf": 3
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 3,
+        "cf": 3
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 3,
+        "cf": 3
+      },
+      "google/gemma-3-4b-pt": {
+        "base": 3,
+        "cf": 3
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    }
+  }
+}
