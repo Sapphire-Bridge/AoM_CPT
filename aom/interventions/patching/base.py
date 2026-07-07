@@ -103,6 +103,7 @@ def run_activation_patching(
     ci: float = 0.95,
     bootstrap_n: int = 1000,
     bootstrap_seed: int = 42,
+    trace_rows: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     if layers is None:
         n_layers = int(get_num_layers(model))
@@ -213,6 +214,28 @@ def run_activation_patching(
                 flip = float((base_pred != str(case.expected_label)) and (patched_pred == str(case.expected_label)))
             else:
                 flip = float((base_pred == str(case.expected_label)) and (patched_pred != str(case.expected_label)))
+
+            if trace_rows is not None:
+                trace_row: Dict[str, Any] = {
+                    "case_id": str(case.case_id),
+                    "layer": int(layer),
+                    "expected_label": str(case.expected_label),
+                    "effect_sign": float(case.effect_sign),
+                    "base_margin": float(base_margin),
+                    "patched_margin": float(patched_margin),
+                    "sham_margin": float(sham_margin),
+                    "delta_margin": float(raw_delta),
+                    "effect": float(eff),
+                    "sham_delta_margin": float(raw_sham_delta),
+                    "sham_effect": float(sham_eff),
+                    "base_pred": str(base_pred),
+                    "patched_pred": str(patched_pred),
+                    "flip": float(flip),
+                    "receiver_span": ",".join(str(int(i)) for i in case.receiver_span),
+                    "donor_span": ",".join(str(int(i)) for i in case.donor_span),
+                }
+                trace_row.update({str(k): str(v) for k, v in case.strata.items()})
+                trace_rows.append(trace_row)
 
             per_layer_sum[int(layer)] += eff
             per_layer_n[int(layer)] += 1

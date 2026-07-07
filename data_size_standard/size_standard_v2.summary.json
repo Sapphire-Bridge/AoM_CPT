@@ -1,0 +1,218 @@
+{
+  "class_swap_specs_used": [
+    [
+      "ant",
+      "elephant",
+      2
+    ],
+    [
+      "ant",
+      "elephant",
+      5
+    ],
+    [
+      "ant",
+      "elephant",
+      12
+    ],
+    [
+      "ant",
+      "elephant",
+      32
+    ],
+    [
+      "ant",
+      "elephant",
+      83
+    ],
+    [
+      "ant",
+      "human",
+      2
+    ],
+    [
+      "ant",
+      "human",
+      4
+    ],
+    [
+      "ant",
+      "human",
+      9
+    ],
+    [
+      "ant",
+      "human",
+      22
+    ],
+    [
+      "ant",
+      "human",
+      53
+    ],
+    [
+      "human",
+      "elephant",
+      190
+    ],
+    [
+      "human",
+      "elephant",
+      207
+    ],
+    [
+      "human",
+      "elephant",
+      226
+    ],
+    [
+      "human",
+      "elephant",
+      246
+    ],
+    [
+      "human",
+      "elephant",
+      268
+    ]
+  ],
+  "conflict_swap_specs_used": [
+    [
+      "ant",
+      "elephant",
+      12,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "elephant",
+      32,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "elephant",
+      83,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "human",
+      22,
+      10,
+      90
+    ],
+    [
+      "ant",
+      "human",
+      53,
+      10,
+      90
+    ],
+    [
+      "human",
+      "elephant",
+      190,
+      100,
+      200
+    ],
+    [
+      "human",
+      "elephant",
+      207,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      226,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      246,
+      100,
+      900
+    ],
+    [
+      "human",
+      "elephant",
+      268,
+      100,
+      900
+    ]
+  ],
+  "counts_by_family": {
+    "class_swap": 45,
+    "conflict_swap": 120,
+    "standard_swap": 144
+  },
+  "counts_by_patch_span": {
+    "class_span": 105,
+    "standard_span": 204
+  },
+  "generated_at_utc": "2026-07-07T16:50:44+00:00",
+  "generation_error_counts": {},
+  "generator": "scripts/generate_size_standard.py",
+  "git_commit": "a2bbb712c8748c3fac469eb0b57a2848d1e54133",
+  "min_rows": 150,
+  "model_priors_used": {
+    "ant": 0.5,
+    "elephant": 300.0,
+    "human": 170.0
+  },
+  "n_rows": 309,
+  "readout": "bigness_logscore_margin",
+  "skip_reason_counts": {},
+  "strict_generation": true,
+  "tokenizer_models_checked": [
+    "gpt2",
+    "Qwen/Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-1.5B",
+    "Qwen/Qwen2.5-3B"
+  ],
+  "tokenizer_span_length_examples": {
+    "class_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 1,
+        "cf": 1
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    },
+    "standard_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 3,
+        "cf": 3
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 3,
+        "cf": 3
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 3,
+        "cf": 3
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    }
+  }
+}

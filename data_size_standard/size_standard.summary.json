@@ -1,0 +1,63 @@
+{
+  "counts_by_family": {
+    "class_swap": 12,
+    "standard_swap": 54
+  },
+  "counts_by_patch_span": {
+    "class_span": 12,
+    "standard_span": 54
+  },
+  "generated_at_utc": "2026-07-07T14:41:51+00:00",
+  "generation_error_counts": {},
+  "generator": "scripts/generate_size_standard.py",
+  "git_commit": "a2bbb712c8748c3fac469eb0b57a2848d1e54133",
+  "min_rows": 60,
+  "n_rows": 66,
+  "readout": "bigness_logscore_margin",
+  "skip_reason_counts": {},
+  "strict_generation": true,
+  "tokenizer_models_checked": [
+    "gpt2",
+    "Qwen/Qwen2.5-0.5B",
+    "Qwen/Qwen2.5-1.5B",
+    "Qwen/Qwen2.5-3B"
+  ],
+  "tokenizer_span_length_examples": {
+    "class_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 1,
+        "cf": 1
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 1,
+        "cf": 1
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    },
+    "standard_span": {
+      "Qwen/Qwen2.5-0.5B": {
+        "base": 2,
+        "cf": 2
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "base": 2,
+        "cf": 2
+      },
+      "Qwen/Qwen2.5-3B": {
+        "base": 2,
+        "cf": 2
+      },
+      "gpt2": {
+        "base": 1,
+        "cf": 1
+      }
+    }
+  }
+}
