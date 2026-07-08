@@ -1,0 +1,636 @@
+{
+  "factors": {
+    "amount": [
+      5,
+      25,
+      100
+    ],
+    "material": [
+      "wood",
+      "sand",
+      "boxes"
+    ],
+    "order_state": [
+      "disordered",
+      "loosely_grouped",
+      "ordered"
+    ]
+  },
+  "framing": {
+    "aom": "DISAMB-adjacent controlled contextual variation, not a clean homonym-style DISAMB task.",
+    "mom": "Candidate intervention family for testing whether contextual preference shifts are recovered in residual states or sparse feature bases.",
+    "vagueness": "Direct bridge to Sorites-sensitive vague predicates: pile and heap have graded boundaries, while stack depends on ordered arrangement and material affordance."
+  },
+  "items": [
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "pieces",
+      "arrangement_description": "scattered irregularly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_wood_scattered_5",
+      "label_strength": "preference",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "disordered",
+      "prompt": "There were 5 pieces of wood scattered irregularly in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Loose wood favors pile; larger disordered quantities shift preference toward heap without making pile impossible.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "pieces",
+      "arrangement_description": "scattered irregularly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_wood_scattered_25",
+      "label_strength": "borderline",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "disordered",
+      "prompt": "There were 25 pieces of wood scattered irregularly in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Loose wood favors pile; larger disordered quantities shift preference toward heap without making pile impossible.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "pieces",
+      "arrangement_description": "scattered irregularly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_wood_scattered_100",
+      "label_strength": "preference",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "disordered",
+      "prompt": "There were 100 pieces of wood scattered irregularly in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Loose wood favors pile; larger disordered quantities shift preference toward heap without making pile impossible.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "pieces",
+      "arrangement_description": "lying together in one uneven group",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_wood_loose_5",
+      "label_strength": "strong",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 5 pieces of wood lying together in one uneven group in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "A single loose group licenses pile; high quantity creates a graded pile-to-heap transition.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "pieces",
+      "arrangement_description": "lying together in one uneven group",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_wood_loose_25",
+      "label_strength": "preference",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 25 pieces of wood lying together in one uneven group in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "A single loose group licenses pile; high quantity creates a graded pile-to-heap transition.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "pieces",
+      "arrangement_description": "lying together in one uneven group",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_wood_loose_100",
+      "label_strength": "borderline",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 100 pieces of wood lying together in one uneven group in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "A single loose group licenses pile; high quantity creates a graded pile-to-heap transition.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 5,
+      "amount_unit": "pieces",
+      "arrangement_description": "neatly arranged in aligned layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_wood_ordered_5",
+      "label_strength": "strong",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "ordered",
+      "prompt": "There were 5 pieces of wood neatly arranged in aligned layers in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Wood is stackable, and ordered aligned layers strongly favor stack over pile or heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 25,
+      "amount_unit": "pieces",
+      "arrangement_description": "neatly arranged in aligned layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_wood_ordered_25",
+      "label_strength": "strong",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "ordered",
+      "prompt": "There were 25 pieces of wood neatly arranged in aligned layers in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Wood is stackable, and ordered aligned layers strongly favor stack over pile or heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "pieces",
+      "arrangement_description": "neatly arranged in aligned layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_wood_ordered_100",
+      "label_strength": "strong",
+      "material": "wood",
+      "material_phrase": "pieces of wood",
+      "order_state": "ordered",
+      "prompt": "There were 100 pieces of wood neatly arranged in aligned layers in the corner, and he told his coworker to move this ___ of wood to the trailer.",
+      "rationale": "Wood is stackable, and ordered aligned layers strongly favor stack over pile or heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "buckets",
+      "arrangement_description": "spread into one uneven mass on the floor",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_scattered_5",
+      "label_strength": "preference",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "disordered",
+      "prompt": "There was sand from 5 buckets spread into one uneven mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Granular material suppresses stack; quantity and unevenness shift pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 25,
+      "amount_unit": "buckets",
+      "arrangement_description": "spread into one uneven mass on the floor",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_sand_scattered_25",
+      "label_strength": "borderline",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "disordered",
+      "prompt": "There was sand from 25 buckets spread into one uneven mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Granular material suppresses stack; quantity and unevenness shift pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "buckets",
+      "arrangement_description": "spread into one uneven mass on the floor",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_sand_scattered_100",
+      "label_strength": "preference",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "disordered",
+      "prompt": "There was sand from 100 buckets spread into one uneven mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Granular material suppresses stack; quantity and unevenness shift pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "buckets",
+      "arrangement_description": "gathered into one low irregular mass",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_loose_5",
+      "label_strength": "strong",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "loosely_grouped",
+      "prompt": "There was sand from 5 buckets gathered into one low irregular mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Sand can form a pile or heap but not a stack; middle quantities are intentionally borderline.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "buckets",
+      "arrangement_description": "gathered into one low irregular mass",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_loose_25",
+      "label_strength": "borderline",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "loosely_grouped",
+      "prompt": "There was sand from 25 buckets gathered into one low irregular mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Sand can form a pile or heap but not a stack; middle quantities are intentionally borderline.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "buckets",
+      "arrangement_description": "gathered into one low irregular mass",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_sand_loose_100",
+      "label_strength": "borderline",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "loosely_grouped",
+      "prompt": "There was sand from 100 buckets gathered into one low irregular mass in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "Sand can form a pile or heap but not a stack; middle quantities are intentionally borderline.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "buckets",
+      "arrangement_description": "shaped into one smooth regular form",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_ordered_5",
+      "label_strength": "preference",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "ordered",
+      "prompt": "There was sand from 5 buckets shaped into one smooth regular form in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "The candidate set deliberately excludes mound; ordered sand should still suppress stack because sand is not naturally stackable.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "buckets",
+      "arrangement_description": "shaped into one smooth regular form",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_ordered_25",
+      "label_strength": "preference",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "ordered",
+      "prompt": "There was sand from 25 buckets shaped into one smooth regular form in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "The candidate set deliberately excludes mound; ordered sand should still suppress stack because sand is not naturally stackable.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 100,
+      "amount_unit": "buckets",
+      "arrangement_description": "shaped into one smooth regular form",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_sand_ordered_100",
+      "label_strength": "borderline",
+      "material": "sand",
+      "material_phrase": "sand",
+      "order_state": "ordered",
+      "prompt": "There was sand from 100 buckets shaped into one smooth regular form in the corner, and he told his coworker to move this ___ of sand to the trailer.",
+      "rationale": "The candidate set deliberately excludes mound; ordered sand should still suppress stack because sand is not naturally stackable.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "boxes",
+      "arrangement_description": "scattered without alignment in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_boxes_scattered_5",
+      "label_strength": "preference",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "disordered",
+      "prompt": "There were 5 boxes scattered without alignment in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable, but disorder blocks stack and quantity pushes pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "boxes",
+      "arrangement_description": "scattered without alignment in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_boxes_scattered_25",
+      "label_strength": "borderline",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "disordered",
+      "prompt": "There were 25 boxes scattered without alignment in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable, but disorder blocks stack and quantity pushes pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "boxes",
+      "arrangement_description": "scattered without alignment in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_boxes_scattered_100",
+      "label_strength": "preference",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "disordered",
+      "prompt": "There were 100 boxes scattered without alignment in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable, but disorder blocks stack and quantity pushes pile toward heap.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 5,
+      "amount_unit": "boxes",
+      "arrangement_description": "grouped together unevenly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_boxes_loose_5",
+      "label_strength": "preference",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 5 boxes grouped together unevenly in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "A loose aggregate favors pile, with heap becoming more plausible as amount increases.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "heap"
+      ],
+      "amount": 25,
+      "amount_unit": "boxes",
+      "arrangement_description": "grouped together unevenly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "pile",
+      "item_id": "agg_boxes_loose_25",
+      "label_strength": "borderline",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 25 boxes grouped together unevenly in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "A loose aggregate favors pile, with heap becoming more plausible as amount increases.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "boxes",
+      "arrangement_description": "grouped together unevenly in the corner",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "heap",
+      "item_id": "agg_boxes_loose_100",
+      "label_strength": "borderline",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "loosely_grouped",
+      "prompt": "There were 100 boxes grouped together unevenly in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "A loose aggregate favors pile, with heap becoming more plausible as amount increases.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 5,
+      "amount_unit": "boxes",
+      "arrangement_description": "neatly arranged in vertical layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_boxes_ordered_5",
+      "label_strength": "strong",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "ordered",
+      "prompt": "There were 5 boxes neatly arranged in vertical layers in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable count objects, and ordered vertical layers strongly favor stack.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 25,
+      "amount_unit": "boxes",
+      "arrangement_description": "neatly arranged in vertical layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_boxes_ordered_25",
+      "label_strength": "strong",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "ordered",
+      "prompt": "There were 25 boxes neatly arranged in vertical layers in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable count objects, and ordered vertical layers strongly favor stack.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    },
+    {
+      "alternate_acceptable_labels": [
+        "pile"
+      ],
+      "amount": 100,
+      "amount_unit": "boxes",
+      "arrangement_description": "neatly arranged in vertical layers",
+      "candidate_labels": [
+        "pile",
+        "heap",
+        "stack"
+      ],
+      "expected_label": "stack",
+      "item_id": "agg_boxes_ordered_100",
+      "label_strength": "strong",
+      "material": "boxes",
+      "material_phrase": "boxes",
+      "order_state": "ordered",
+      "prompt": "There were 100 boxes neatly arranged in vertical layers in the corner, and he told his coworker to move this ___ of boxes to the trailer.",
+      "rationale": "Boxes are stackable count objects, and ordered vertical layers strongly favor stack.",
+      "scoring_note": "Treat as a preference target; use log-probability margins, not hard truth-conditional accuracy."
+    }
+  ],
+  "methodological_caveats": [
+    "Do not report as simple truth-conditional accuracy; many labels are preference targets.",
+    "Use log-probability margins over candidate labels: log P(expected) - max log P(other candidates).",
+    "Interpret borderline items as graded transitions, especially pile-to-heap with increasing amount.",
+    "The candidate set excludes mound; ordered sand items should therefore be interpreted as pile-vs-heap-vs-stack only.",
+    "Prompts avoid direct target leakage: no pile, heap, stack, heaped, stacked, or mound in item text."
+  ],
+  "predictions": [
+    "Ordered wood and ordered boxes should increase the stack margin.",
+    "Sand should suppress the stack margin even when spatially regular.",
+    "Large disordered quantities should increase the heap margin.",
+    "Quantity should induce a gradual pile-to-heap shift rather than a sharp boundary."
+  ],
+  "status": "pilot_spec",
+  "suite_id": "aggregate_noun_selection_pilot_v1",
+  "title": "Aggregate Noun Selection Pilot: pile / heap / stack"
+}
