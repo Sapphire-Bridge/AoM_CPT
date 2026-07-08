@@ -21,6 +21,39 @@
     "mom": "Candidate intervention family for testing whether contextual preference shifts are recovered in residual states or sparse feature bases.",
     "vagueness": "Direct bridge to Sorites-sensitive vague predicates: pile and heap have graded boundaries, while stack depends on ordered arrangement and material affordance."
   },
+  "firthian_framing": {
+    "core_claim": "The suite treats pile, heap, and stack as use-sensitive aggregate nouns whose application depends on a complex of contextual relations rather than isolated lexical definitions.",
+    "meaning_levels": {
+      "colligation": "The grammatical frame is held fixed as this ___ of X so candidate labels compete in the same syntactic slot.",
+      "collocation": "Material nouns such as sand, boxes, and wood carry different prior associations with pile, heap, and stack.",
+      "context_of_situation": "The material-handling scene, movement request, quantity, order, and material affordance jointly determine the preferred aggregate noun.",
+      "restricted_language": "The pilot restricts analysis to aggregate-noun descriptions in material-handling situations.",
+      "system": "The current candidate system is pile / heap / stack; mound is intentionally excluded and recorded as a caveat for sand cases."
+    },
+    "paper_positioning": {
+      "aom": "A supplementary aggregate-noun selection probe for controlled contextual variation.",
+      "mom": "A possible intervention family for testing whether quantity, order, and material cues are recovered in raw residual states or sparse feature bases.",
+      "vagueness": "A concrete bridge to Sorites-sensitive heap/pile boundaries and higher-order borderline structure.",
+      "williamson_contrast": "The suite does not try to discover a hidden sharp boundary for heap; it measures how preference landscapes shift under controlled changes in use context."
+    }
+  },
+  "measurement_plan": {
+    "primary_metric": "candidate_margin",
+    "candidate_margin": "log P(expected_label) - max log P(other candidate_labels)",
+    "secondary_metrics": [
+      "entropy over candidate_labels",
+      "heap_minus_pile_margin",
+      "stack_margin under material and order manipulations",
+      "human agreement distribution when norming data are available"
+    ],
+    "interpretation": "Clear cases should have large margins; borderline cases should have low margins or higher entropy rather than being counted as simple errors."
+  },
+  "research_questions": [
+    "Do LLMs select neighboring aggregate nouns from isolated lexical association or from context-sensitive relations among quantity, order, and material?",
+    "Does the pile-to-heap boundary appear as a gradual preference shift rather than a sharp observable cutoff?",
+    "Does stack require both ordered arrangement and stackable material, or does the model overuse surface order cues?",
+    "Can usage-shift prompts move the model's pile/heap boundary in the way a Firthian use-based account predicts?"
+  ],
   "items": [
     {
       "alternate_acceptable_labels": [
@@ -622,13 +655,76 @@
     "Use log-probability margins over candidate labels: log P(expected) - max log P(other candidates).",
     "Interpret borderline items as graded transitions, especially pile-to-heap with increasing amount.",
     "The candidate set excludes mound; ordered sand items should therefore be interpreted as pile-vs-heap-vs-stack only.",
-    "Prompts avoid direct target leakage: no pile, heap, stack, heaped, stacked, or mound in item text."
+    "Prompts avoid direct target leakage: no pile, heap, stack, heaped, stacked, or mound in item text.",
+    "The current file is a pilot item set plus theory scaffold; it does not yet contain human norming data, cross-lingual items, or mechanistic patching cases."
   ],
   "predictions": [
     "Ordered wood and ordered boxes should increase the stack margin.",
     "Sand should suppress the stack margin even when spatially regular.",
     "Large disordered quantities should increase the heap margin.",
     "Quantity should induce a gradual pile-to-heap shift rather than a sharp boundary."
+  ],
+  "test_architecture": [
+    {
+      "experiment_id": "restricted_language_scope",
+      "firth_level": "restricted_language",
+      "purpose": "Define the domain as aggregate-noun descriptions in material-handling situations.",
+      "status": "covered_by_pilot_metadata"
+    },
+    {
+      "experiment_id": "collocation_baseline",
+      "firth_level": "collocation",
+      "purpose": "Measure candidate preferences in minimal frames such as a ___ of sand, a ___ of boxes, and a ___ of wood.",
+      "status": "not_yet_implemented"
+    },
+    {
+      "experiment_id": "context_of_situation_minimal_pairs",
+      "firth_level": "context_of_situation",
+      "purpose": "Test whether quantity, order, and material affordance shift preferences in full material-handling scenes.",
+      "status": "covered_by_current_items"
+    },
+    {
+      "experiment_id": "collocation_situation_conflicts",
+      "firth_level": "collocation_vs_context_of_situation",
+      "purpose": "Create cases where material collocation and described arrangement pull in different directions.",
+      "status": "partly_covered_by_current_items"
+    },
+    {
+      "experiment_id": "colligation_control",
+      "firth_level": "colligation",
+      "purpose": "Hold the grammatical slot fixed as this ___ of X so pile, heap, and stack commute in the same frame.",
+      "status": "covered_by_current_items"
+    },
+    {
+      "experiment_id": "sorites_gradient",
+      "firth_level": "graded_contextual_use",
+      "purpose": "Vary quantity more densely, for example 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, and measure heap-minus-pile margins.",
+      "status": "not_yet_implemented"
+    },
+    {
+      "experiment_id": "human_norming",
+      "firth_level": "social_use",
+      "purpose": "Collect human choice distributions and clarity ratings for pile / heap / stack / mound / other.",
+      "status": "not_yet_implemented"
+    },
+    {
+      "experiment_id": "usage_shift",
+      "firth_level": "social_practice",
+      "purpose": "Add local workplace usage conventions and test whether the same physical scene shifts its preferred label.",
+      "status": "not_yet_implemented"
+    },
+    {
+      "experiment_id": "translation_bridge",
+      "firth_level": "modes_of_translation",
+      "purpose": "Compare English pile / heap / stack / mound with German Haufen / Stapel / Berg / Ansammlung.",
+      "status": "not_yet_implemented"
+    },
+    {
+      "experiment_id": "mechanistic_patching",
+      "firth_level": "internal_realization",
+      "purpose": "Patch quantity, order, or material spans to test where contextual control over aggregate-noun margins is realized.",
+      "status": "not_yet_implemented"
+    }
   ],
   "status": "pilot_spec",
   "suite_id": "aggregate_noun_selection_pilot_v1",
