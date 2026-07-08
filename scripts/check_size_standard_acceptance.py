@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import re
 import sys
 from collections import Counter
@@ -120,6 +121,40 @@ def _argmax_label(scores: Mapping[str, float]) -> str:
 
 def _corrected_scores(scores: Mapping[str, float], bias: Mapping[str, float]) -> dict[str, float]:
     return {str(label): float(score) - float(bias.get(str(label), 0.0)) for label, score in scores.items()}
+
+
+def _binary_label_metrics(
+    scores: Mapping[str, float],
+    *,
+    small_label: str = "def_small",
+    large_label: str = "def_large",
+) -> dict[str, float | str]:
+    if small_label not in scores:
+        raise KeyError(f"Missing small label {small_label!r} in scores {sorted(scores)}")
+    if large_label not in scores:
+        raise KeyError(f"Missing large label {large_label!r} in scores {sorted(scores)}")
+    small = float(scores[small_label])
+    large = float(scores[large_label])
+    margin = float(large - small)
+    mx = max(small, large)
+    exp_small = math.exp(small - mx)
+    exp_large = math.exp(large - mx)
+    denom = exp_small + exp_large
+    p_small = float(exp_small / denom)
+    p_large = float(exp_large / denom)
+    entropy = 0.0
+    for p in (p_small, p_large):
+        if p > 0.0:
+            entropy -= p * math.log(p)
+    return {
+        "pred_label": large_label if margin >= 0.0 else small_label,
+        "margin": margin,
+        "abs_margin": abs(margin),
+        "prob_def_small": p_small,
+        "prob_def_large": p_large,
+        "entropy": float(entropy),
+        "entropy_norm": float(entropy / math.log(2.0)),
+    }
 
 
 def _write_json(path: Path, obj: Mapping[str, Any]) -> None:
@@ -751,6 +786,8 @@ def main() -> None:
                     det_gate_scores = _corrected_scores(det_scores, determinacy_label_bias)
                     det_pred = _argmax_label(det_scores)
                     det_gate_pred = _argmax_label(det_gate_scores)
+                    det_binary = _binary_label_metrics(det_scores)
+                    det_binary_corrected = _binary_label_metrics(det_gate_scores)
                     row["determinacy_pred_label"] = str(det_pred)
                     row["determinacy_borderline_margin"] = float(
                         det_scores["borderline"] - max(det_scores["def_small"], det_scores["def_large"])
@@ -770,6 +807,10 @@ def main() -> None:
                         row[f"det_score_{label}"] = float(det_scores[label])
                         row[f"det_bias_{label}"] = float(determinacy_label_bias.get(str(label), 0.0))
                         row[f"det_score_{label}_corrected"] = float(det_gate_scores[label])
+                    for key, value in det_binary.items():
+                        row[f"determinacy_binary_{key}"] = value
+                    for key, value in det_binary_corrected.items():
+                        row[f"determinacy_binary_{key}_corrected"] = value
                 reason: str | None = None
                 if bool(gate_asserted):
                     if gate_pred != str(expected):
@@ -917,6 +958,9 @@ def main() -> None:
                 "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
                 "score_determinacy": bool(args.score_determinacy),
                 "determinacy_bias_mode": str(args.determinacy_bias_mode),
+                "determinacy_continuous_readout": (
+                    "two_way_definite_margin_entropy" if bool(args.score_determinacy) else ""
+                ),
                 "determinacy_bias_info": determinacy_bias_info,
                 "conflict_gate_policy": "siblings",
                 "gate_mode": str(args.gate_mode),
@@ -945,6 +989,9 @@ def main() -> None:
                 "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
                 "score_determinacy": bool(args.score_determinacy),
                 "determinacy_bias_mode": str(args.determinacy_bias_mode),
+                "determinacy_continuous_readout": (
+                    "two_way_definite_margin_entropy" if bool(args.score_determinacy) else ""
+                ),
                 "determinacy_bias_info": determinacy_bias_info,
                 "conflict_gate_policy": "siblings",
                 "bias_info": bias_info,
@@ -979,6 +1026,9 @@ def main() -> None:
             "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
             "score_determinacy": bool(args.score_determinacy),
             "determinacy_bias_mode": str(args.determinacy_bias_mode),
+            "determinacy_continuous_readout": (
+                "two_way_definite_margin_entropy" if bool(args.score_determinacy) else ""
+            ),
             "conflict_gate_policy": "siblings",
             "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
             "tokenizer_models_checked": [str(x) for x in args.tokenizer_models],

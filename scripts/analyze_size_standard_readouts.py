@@ -92,6 +92,18 @@ def _mean_optional(values: Iterable[float | None]) -> float | None:
     return float(mean(xs))
 
 
+def _binary_entropy_norm(small: float, large: float) -> float:
+    mx = max(float(small), float(large))
+    exp_small = math.exp(float(small) - mx)
+    exp_large = math.exp(float(large) - mx)
+    denom = exp_small + exp_large
+    entropy = 0.0
+    for p in (exp_small / denom, exp_large / denom):
+        if p > 0.0:
+            entropy -= p * math.log(p)
+    return float(entropy / math.log(2.0))
+
+
 def _item_id(row: Mapping[str, Any]) -> str:
     return _clean(row.get("item_id")) or _clean(row.get("case_id"))
 
@@ -248,9 +260,11 @@ def summarize_conflict_winners(
 
 
 def _prior_bin(row: Mapping[str, Any]) -> str:
-    value = _float_or_none(row.get("abs_log_ratio_to_prior"))
+    # Margins CSV rows are side-level; abs_log_ratio is the side-specific
+    # value. abs_log_ratio_to_prior is retained for older/item-level rows.
+    value = _float_or_none(row.get("abs_log_ratio"))
     if value is None:
-        value = _float_or_none(row.get("abs_log_ratio"))
+        value = _float_or_none(row.get("abs_log_ratio_to_prior"))
     if value is None:
         return "missing"
     if value < 0.5:
@@ -283,6 +297,22 @@ def summarize_determinacy(
     labels = ["def_small", "borderline", "def_large"]
     specs = [
         ("family", lambda r: _clean(r.get("family")) or "missing"),
+        ("side", lambda r: _clean(r.get("side")) or "missing"),
+        (
+            "family_side",
+            lambda r: f"{_clean(r.get('family')) or 'missing'}::{_clean(r.get('side')) or 'missing'}",
+        ),
+        (
+            "family_abs_log_ratio_to_prior_bin",
+            lambda r: f"{_clean(r.get('family')) or 'missing'}::{_prior_bin(r)}",
+        ),
+        (
+            "family_side_abs_log_ratio_to_prior_bin",
+            lambda r: (
+                f"{_clean(r.get('family')) or 'missing'}::"
+                f"{_clean(r.get('side')) or 'missing'}::{_prior_bin(r)}"
+            ),
+        ),
         ("class_name", lambda r: _clean(r.get("class_name")) or "missing"),
         ("template_id", lambda r: _clean(r.get("template_id")) or "missing"),
         ("abs_log_ratio_to_prior_bin", _prior_bin),
@@ -310,6 +340,123 @@ def summarize_determinacy(
         ),
         "mean_borderline_margin_corrected": _mean_optional(
             _float_or_none(row.get("determinacy_borderline_margin_corrected")) for row in det_rows
+        ),
+        "strata_rows": strata_rows,
+    }
+
+
+def _det_binary_metric(row: Mapping[str, Any], *, corrected: bool, metric: str) -> float | None:
+    suffix = "_corrected" if corrected else ""
+    if metric == "margin":
+        explicit = _float_or_none(row.get(f"determinacy_binary_margin{suffix}"))
+        if explicit is not None:
+            return explicit
+        small = _float_or_none(row.get(f"det_score_def_small{suffix}"))
+        large = _float_or_none(row.get(f"det_score_def_large{suffix}"))
+        if small is None or large is None:
+            return None
+        return float(large - small)
+    if metric == "abs_margin":
+        explicit = _float_or_none(row.get(f"determinacy_binary_abs_margin{suffix}"))
+        if explicit is not None:
+            return explicit
+        margin = _det_binary_metric(row, corrected=corrected, metric="margin")
+        return None if margin is None else abs(float(margin))
+    if metric == "entropy_norm":
+        explicit = _float_or_none(row.get(f"determinacy_binary_entropy_norm{suffix}"))
+        if explicit is not None:
+            return explicit
+        small = _float_or_none(row.get(f"det_score_def_small{suffix}"))
+        large = _float_or_none(row.get(f"det_score_def_large{suffix}"))
+        if small is None or large is None:
+            return None
+        return _binary_entropy_norm(small, large)
+    raise ValueError(f"Unknown determinacy binary metric: {metric!r}")
+
+
+def summarize_uncertainty(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    filtered_ids: set[str] | None = None,
+) -> dict[str, Any]:
+    det_rows = [
+        row
+        for row in rows
+        if _is_kept(row, filtered_ids)
+        and _det_binary_metric(row, corrected=False, metric="abs_margin") is not None
+    ]
+    has_corrected = any(
+        _det_binary_metric(row, corrected=True, metric="abs_margin") is not None for row in det_rows
+    )
+
+    specs = [
+        ("family", lambda r: _clean(r.get("family")) or "missing"),
+        ("side", lambda r: _clean(r.get("side")) or "missing"),
+        (
+            "family_side",
+            lambda r: f"{_clean(r.get('family')) or 'missing'}::{_clean(r.get('side')) or 'missing'}",
+        ),
+        (
+            "family_abs_log_ratio_to_prior_bin",
+            lambda r: f"{_clean(r.get('family')) or 'missing'}::{_prior_bin(r)}",
+        ),
+        (
+            "family_side_abs_log_ratio_to_prior_bin",
+            lambda r: (
+                f"{_clean(r.get('family')) or 'missing'}::"
+                f"{_clean(r.get('side')) or 'missing'}::{_prior_bin(r)}"
+            ),
+        ),
+        ("class_name", lambda r: _clean(r.get("class_name")) or "missing"),
+        ("template_id", lambda r: _clean(r.get("template_id")) or "missing"),
+        ("abs_log_ratio_to_prior_bin", _prior_bin),
+    ]
+    strata_rows: list[dict[str, Any]] = []
+    for stratum, getter in specs:
+        grouped: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+        for row in det_rows:
+            grouped[str(getter(row))].append(row)
+        for value, group in sorted(grouped.items()):
+            out: dict[str, Any] = {"stratum": stratum, "value": value, "n": len(group)}
+            out["mean_abs_margin_raw"] = _mean_optional(
+                _det_binary_metric(row, corrected=False, metric="abs_margin") for row in group
+            )
+            out["mean_entropy_norm_raw"] = _mean_optional(
+                _det_binary_metric(row, corrected=False, metric="entropy_norm") for row in group
+            )
+            out["mean_signed_margin_raw"] = _mean_optional(
+                _det_binary_metric(row, corrected=False, metric="margin") for row in group
+            )
+            out["mean_abs_margin_corrected"] = _mean_optional(
+                _det_binary_metric(row, corrected=True, metric="abs_margin") for row in group
+            )
+            out["mean_entropy_norm_corrected"] = _mean_optional(
+                _det_binary_metric(row, corrected=True, metric="entropy_norm") for row in group
+            )
+            out["mean_signed_margin_corrected"] = _mean_optional(
+                _det_binary_metric(row, corrected=True, metric="margin") for row in group
+            )
+            strata_rows.append(out)
+
+    return {
+        "n": len(det_rows),
+        "readout": "two_way_definite_margin_entropy",
+        "has_corrected": bool(has_corrected),
+        "interpretation": (
+            "lower abs_margin and higher entropy_norm indicate greater uncertainty; "
+            "this readout never uses a borderline token as an argmax category"
+        ),
+        "mean_abs_margin_raw": _mean_optional(
+            _det_binary_metric(row, corrected=False, metric="abs_margin") for row in det_rows
+        ),
+        "mean_entropy_norm_raw": _mean_optional(
+            _det_binary_metric(row, corrected=False, metric="entropy_norm") for row in det_rows
+        ),
+        "mean_abs_margin_corrected": _mean_optional(
+            _det_binary_metric(row, corrected=True, metric="abs_margin") for row in det_rows
+        ),
+        "mean_entropy_norm_corrected": _mean_optional(
+            _det_binary_metric(row, corrected=True, metric="entropy_norm") for row in det_rows
         ),
         "strata_rows": strata_rows,
     }
@@ -457,6 +604,7 @@ def write_outputs(
     rows, filtered_ids = load_analysis_rows(filtered_jsonl, margins_csv)
     conflict = summarize_conflict_winners(rows, filtered_ids=filtered_ids)
     determinacy = summarize_determinacy(rows, filtered_ids=filtered_ids)
+    uncertainty = summarize_uncertainty(rows, filtered_ids=filtered_ids)
     summary: dict[str, Any] = {
         "interpretation_rules": {
             "conflict_count_unit": "receiver",
@@ -464,6 +612,8 @@ def write_outputs(
             "conflict_prediction_column": CONFLICT_PRED_COL,
             "patch_case_counts": "diagnostic_only",
             "determinacy_prediction_column": determinacy["corrected_column"],
+            "uncertainty_readout": "two_way_definite_margin_entropy",
+            "uncertainty_interpretation": "lower abs_margin / higher entropy_norm means more borderline-like",
             "class_small_standard_large_class_wins": "residual_small_hang",
             "conflict_expectation": "open_by_direction; correction may uncover or remove class wins",
         },
@@ -471,6 +621,7 @@ def write_outputs(
         "n_filtered_items": len(filtered_ids),
         "conflict": {k: v for k, v in conflict.items() if k != "receiver_rows"},
         "determinacy": {k: v for k, v in determinacy.items() if k != "strata_rows"},
+        "uncertainty": {k: v for k, v in uncertainty.items() if k != "strata_rows"},
     }
 
     prefix = Path(out_prefix)
@@ -479,6 +630,7 @@ def write_outputs(
     _write_csv(f"{prefix}.conflict_counts.csv", conflict_count_rows(conflict))
     _write_csv(f"{prefix}.determinacy_counts.csv", determinacy_count_rows(determinacy))
     _write_csv(f"{prefix}.determinacy_strata.csv", determinacy["strata_rows"])
+    _write_csv(f"{prefix}.uncertainty_strata.csv", uncertainty["strata_rows"])
 
     if trace_csv is not None:
         trace = summarize_trace(_read_csv(trace_csv))

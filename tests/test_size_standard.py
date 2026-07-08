@@ -30,6 +30,7 @@ from aom_size_standard_patching import (
 )
 from scripts.check_size_standard_acceptance import (
     _argmax_label,
+    _binary_label_metrics,
     _corrected_scores,
     _determinacy_bias_from_scored_contexts,
     _parse_min_kept_by_family,
@@ -41,6 +42,7 @@ from scripts.analyze_size_standard_readouts import (
     summarize_conflict_winners,
     summarize_determinacy,
     summarize_trace,
+    summarize_uncertainty,
 )
 
 
@@ -641,6 +643,84 @@ def test_readout_analysis_prefers_corrected_determinacy() -> None:
     assert summary["counts_raw"] == {"borderline": 1}
     assert summary["counts_corrected"] == {"def_small": 1}
     assert summary["mean_borderline_margin_corrected"] == pytest.approx(-0.3)
+
+
+def test_binary_determinacy_metrics_use_margin_magnitude_and_entropy() -> None:
+    raw = {"def_small": -2.0, "def_large": -2.5, "borderline": -0.1}
+    corrected = _corrected_scores(raw, {"def_small": -1.0, "def_large": -2.0, "borderline": 0.0})
+
+    raw_metrics = _binary_label_metrics(raw)
+    corrected_metrics = _binary_label_metrics(corrected)
+
+    assert raw_metrics["pred_label"] == "def_small"
+    assert raw_metrics["margin"] == pytest.approx(-0.5)
+    assert raw_metrics["abs_margin"] == pytest.approx(0.5)
+    assert 0.0 < float(raw_metrics["entropy_norm"]) < 1.0
+
+    assert corrected_metrics["pred_label"] == "def_large"
+    assert corrected_metrics["margin"] == pytest.approx(0.5)
+    assert corrected_metrics["abs_margin"] == pytest.approx(0.5)
+    assert corrected_metrics["prob_def_large"] == pytest.approx(float(raw_metrics["prob_def_small"]))
+
+
+def test_uncertainty_analysis_derives_two_way_scores_from_existing_determinacy_fields() -> None:
+    rows = [
+        {
+            "kept": "True",
+            "family": "class_penumbra",
+            "side": "base",
+            "class_name": "cup",
+            "abs_log_ratio": "0.1",
+            "abs_log_ratio_to_prior": "2.5",
+            "det_score_def_small": "-2.0",
+            "det_score_def_large": "-2.2",
+            "det_score_def_small_corrected": "-2.0",
+            "det_score_def_large_corrected": "-2.1",
+        },
+        {
+            "kept": "True",
+            "family": "class_penumbra",
+            "side": "cf",
+            "class_name": "cup",
+            "abs_log_ratio": "2.5",
+            "abs_log_ratio_to_prior": "0.1",
+            "det_score_def_small": "-1.0",
+            "det_score_def_large": "-4.0",
+            "det_score_def_small_corrected": "-1.0",
+            "det_score_def_large_corrected": "-4.0",
+        },
+        {
+            "kept": "False",
+            "family": "class_penumbra",
+            "abs_log_ratio_to_prior": "0.0",
+            "det_score_def_small": "-1.0",
+            "det_score_def_large": "-1.0",
+        },
+    ]
+
+    summary = summarize_uncertainty(rows)
+
+    assert summary["n"] == 2
+    assert summary["has_corrected"] is True
+    near = next(
+        row
+        for row in summary["strata_rows"]
+        if row["stratum"] == "abs_log_ratio_to_prior_bin" and row["value"] == "0-0.5"
+    )
+    far = next(
+        row
+        for row in summary["strata_rows"]
+        if row["stratum"] == "abs_log_ratio_to_prior_bin" and row["value"] == ">=2"
+    )
+    assert near["mean_abs_margin_corrected"] == pytest.approx(0.1)
+    assert far["mean_abs_margin_corrected"] == pytest.approx(3.0)
+    assert float(near["mean_entropy_norm_corrected"]) > float(far["mean_entropy_norm_corrected"])
+    family_side_values = {
+        row["value"]
+        for row in summary["strata_rows"]
+        if row["stratum"] == "family_side"
+    }
+    assert family_side_values == {"class_penumbra::base", "class_penumbra::cf"}
 
 
 def test_trace_analysis_aggregates_duplicate_patch_cases_receiver_level() -> None:
