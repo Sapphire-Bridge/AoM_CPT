@@ -9,7 +9,7 @@ import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 import torch
 from transformers import AutoTokenizer
@@ -43,7 +43,7 @@ CONTEXT_BIAS_PROMPTS: dict[str, list[str]] = {
         "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
     ],
     "class_swap:t1": [
-        "For an object, 100 cm is",
+        "For class object, 100 cm is",
     ],
     "class_swap:t2": [
         "As object sizes go, 100 cm is",
@@ -51,11 +51,20 @@ CONTEXT_BIAS_PROMPTS: dict[str, list[str]] = {
     "class_swap:t3": [
         "Compared with a typical object, 100 cm is",
     ],
+    "class_penumbra:t1": [
+        "For class object, 100 cm is",
+    ],
+    "class_penumbra:t2": [
+        "As object sizes go, 100 cm is",
+    ],
+    "class_penumbra:t3": [
+        "Compared with a typical object, 100 cm is",
+    ],
     "conflict_swap:t1": [
         "For this object, the class is object. The stated reference is 100 cm. Its measured length is 100 cm, so it is",
     ],
     "conflict_swap:t2": [
-        "This item is an object. The comparison standard is 100 cm. The item measures 100 cm and is",
+        "This item's class is object. The comparison standard is 100 cm. The item measures 100 cm and is",
     ],
     "conflict_swap:t3": [
         "Category: object. Reference length: 100 cm. Observed length: 100 cm. Verdict:",
@@ -70,6 +79,24 @@ CONTEXT_BIAS_PROMPTS: dict[str, list[str]] = {
         "This object is measured at 100 cm. Relative to a 100 cm standard, it is",
     ],
 }
+DEFAULT_DETERMINACY_BIAS_CONTEXTS: tuple[dict[str, str], ...] = (
+    {
+        "expected_label": "def_small",
+        "prompt": "Compared with a building, a grain of rice is",
+    },
+    {
+        "expected_label": "def_small",
+        "prompt": "Compared with a suitcase, a paperclip is",
+    },
+    {
+        "expected_label": "def_large",
+        "prompt": "Compared with a coin, an airplane is",
+    },
+    {
+        "expected_label": "def_large",
+        "prompt": "Compared with a teacup, a refrigerator is",
+    },
+)
 
 
 def _utc_now_iso() -> str:
@@ -186,6 +213,77 @@ def _mean_label_bias(contexts: Mapping[str, Mapping[str, float]], choices: Mappi
     return out
 
 
+def _determinacy_bias_from_scored_contexts(
+    scored_contexts: Sequence[Mapping[str, Any]],
+    choices: Mapping[str, list[str]],
+) -> dict[str, float]:
+    """Estimate lexical determinacy bias only from non-content observations.
+
+    In particular, borderline bias must be estimated from clear-small and
+    clear-large contexts; a neutral context is semantically borderline and would
+    subtract the signal this readout is meant to measure.
+    """
+    accum: dict[str, list[float]] = {str(label): [] for label in choices}
+    for ctx in scored_contexts:
+        expected = str(ctx.get("expected_label", "")).strip()
+        scores = ctx.get("scores", {})
+        if expected and expected not in accum:
+            raise ValueError(f"Unknown determinacy expected_label={expected!r}")
+        if not isinstance(scores, Mapping):
+            raise ValueError("Each determinacy bias context needs a scores mapping")
+        for label in accum:
+            if label == expected:
+                continue
+            if label not in scores:
+                raise ValueError(f"Missing determinacy score for label={label!r}")
+            accum[label].append(float(scores[label]))
+    missing = [label for label, vals in accum.items() if not vals]
+    if missing:
+        raise ValueError(
+            "Determinacy bias contexts must include non-content observations "
+            f"for every label; missing {missing!r}"
+        )
+    return {label: float(sum(vals) / len(vals)) for label, vals in sorted(accum.items())}
+
+
+def _load_determinacy_bias_contexts(raw: str) -> list[dict[str, str]]:
+    spec = str(raw or "").strip()
+    if not spec:
+        return [dict(ctx) for ctx in DEFAULT_DETERMINACY_BIAS_CONTEXTS]
+    path = Path(spec)
+    if not path.exists():
+        raise ValueError(
+            "--determinacy_bias_prompts must point to a JSONL file with prompt/expected_label "
+            "objects or a text file with expected_label<TAB>prompt lines"
+        )
+    rows: list[dict[str, str]] = []
+    if path.suffix.lower() == ".jsonl":
+        for idx, obj in enumerate(_read_jsonl_rows(path), start=1):
+            prompt = str(obj.get("prompt", "")).strip()
+            expected = str(obj.get("expected_label", obj.get("label", ""))).strip()
+            if not prompt or not expected:
+                raise ValueError(f"Determinacy context {path}:{idx} needs prompt and expected_label")
+            rows.append({"prompt": prompt, "expected_label": expected})
+    else:
+        for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+            text = line.strip()
+            if not text or text.startswith("#"):
+                continue
+            if "\t" not in text:
+                raise ValueError(
+                    f"Determinacy context {path}:{line_no} must use expected_label<TAB>prompt"
+                )
+            expected, prompt = text.split("\t", 1)
+            expected = expected.strip()
+            prompt = prompt.strip()
+            if not prompt or not expected:
+                raise ValueError(f"Determinacy context {path}:{line_no} needs prompt and expected_label")
+            rows.append({"prompt": prompt, "expected_label": expected})
+    if not rows:
+        raise ValueError(f"No determinacy bias contexts found in {path}")
+    return rows
+
+
 def _parse_min_kept_by_family(raw: list[str] | None) -> dict[str, int]:
     out: dict[str, int] = {}
     for spec in raw or []:
@@ -203,9 +301,16 @@ def _parse_min_kept_by_family(raw: list[str] | None) -> dict[str, int]:
 
 
 def _side_abs_log_ratio(md: Mapping[str, Any], side_name: str) -> float | None:
-    key = "cf_abs_log_ratio" if str(side_name) == "cf" else "abs_log_ratio"
-    fallback = "cf_log_ratio" if str(side_name) == "cf" else "log_ratio"
-    raw = md.get(key, md.get(fallback, None))
+    keys = (
+        ("cf_abs_log_ratio_to_prior", "cf_log_ratio_to_prior", "cf_abs_log_ratio", "cf_log_ratio")
+        if str(side_name) == "cf"
+        else ("abs_log_ratio_to_prior", "log_ratio_to_prior", "abs_log_ratio", "log_ratio")
+    )
+    raw = None
+    for key in keys:
+        raw = md.get(key, None)
+        if raw not in (None, ""):
+            break
     if raw is None or raw == "":
         return None
     try:
@@ -215,7 +320,10 @@ def _side_abs_log_ratio(md: Mapping[str, Any], side_name: str) -> float | None:
 
 
 def _is_soft_penumbra_side(md: Mapping[str, Any], side_name: str, threshold: float) -> bool:
-    if str(md.get("family", "")) != "penumbra_standard":
+    family = str(md.get("family", ""))
+    if family not in {"penumbra_standard", "class_penumbra"}:
+        return False
+    if family == "class_penumbra" and str(side_name) != "base":
         return False
     target_abs = md.get("target_abs_log_ratio", None)
     if target_abs not in (None, ""):
@@ -300,6 +408,36 @@ def _compute_context_label_biases(
     }
 
 
+def _compute_determinacy_label_bias(
+    *,
+    loaded: LoadedModel,
+    contexts: Sequence[Mapping[str, str]],
+    choices: Mapping[str, list[str]],
+    device: torch.device,
+) -> dict[str, Any]:
+    scored_contexts: list[dict[str, Any]] = []
+    for ctx in contexts:
+        prompt = str(ctx.get("prompt", "")).strip()
+        expected = str(ctx.get("expected_label", "")).strip()
+        if not prompt or not expected:
+            raise ValueError("Determinacy bias contexts require prompt and expected_label")
+        scores = _score_prompt(loaded=loaded, prompt=prompt, choices=choices, device=device)
+        scored_contexts.append(
+            {
+                "prompt": prompt,
+                "expected_label": expected,
+                "scores": {str(label): float(score) for label, score in scores.items()},
+            }
+        )
+    label_bias = _determinacy_bias_from_scored_contexts(scored_contexts, choices)
+    return {
+        "source": "determinate_context_non_content",
+        "contexts": [dict(ctx) for ctx in contexts],
+        "context_scores": scored_contexts,
+        "label_bias": label_bias,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Acceptance checks for size_standard.jsonl.")
     p.add_argument("--size_path", type=str, required=True)
@@ -341,14 +479,31 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=0.15,
         help=(
-            "For penumbra_standard rows with abs(log(value/standard)) at or below this threshold, "
-            "record margins but do not reject by argmax. Default: 0.15."
+            "For penumbra_standard rows, and for the base side of class_penumbra rows, "
+            "record margins but do not reject by argmax when the target abs log ratio is at or below this threshold. "
+            "Default: 0.15."
         ),
     )
     p.add_argument(
         "--score_determinacy",
         action="store_true",
         help="Also write definitely-small/borderline/definitely-large continuation scores to the margins CSV.",
+    )
+    p.add_argument(
+        "--determinacy_bias_mode",
+        type=str,
+        default="bias_corrected",
+        choices=["raw", "bias_corrected"],
+        help="Bias mode for determinacy argmax readout. Default: bias_corrected.",
+    )
+    p.add_argument(
+        "--determinacy_bias_prompts",
+        type=str,
+        default="",
+        help=(
+            "Optional determinacy bias context file. JSONL rows need prompt and expected_label; "
+            "plain text uses expected_label<TAB>prompt. Default: clear-small and clear-large contexts."
+        ),
     )
     p.add_argument("--emit_filtered_jsonl", type=str, default="")
     p.add_argument("--emit_filtered_summary", type=str, default="")
@@ -383,6 +538,9 @@ def main() -> None:
     )
     if not items:
         raise ValueError("size_standard dataset has zero valid rows")
+    has_class_penumbra = any(str((it.metadata or {}).get("family", "")) == "class_penumbra" for it in items)
+    if bool(has_class_penumbra) and not bool(args.skip_behavioral) and not bool(args.score_determinacy):
+        raise ValueError("class_penumbra rows require --score_determinacy; determinacy is the registered readout for this arm.")
     protocol = SizeStandardNamedSpanProtocol()
 
     tokenizer_summaries: dict[str, Any] = {}
@@ -495,6 +653,30 @@ def main() -> None:
                 label_bias = {str(label): 0.0 for label in choices}
                 bias_info = {"source": "raw_no_bias", "prompts": [], "prompt_scores": [], "label_bias": dict(label_bias)}
 
+            if bool(args.score_determinacy):
+                if str(args.determinacy_bias_mode) == "bias_corrected":
+                    determinacy_contexts = _load_determinacy_bias_contexts(str(args.determinacy_bias_prompts))
+                    determinacy_bias_info = _compute_determinacy_label_bias(
+                        loaded=loaded,
+                        contexts=determinacy_contexts,
+                        choices=DETERMINACY_CHOICES,
+                        device=device,
+                    )
+                    determinacy_label_bias = {
+                        str(k): float(v) for k, v in dict(determinacy_bias_info["label_bias"]).items()
+                    }
+                else:
+                    determinacy_label_bias = {str(label): 0.0 for label in DETERMINACY_CHOICES}
+                    determinacy_bias_info = {
+                        "source": "raw_no_bias",
+                        "contexts": [],
+                        "context_scores": [],
+                        "label_bias": dict(determinacy_label_bias),
+                    }
+            else:
+                determinacy_label_bias = {str(label): 0.0 for label in DETERMINACY_CHOICES}
+                determinacy_bias_info = {}
+
             def score_gate_row(
                 *,
                 item_id: str,
@@ -537,7 +719,12 @@ def main() -> None:
                     "standard_cm": md.get("standard_cm", ""),
                     "cf_standard_cm": md.get("cf_standard_cm", ""),
                     "value_cm": md.get("value_cm", ""),
+                    "value_text": str(md.get("value_text", "")),
                     "abs_log_ratio": "" if side_abs_log_ratio is None else float(side_abs_log_ratio),
+                    "log_ratio_to_prior": md.get("log_ratio_to_prior", ""),
+                    "cf_log_ratio_to_prior": md.get("cf_log_ratio_to_prior", ""),
+                    "abs_log_ratio_to_prior": md.get("abs_log_ratio_to_prior", ""),
+                    "cf_abs_log_ratio_to_prior": md.get("cf_abs_log_ratio_to_prior", ""),
                     "penumbra_axis": str(md.get("penumbra_axis", "")),
                     "penumbral_relation": str(md.get("penumbral_relation", "")),
                     "value_pair_id": str(md.get("value_pair_id", "")),
@@ -561,13 +748,28 @@ def main() -> None:
                         choices=DETERMINACY_CHOICES,
                         device=device,
                     )
+                    det_gate_scores = _corrected_scores(det_scores, determinacy_label_bias)
                     det_pred = _argmax_label(det_scores)
+                    det_gate_pred = _argmax_label(det_gate_scores)
                     row["determinacy_pred_label"] = str(det_pred)
                     row["determinacy_borderline_margin"] = float(
                         det_scores["borderline"] - max(det_scores["def_small"], det_scores["def_large"])
                     )
+                    row["determinacy_pred_label_corrected"] = str(det_gate_pred)
+                    row["determinacy_borderline_margin_corrected"] = float(
+                        det_gate_scores["borderline"]
+                        - max(det_gate_scores["def_small"], det_gate_scores["def_large"])
+                    )
+                    row["determinacy_bias_mode"] = str(args.determinacy_bias_mode)
+                    row["determinacy_bias_context"] = json.dumps(
+                        determinacy_bias_info.get("contexts", []),
+                        sort_keys=True,
+                        ensure_ascii=False,
+                    )
                     for label in sorted(det_scores):
                         row[f"det_score_{label}"] = float(det_scores[label])
+                        row[f"det_bias_{label}"] = float(determinacy_label_bias.get(str(label), 0.0))
+                        row[f"det_score_{label}_corrected"] = float(det_gate_scores[label])
                 reason: str | None = None
                 if bool(gate_asserted):
                     if gate_pred != str(expected):
@@ -714,6 +916,8 @@ def main() -> None:
                 "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
                 "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
                 "score_determinacy": bool(args.score_determinacy),
+                "determinacy_bias_mode": str(args.determinacy_bias_mode),
+                "determinacy_bias_info": determinacy_bias_info,
                 "conflict_gate_policy": "siblings",
                 "gate_mode": str(args.gate_mode),
                 "bias_info": bias_info,
@@ -740,6 +944,8 @@ def main() -> None:
                 "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
                 "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
                 "score_determinacy": bool(args.score_determinacy),
+                "determinacy_bias_mode": str(args.determinacy_bias_mode),
+                "determinacy_bias_info": determinacy_bias_info,
                 "conflict_gate_policy": "siblings",
                 "bias_info": bias_info,
             }
@@ -772,6 +978,7 @@ def main() -> None:
             "min_gate_margin": float(min_gate_margin),
             "penumbra_soft_abs_log_ratio": float(args.penumbra_soft_abs_log_ratio),
             "score_determinacy": bool(args.score_determinacy),
+            "determinacy_bias_mode": str(args.determinacy_bias_mode),
             "conflict_gate_policy": "siblings",
             "min_kept_by_family": {str(k): int(v) for k, v in sorted(min_kept_by_family.items())},
             "tokenizer_models_checked": [str(x) for x in args.tokenizer_models],

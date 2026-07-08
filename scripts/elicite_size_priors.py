@@ -6,6 +6,7 @@ import json
 import math
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -21,12 +22,12 @@ from aom.models.loader import LoadedModel, load_causal_lm
 from aom.utils import configure_logprob_computation, get_best_device
 
 
-DEFAULT_CLASSES = ["ant", "human", "elephant"]
-DEFAULT_GRID_CM = "0.1,0.2,0.5,1,2,5,10,20,50,100,170,300,500,1000"
+DEFAULT_CLASSES = ["ant", "mouse", "worm", "frog", "fish", "cat", "dog", "human", "horse", "elephant", "car", "plane", "ship"]
+DEFAULT_GRID_CM = "0.05,0.1,0.2,0.5,1,2,5,10,20,30,50,80,100,170,240,300,450,700,1000"
 TEMPLATES = (
-    "A typical {class_name} is about",
-    "The normal length of a {class_name} is about",
-    "For a {class_name}, a typical length is",
+    "A typical class {class_name} specimen is about",
+    "The normal length of class {class_name} is about",
+    "For class {class_name}, a typical length is",
 )
 
 
@@ -104,6 +105,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--classes", nargs="+", default=list(DEFAULT_CLASSES))
     p.add_argument("--candidate_grid_cm", type=str, default=DEFAULT_GRID_CM)
     p.add_argument("--out_path", type=str, default=str(ROOT / "data_size_standard" / "size_priors.qwen_qwen2_5_3b.json"))
+    p.add_argument(
+        "--prior_confidence_floor",
+        type=float,
+        default=0.01,
+        help="Minimum top-vs-second score gap for a class prior to be marked valid. Default: 0.01.",
+    )
     p.add_argument("--torch_dtype", type=str, default="float32")
     p.add_argument("--device", type=str, default="auto", choices=["auto", "cpu", "cuda", "mps"])
     p.add_argument("--local_files_only", action="store_true")
@@ -153,6 +160,31 @@ def main() -> None:
             "prompt_scores": prompt_scores,
         }
 
+    argmax_vals = [float(v["model_prior_cm_argmax"]) for v in model_priors.values()]
+    mode_val = None
+    mode_count = 0
+    default_mode_detected = False
+    if argmax_vals:
+        mode_val, mode_count = Counter(argmax_vals).most_common(1)[0]
+        default_mode_detected = int(mode_count) >= max(3, math.ceil(0.25 * len(argmax_vals)))
+    confidence_floor = float(args.prior_confidence_floor)
+    if confidence_floor < 0:
+        raise ValueError("--prior_confidence_floor must be >= 0")
+    for rec in model_priors.values():
+        reasons: list[str] = []
+        argmax_cm = float(rec["model_prior_cm_argmax"])
+        confidence = float(rec["prior_confidence"])
+        if default_mode_detected and mode_val is not None and abs(argmax_cm - float(mode_val)) < 1e-12:
+            reasons.append("global_argmax_mode")
+        if confidence < confidence_floor:
+            reasons.append("confidence_below_floor")
+        rec["prior_valid"] = len(reasons) == 0
+        rec["prior_invalid_reasons"] = reasons
+        rec["prior_argmax_global_mode_cm"] = None if mode_val is None else float(mode_val)
+        rec["prior_argmax_global_mode_count"] = int(mode_count)
+        rec["prior_default_mode_detected"] = bool(default_mode_detected)
+        rec["prior_confidence_floor"] = float(confidence_floor)
+
     out = {
         "created_at_utc": _utc_now_iso(),
         "model": str(args.model),
@@ -166,6 +198,15 @@ def main() -> None:
         "trust_remote_code": bool(args.trust_remote_code),
         "candidate_grid_cm": [float(x) for x in grid],
         "templates": list(TEMPLATES),
+        "prior_validity_policy": {
+            "default_mode_rule": "mark invalid if argmax equals the global argmax mode when that mode appears in at least max(3, ceil(0.25*n_classes)) classes",
+            "argmax_global_mode_cm": None if mode_val is None else float(mode_val),
+            "argmax_global_mode_count": int(mode_count),
+            "default_mode_detected": bool(default_mode_detected),
+            "prior_confidence_floor": float(confidence_floor),
+            "n_valid": int(sum(1 for v in model_priors.values() if bool(v.get("prior_valid", False)))),
+            "n_invalid": int(sum(1 for v in model_priors.values() if not bool(v.get("prior_valid", False)))),
+        },
         "model_priors": model_priors,
     }
     out_path = Path(str(args.out_path))

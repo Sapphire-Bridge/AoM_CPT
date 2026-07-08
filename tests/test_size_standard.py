@@ -31,10 +31,16 @@ from aom_size_standard_patching import (
 from scripts.check_size_standard_acceptance import (
     _argmax_label,
     _corrected_scores,
+    _determinacy_bias_from_scored_contexts,
     _parse_min_kept_by_family,
     _is_soft_penumbra_side,
     _slug as acceptance_slug,
     filtered_jsonl_path,
+)
+from scripts.analyze_size_standard_readouts import (
+    summarize_conflict_winners,
+    summarize_determinacy,
+    summarize_trace,
 )
 
 
@@ -199,6 +205,7 @@ def test_generated_rows_load_and_protocol_builds_without_span_mismatch(tmp_path:
         assert all(len(c.receiver_span) == len(c.donor_span) for c in cases)
         assert {c.strata["patch_span"] for c in cases} == {"class_span", "standard_span"}
         assert "penumbra_standard" in {c.strata["family"] for c in cases}
+        assert "class_penumbra" in {c.strata["family"] for c in cases}
 
 
 def test_protocol_can_add_value_span_placebo_cases(tmp_path: Path) -> None:
@@ -207,7 +214,11 @@ def test_protocol_can_add_value_span_placebo_cases(tmp_path: Path) -> None:
         "digit": FakeFastTokenizer(digit_tokens=True),
     }
     rows, _summary = generate_size_standard_rows(tokenizers=tokenizers)
-    standard_rows = [r for r in rows if r["metadata"]["family"] in {"standard_swap", "penumbra_standard"}]
+    standard_rows = [
+        r
+        for r in rows
+        if r["metadata"]["family"] in {"standard_swap", "penumbra_standard", "class_penumbra"}
+    ]
     primary_standard_span_rows = [r for r in rows if r["metadata"]["patch_span"] == "standard_span"]
     jsonl_path = tmp_path / "size_standard.jsonl"
     _write_jsonl(jsonl_path, rows)
@@ -282,15 +293,61 @@ def test_penumbra_standard_rows_are_dense_soft_gate_candidates() -> None:
         assert md["value_pair_id"]
 
 
+def test_class_penumbra_rows_are_near_prior_and_soft_gated() -> None:
+    priors = {
+        "ant": 0.5,
+        "mouse": 8.0,
+        "worm": 10.0,
+        "frog": 12.0,
+        "fish": 30.0,
+        "cat": 45.0,
+        "dog": 80.0,
+        "human": 170.0,
+        "horse": 240.0,
+        "elephant": 300.0,
+        "car": 450.0,
+        "plane": 4000.0,
+        "ship": 30000.0,
+    }
+    rows, summary = generate_size_standard_rows(
+        tokenizers={"whole": FakeFastTokenizer(digit_tokens=False)},
+        model_priors_cm=priors,
+        require_model_priors=True,
+    )
+    pen_rows = [r for r in rows if r["metadata"]["family"] == "class_penumbra"]
+    assert pen_rows
+    assert summary["counts_by_family"]["class_penumbra"] == len(pen_rows)
+    assert {r["metadata"]["patch_span"] for r in pen_rows} == {"class_span"}
+
+    value_texts = {str(r["metadata"]["value_text"]) for r in pen_rows}
+    assert any("." in v for v in value_texts)
+    assert any(float(r["metadata"]["value_cm"]) < 1.0 for r in pen_rows)
+
+    near_rows = [r for r in pen_rows if float(r["metadata"]["target_abs_log_ratio"]) <= 0.15]
+    assert near_rows
+    for row in near_rows[:20]:
+        md = row["metadata"]
+        assert _is_soft_penumbra_side(md, "base", threshold=0.15)
+        assert not _is_soft_penumbra_side(md, "cf", threshold=0.15)
+        assert md["penumbra_axis"] == "class_prior"
+        assert md["penumbral_relation"] == "class_prior_neighborhood"
+        assert md["label_source"] == "class_prior_penumbra"
+        assert "standard" not in row["base"]["prompt"].lower()
+        assert "reference" not in row["base"]["prompt"].lower()
+        assert "value_span" in md["span_markers"]
+        assert float(md["abs_log_ratio_to_prior"]) <= 0.2
+        assert float(md["cf_abs_log_ratio_to_prior"]) >= 0.35
+
+
 def test_model_prior_loader_and_required_prior_mode(tmp_path: Path) -> None:
     priors_path = tmp_path / "priors.json"
     priors_path.write_text(
         json.dumps(
             {
                 "model_priors": {
-                    "ant": {"model_prior_cm_argmax": 1},
-                    "human": {"model_prior_cm_argmax": 180},
-                    "elephant": {"model_prior_cm_argmax": 400},
+                    "ant": {"model_prior_cm_argmax": 1, "model_prior_cm_expected_log": 0.8, "prior_valid": True},
+                    "human": {"model_prior_cm_argmax": 180, "model_prior_cm_expected_log": 170, "prior_valid": False},
+                    "elephant": {"model_prior_cm_argmax": 400, "model_prior_cm_expected_log": 350, "prior_valid": True},
                 }
             }
         ),
@@ -298,6 +355,10 @@ def test_model_prior_loader_and_required_prior_mode(tmp_path: Path) -> None:
     )
     priors = _load_model_priors_cm(priors_path)
     assert priors == {"ant": 1.0, "human": 180.0, "elephant": 400.0}
+    priors_expected = _load_model_priors_cm(priors_path, prior_field="expected_log")
+    assert priors_expected == {"ant": 0.8, "human": 170.0, "elephant": 350.0}
+    priors_valid = _load_model_priors_cm(priors_path, prior_field="argmax", valid_only=True)
+    assert priors_valid == {"ant": 1.0, "elephant": 400.0}
 
     with pytest.raises(ValueError, match="requires finite positive priors"):
         generate_size_standard_rows(
@@ -349,6 +410,30 @@ def test_bias_correction_changes_gate_argmax_when_label_prior_dominates() -> Non
     assert corrected["small"] == pytest.approx(-0.3)
     assert corrected["large"] == pytest.approx(0.2)
     assert _argmax_label(corrected) == "large"
+
+
+def test_determinacy_bias_uses_determinate_non_content_contexts() -> None:
+    scored_contexts = [
+        {
+            "expected_label": "def_small",
+            "scores": {"def_small": 10.0, "borderline": 1.0, "def_large": 2.0},
+        },
+        {
+            "expected_label": "def_large",
+            "scores": {"def_small": 3.0, "borderline": 5.0, "def_large": 20.0},
+        },
+    ]
+    choices = {
+        "def_small": [" definitely small"],
+        "borderline": [" borderline"],
+        "def_large": [" definitely large"],
+    }
+
+    bias = _determinacy_bias_from_scored_contexts(scored_contexts, choices)
+
+    assert bias["borderline"] == pytest.approx(3.0)
+    assert bias["def_small"] == pytest.approx(3.0)
+    assert bias["def_large"] == pytest.approx(2.0)
 
 
 def test_per_model_filtered_path_slugging(tmp_path: Path) -> None:
@@ -451,3 +536,130 @@ def test_multi_model_runner_requires_filter_manifest_or_explicit_shared_path() -
     )
     assert selected == Path("/tmp/shared.jsonl")
     assert entry is None
+
+
+def test_readout_analysis_counts_conflicts_receiver_level_from_base_rows() -> None:
+    rows = [
+        {
+            "item_id": "case-1",
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "base",
+            "conflict_receiver_id": "r1",
+            "conflict_direction": "class_small_standard_large",
+            "pred_label": "small",
+            "gate_pred_label": "large",
+        },
+        {
+            "item_id": "case-1",
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "sibling_class",
+            "conflict_receiver_id": "r1",
+            "conflict_direction": "class_small_standard_large",
+            "pred_label": "small",
+            "gate_pred_label": "small",
+        },
+        {
+            "item_id": "case-2",
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "base",
+            "conflict_receiver_id": "r1",
+            "conflict_direction": "class_small_standard_large",
+            "pred_label": "small",
+            "gate_pred_label": "large",
+        },
+        {
+            "item_id": "case-3",
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "base",
+            "conflict_receiver_id": "r2",
+            "conflict_direction": "standard_small_class_large",
+            "pred_label": "small",
+            "gate_pred_label": "small",
+        },
+    ]
+
+    summary = summarize_conflict_winners(rows)
+
+    assert summary["n_patch_cases"] == 3
+    assert summary["n_receivers"] == 2
+    assert summary["receiver_counts_corrected"] == {"standard": 2}
+    assert summary["receiver_counts_raw"] == {"class": 1, "standard": 1}
+    assert summary["patch_case_counts_corrected_diagnostic"] == {"standard": 3}
+
+
+def test_readout_analysis_rejects_inconsistent_duplicate_receiver_predictions() -> None:
+    rows = [
+        {
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "base",
+            "conflict_receiver_id": "r1",
+            "conflict_direction": "class_small_standard_large",
+            "gate_pred_label": "small",
+        },
+        {
+            "kept": "True",
+            "family": "conflict_swap",
+            "side": "base",
+            "conflict_receiver_id": "r1",
+            "conflict_direction": "class_small_standard_large",
+            "gate_pred_label": "large",
+        },
+    ]
+    with pytest.raises(ValueError, match="Conflicting 'gate_pred_label'"):
+        summarize_conflict_winners(rows)
+
+
+def test_readout_analysis_prefers_corrected_determinacy() -> None:
+    rows = [
+        {
+            "kept": "True",
+            "family": "class_penumbra",
+            "class_name": "cup",
+            "template_id": "1",
+            "abs_log_ratio_to_prior": "0.1",
+            "determinacy_pred_label": "borderline",
+            "determinacy_pred_label_corrected": "def_small",
+            "determinacy_borderline_margin": "0.2",
+            "determinacy_borderline_margin_corrected": "-0.3",
+        },
+        {
+            "kept": "False",
+            "family": "class_penumbra",
+            "determinacy_pred_label": "def_large",
+            "determinacy_pred_label_corrected": "def_large",
+        },
+    ]
+
+    summary = summarize_determinacy(rows)
+
+    assert summary["corrected_column"] == "determinacy_pred_label_corrected"
+    assert summary["counts_raw"] == {"borderline": 1}
+    assert summary["counts_corrected"] == {"def_small": 1}
+    assert summary["mean_borderline_margin_corrected"] == pytest.approx(-0.3)
+
+
+def test_trace_analysis_aggregates_duplicate_patch_cases_receiver_level() -> None:
+    rows = [
+        {"conflict_receiver_id": "r1", "patch_span": "standard_span", "layer": "0", "effect": "1.0", "sham_effect": "0.1", "flip": "1.0"},
+        {"conflict_receiver_id": "r1", "patch_span": "standard_span", "layer": "0", "effect": "3.0", "sham_effect": "0.3", "flip": "0.0"},
+        {"conflict_receiver_id": "r1", "patch_span": "standard_span", "layer": "1", "effect": "4.0", "sham_effect": "0.4", "flip": "1.0"},
+        {"conflict_receiver_id": "r1", "patch_span": "class_span", "layer": "0", "effect": "1.0", "sham_effect": "0.0", "flip": "0.0"},
+        {"conflict_receiver_id": "r1", "patch_span": "class_span", "layer": "1", "effect": "2.0", "sham_effect": "0.0", "flip": "1.0"},
+    ]
+
+    summary = summarize_trace(rows)
+
+    assert summary["n_trace_rows"] == 5
+    assert summary["n_receiver_layer_span_cells"] == 4
+    std_layer0 = next(
+        row for row in summary["layer_rows"] if row["patch_span"] == "standard_span" and row["layer"] == "0"
+    )
+    assert std_layer0["mean_effect"] == pytest.approx(2.0)
+    assert std_layer0["mean_sham_effect"] == pytest.approx(0.2)
+    assert std_layer0["flip_rate"] == pytest.approx(0.5)
+    assert summary["paired_standard_vs_class"]["mean_standard_minus_class_max_effect"] == pytest.approx(2.0)

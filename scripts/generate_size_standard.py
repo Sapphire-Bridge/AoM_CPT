@@ -56,6 +56,11 @@ class ClassTemplateSpec:
     value_right: str
 
 
+CLASS_PENUMBRA_DELTAS: tuple[float, ...] = (-0.5, -0.3, -0.15, -0.07, -0.03, 0.03, 0.07, 0.15, 0.3, 0.5)
+CLASS_PENUMBRA_MAX_DONORS_PER_POINT = 4
+CLASS_PENUMBRA_MIN_DONOR_ABS_LOG = 0.35
+
+
 STANDARD_TEMPLATES: tuple[TemplateSpec, ...] = (
     TemplateSpec(
         template_id=1,
@@ -93,27 +98,27 @@ STANDARD_TEMPLATES: tuple[TemplateSpec, ...] = (
 CLASS_SWAP_TEMPLATES: tuple[ClassTemplateSpec, ...] = (
     ClassTemplateSpec(
         template_id=1,
-        text="For class {class_name}, {value} cm is",
+        text="For class {class_name}, {value} {unit} is",
         class_left="For class ",
         class_right=",",
         value_left=", ",
-        value_right=" cm",
+        value_right=" {unit}",
     ),
     ClassTemplateSpec(
         template_id=2,
-        text="As {class_name} sizes go, {value} cm is",
+        text="As {class_name} sizes go, {value} {unit} is",
         class_left="As ",
         class_right=" sizes",
         value_left="go, ",
-        value_right=" cm",
+        value_right=" {unit}",
     ),
     ClassTemplateSpec(
         template_id=3,
-        text="Compared with a typical {class_name}, {value} cm is",
+        text="Compared with a typical {class_name}, {value} {unit} is",
         class_left="typical ",
         class_right=",",
         value_left=", ",
-        value_right=" cm",
+        value_right=" {unit}",
     ),
 )
 
@@ -154,8 +159,18 @@ CONFLICT_TEMPLATES: tuple[TemplateSpec, ...] = (
 
 CLASS_SPECS: tuple[ClassSpec, ...] = (
     ClassSpec("ant", "real", 1.0),
+    ClassSpec("mouse", "real", 8.0),
+    ClassSpec("worm", "real", 10.0),
+    ClassSpec("frog", "real", 12.0),
+    ClassSpec("fish", "real", 30.0),
+    ClassSpec("cat", "real", 45.0),
+    ClassSpec("dog", "real", 80.0),
     ClassSpec("human", "real", 170.0),
+    ClassSpec("horse", "real", 240.0),
     ClassSpec("elephant", "real", 350.0),
+    ClassSpec("car", "real", 450.0),
+    ClassSpec("plane", "real", 4000.0),
+    ClassSpec("ship", "real", 30000.0),
     ClassSpec("glorb", "nonce", None),
     ClassSpec("dax", "nonce", None),
     ClassSpec("fenzel", "nonce", None),
@@ -234,6 +249,25 @@ def _slug(s: str) -> str:
     return s.strip("_") or "x"
 
 
+def _num_slug(x: str | int | float) -> str:
+    return _slug(str(x).replace(".", "p").replace("-", "m"))
+
+
+def _fmt_measurement_cm(x: float) -> str:
+    val = float(x)
+    if not math.isfinite(val) or val <= 0:
+        raise ValueError(f"measurement must be finite and positive: {x!r}")
+    if abs(val - round(val)) < 1e-9:
+        return str(int(round(val)))
+    if val < 1:
+        s = f"{val:.3f}"
+    elif val < 10:
+        s = f"{val:.2f}"
+    else:
+        s = f"{val:.1f}"
+    return s.rstrip("0").rstrip(".")
+
+
 def _article_for(class_name: str, *, capitalize: bool = False) -> str:
     first = str(class_name).strip().lower()[:1]
     article = "an" if first in {"a", "e", "i", "o", "u"} else "a"
@@ -245,17 +279,19 @@ def _format_context(
     *,
     class_name: str,
     standard: int | None = None,
-    value: int | None = None,
+    value: int | float | str | None = None,
+    unit: str = "cm",
 ) -> str:
     kwargs: dict[str, Any] = {
         "class_name": str(class_name),
         "article": _article_for(str(class_name)),
         "Article": _article_for(str(class_name), capitalize=True),
+        "unit": str(unit),
     }
     if standard is not None:
         kwargs["standard"] = int(standard)
     if value is not None:
-        kwargs["value"] = int(value)
+        kwargs["value"] = str(value)
     return str(text).format(**kwargs)
 
 
@@ -364,8 +400,14 @@ def _render_prompt(template: TemplateSpec, *, class_name: str, standard: int, va
     return _format_context(template.text, class_name=class_name, standard=int(standard), value=int(value))
 
 
-def _render_class_prompt(template: ClassTemplateSpec, *, class_name: str, value: int) -> str:
-    return _format_context(template.text, class_name=class_name, value=int(value))
+def _render_class_prompt(
+    template: ClassTemplateSpec,
+    *,
+    class_name: str,
+    value: int | float | str,
+    unit: str = "cm",
+) -> str:
+    return _format_context(template.text, class_name=class_name, value=value, unit=unit)
 
 
 def _markers_for(
@@ -398,18 +440,19 @@ def _class_markers_for(
     template: ClassTemplateSpec,
     *,
     class_name: str,
-    value: int,
+    value: int | float | str,
+    unit: str = "cm",
 ) -> dict[str, SpanMarker]:
     return {
         "class_span": SpanMarker(
             str(class_name),
-            _format_context(template.class_left, class_name=class_name, value=int(value)),
-            _format_context(template.class_right, class_name=class_name, value=int(value)),
+            _format_context(template.class_left, class_name=class_name, value=value, unit=unit),
+            _format_context(template.class_right, class_name=class_name, value=value, unit=unit),
         ),
         "value_span": SpanMarker(
-            str(int(value)),
-            _format_context(template.value_left, class_name=class_name, value=int(value)),
-            _format_context(template.value_right, class_name=class_name, value=int(value)),
+            str(value),
+            _format_context(template.value_left, class_name=class_name, value=value, unit=unit),
+            _format_context(template.value_right, class_name=class_name, value=value, unit=unit),
         ),
     }
 
@@ -421,7 +464,9 @@ def _expected_from_standard(*, value: int, standard: int) -> str:
 
 
 def _class_prior_cm(cls: ClassSpec, model_priors_cm: Mapping[str, float] | None = None) -> float | None:
-    if model_priors_cm is not None and cls.name in model_priors_cm:
+    if model_priors_cm is not None:
+        if cls.name not in model_priors_cm:
+            return None
         return float(model_priors_cm[cls.name])
     return None if cls.real_standard_cm is None else float(cls.real_standard_cm)
 
@@ -438,6 +483,14 @@ def _expected_from_class_prior(
     if float(value) == float(prior):
         raise ValueError("value must not equal class prior")
     return "large" if float(value) > float(prior) else "small"
+
+
+def _expected_from_prior_value(*, value_cm: float, prior_cm: float) -> str:
+    if not (math.isfinite(float(value_cm)) and math.isfinite(float(prior_cm)) and float(value_cm) > 0 and float(prior_cm) > 0):
+        raise ValueError("value_cm and prior_cm must be finite and positive")
+    if abs(float(value_cm) - float(prior_cm)) < 1e-12:
+        raise ValueError("value must not equal class prior")
+    return "large" if float(value_cm) > float(prior_cm) else "small"
 
 
 def _margin_bin(log_ratio: float) -> str:
@@ -502,9 +555,16 @@ def _row(
     }
 
 
-def _load_model_priors_cm(path: str | Path | None) -> dict[str, float]:
+def _load_model_prior_payload(
+    path: str | Path | None,
+    *,
+    prior_field: str = "argmax",
+) -> tuple[dict[str, float], dict[str, bool], dict[str, Any]]:
     if path is None or not str(path).strip():
-        return {}
+        return {}, {}, {}
+    field = str(prior_field)
+    if field not in {"argmax", "expected_log", "prior_cm"}:
+        raise ValueError(f"Unknown prior field {prior_field!r}")
     obj = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(obj, Mapping):
         raise ValueError(f"Prior file must contain a JSON object: {path}")
@@ -512,15 +572,48 @@ def _load_model_priors_cm(path: str | Path | None) -> dict[str, float]:
     if not isinstance(raw, Mapping):
         raise ValueError(f"Prior file has no model_priors mapping: {path}")
     out: dict[str, float] = {}
+    validity: dict[str, bool] = {}
+    validity_details: dict[str, Any] = {
+        "prior_field": str(field),
+        "policy": obj.get("prior_validity_policy", {}),
+        "classes": {},
+    }
     for name, val in raw.items():
         if isinstance(val, Mapping):
-            if "model_prior_cm_argmax" in val:
+            if field == "expected_log" and "model_prior_cm_expected_log" in val:
+                out[str(name)] = float(val["model_prior_cm_expected_log"])
+            elif field == "argmax" and "model_prior_cm_argmax" in val:
                 out[str(name)] = float(val["model_prior_cm_argmax"])
             elif "prior_cm" in val:
                 out[str(name)] = float(val["prior_cm"])
+            elif "model_prior_cm_argmax" in val:
+                out[str(name)] = float(val["model_prior_cm_argmax"])
+            elif "model_prior_cm_expected_log" in val:
+                out[str(name)] = float(val["model_prior_cm_expected_log"])
+            if "prior_valid" in val:
+                validity[str(name)] = bool(val["prior_valid"])
+            validity_details["classes"][str(name)] = {
+                "prior_valid": bool(val.get("prior_valid", True)),
+                "prior_invalid_reasons": list(val.get("prior_invalid_reasons", [])),
+                "model_prior_cm_argmax": val.get("model_prior_cm_argmax", None),
+                "model_prior_cm_expected_log": val.get("model_prior_cm_expected_log", None),
+                "prior_confidence": val.get("prior_confidence", None),
+            }
         else:
             out[str(name)] = float(val)
-    return out
+    return out, validity, validity_details
+
+
+def _load_model_priors_cm(
+    path: str | Path | None,
+    *,
+    prior_field: str = "argmax",
+    valid_only: bool = False,
+) -> dict[str, float]:
+    values, validity, _details = _load_model_prior_payload(path, prior_field=prior_field)
+    if bool(valid_only) and validity:
+        return {str(k): float(v) for k, v in values.items() if bool(validity.get(str(k), True))}
+    return values
 
 
 def _single_edit_error(base_prompt: str, cf_prompt: str, old: str, new: str) -> str | None:
@@ -549,8 +642,10 @@ def _dynamic_class_swap_specs(
     *,
     model_priors_cm: Mapping[str, float] | None,
 ) -> tuple[tuple[str, str, int], ...]:
-    if not model_priors_cm:
+    if model_priors_cm is None:
         return CLASS_SWAP_SPECS
+    if not model_priors_cm:
+        return tuple()
     real = sorted(
         [
         (name, float(model_priors_cm[name]))
@@ -580,8 +675,10 @@ def _dynamic_conflict_swap_specs(
     *,
     model_priors_cm: Mapping[str, float] | None,
 ) -> tuple[tuple[str, str, int, int, int], ...]:
-    if not model_priors_cm:
+    if model_priors_cm is None:
         return CONFLICT_SWAP_SPECS
+    if not model_priors_cm:
+        return tuple()
     class_specs = _dynamic_class_swap_specs(classes_by_name, model_priors_cm=model_priors_cm)
     out: set[tuple[str, str, int, int, int]] = set()
     for low_name, high_name, value in class_specs:
@@ -592,11 +689,77 @@ def _dynamic_conflict_swap_specs(
     return tuple(sorted(out, key=lambda x: (x[0], x[1], x[2], x[3], x[4])))
 
 
+def _dynamic_class_penumbra_specs(
+    classes_by_name: Mapping[str, ClassSpec],
+    *,
+    model_priors_cm: Mapping[str, float] | None,
+) -> tuple[tuple[str, str, str, float, str, str, float, float, float, float], ...]:
+    real: list[tuple[str, float]] = []
+    for name, cls in sorted(classes_by_name.items()):
+        if cls.kind != "real":
+            continue
+        prior = _class_prior_cm(cls, model_priors_cm=model_priors_cm)
+        if prior is None:
+            continue
+        prior_f = float(prior)
+        if math.isfinite(prior_f) and prior_f > 0:
+            real.append((str(name), prior_f))
+    if len(real) < 2:
+        return tuple()
+
+    out: set[tuple[str, str, str, float, str, str, float, float, float, float]] = set()
+    for base_name, base_prior in real:
+        for delta in CLASS_PENUMBRA_DELTAS:
+            raw_value = float(base_prior) * math.exp(float(delta))
+            try:
+                value_text = _fmt_measurement_cm(raw_value)
+                value_cm = float(value_text)
+                base_label = _expected_from_prior_value(value_cm=value_cm, prior_cm=base_prior)
+            except ValueError:
+                continue
+            if abs(math.log(float(value_cm) / float(base_prior))) > (abs(float(delta)) + 0.05):
+                # Decimal formatting should preserve the near-prior point; skip if rounding moved it too far.
+                continue
+            donor_candidates: list[tuple[float, str, str, float]] = []
+            for donor_name, donor_prior in real:
+                if donor_name == base_name:
+                    continue
+                try:
+                    donor_label = _expected_from_prior_value(value_cm=value_cm, prior_cm=donor_prior)
+                except ValueError:
+                    continue
+                if donor_label == base_label:
+                    continue
+                donor_abs_log = abs(math.log(float(value_cm) / float(donor_prior)))
+                if donor_abs_log < CLASS_PENUMBRA_MIN_DONOR_ABS_LOG:
+                    continue
+                donor_candidates.append((float(donor_abs_log), str(donor_name), str(donor_label), float(donor_prior)))
+            for donor_abs_log, donor_name, donor_label, donor_prior in sorted(donor_candidates, reverse=True)[
+                :CLASS_PENUMBRA_MAX_DONORS_PER_POINT
+            ]:
+                out.add(
+                    (
+                        str(base_name),
+                        str(donor_name),
+                        str(value_text),
+                        float(value_cm),
+                        str(base_label),
+                        str(donor_label),
+                        float(delta),
+                        float(base_prior),
+                        float(donor_prior),
+                        float(donor_abs_log),
+                    )
+                )
+    return tuple(sorted(out, key=lambda x: (x[0], x[6], x[1], x[2])))
+
+
 def generate_size_standard_rows(
     *,
     tokenizers: Mapping[str, PreTrainedTokenizerBase],
     strict_generation: bool = False,
     model_priors_cm: Mapping[str, float] | None = None,
+    model_prior_validity: Mapping[str, Any] | None = None,
     require_model_priors: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -611,6 +774,7 @@ def generate_size_standard_rows(
             for spec in list(CLASS_SWAP_SPECS) + [(a, b, v) for a, b, v, _lo, _hi in CONFLICT_SWAP_SPECS]
             for name in (spec[0], spec[1])
         }
+        needed |= {c.name for c in CLASS_SPECS if c.kind == "real"}
         missing = sorted(name for name in needed if name not in (model_priors_cm or {}))
         nonpositive = sorted(
             name
@@ -625,6 +789,7 @@ def generate_size_standard_rows(
 
     class_swap_specs = _dynamic_class_swap_specs(classes_by_name, model_priors_cm=model_priors_cm)
     conflict_swap_specs = _dynamic_conflict_swap_specs(classes_by_name, model_priors_cm=model_priors_cm)
+    class_penumbra_specs = _dynamic_class_penumbra_specs(classes_by_name, model_priors_cm=model_priors_cm)
 
     def record_single_edit_skip(reason: str) -> bool:
         if bool(strict_generation):
@@ -874,6 +1039,94 @@ def generate_size_standard_rows(
                 cf_marker=cf_markers["class_span"],
             )
 
+    for template in CLASS_SWAP_TEMPLATES:
+        for (
+            base_class,
+            cf_class,
+            value_text,
+            value_cm,
+            base_label,
+            cf_label,
+            target_delta,
+            base_prior,
+            cf_prior,
+            cf_abs_log_to_prior,
+        ) in class_penumbra_specs:
+            base_cls = classes_by_name[base_class]
+            cf_cls = classes_by_name[cf_class]
+            base_prompt = _render_class_prompt(template, class_name=base_cls.name, value=value_text, unit="cm")
+            cf_prompt = _render_class_prompt(template, class_name=cf_cls.name, value=value_text, unit="cm")
+            edit_error = _single_edit_error(base_prompt, cf_prompt, base_cls.name, cf_cls.name)
+            if edit_error is not None and not record_single_edit_skip(edit_error):
+                continue
+            base_markers = _class_markers_for(template, class_name=base_cls.name, value=value_text, unit="cm")
+            cf_markers = _class_markers_for(template, class_name=cf_cls.name, value=value_text, unit="cm")
+            log_ratio_to_prior = float(math.log(float(value_cm) / float(base_prior)))
+            cf_log_ratio_to_prior = float(math.log(float(value_cm) / float(cf_prior)))
+            abs_log_ratio_to_prior = float(abs(log_ratio_to_prior))
+            coarse_bin = _penumbra_margin_bin(abs_log_ratio_to_prior)
+            value_pair_id = (
+                f"class-penumbra-{_slug(base_cls.name)}-V{_num_slug(value_text)}-"
+                f"D{_num_slug(f'{target_delta:.3g}')}-t{template.template_id}"
+            )
+            item_id = (
+                f"size-class_penumbra-{_slug(base_cls.name)}_to_{_slug(cf_cls.name)}-"
+                f"V{_num_slug(value_text)}-{base_label}_to_{cf_label}-m{coarse_bin}-"
+                f"d{_num_slug(f'{target_delta:.3g}')}-t{template.template_id}"
+            )
+            metadata = {
+                "family": "class_penumbra",
+                "patch_span": "class_span",
+                "label_source": "class_prior_penumbra",
+                "class_name": base_cls.name,
+                "class_kind": base_cls.kind,
+                "cf_class_name": cf_cls.name,
+                "cf_class_kind": cf_cls.kind,
+                "class_pair": f"{base_cls.name}_to_{cf_cls.name}",
+                "value_cm": float(value_cm),
+                "value_text": str(value_text),
+                "model_prior_cm": float(base_prior),
+                "cf_model_prior_cm": float(cf_prior),
+                "class_prior_label": str(base_label),
+                "cf_class_prior_label": str(cf_label),
+                "donor_label": str(cf_label),
+                "log_ratio_to_prior": float(log_ratio_to_prior),
+                "cf_log_ratio_to_prior": float(cf_log_ratio_to_prior),
+                "abs_log_ratio_to_prior": float(abs_log_ratio_to_prior),
+                "cf_abs_log_ratio_to_prior": float(abs(cf_log_ratio_to_prior)),
+                "target_abs_log_ratio": float(abs(target_delta)),
+                "target_log_ratio_to_prior": float(target_delta),
+                "donor_abs_log_ratio_to_prior": float(cf_abs_log_to_prior),
+                "polarity": f"{base_label}_to_{cf_label}",
+                "margin_bin": str(coarse_bin),
+                "penumbra_axis": "class_prior",
+                "penumbral_relation": "class_prior_neighborhood",
+                "value_pair_id": value_pair_id,
+                "rank_in_chain": -1 if str(base_label) == "small" else 1,
+                "monotonicity_direction": "higher_value_increases_bigness",
+                "unit": "cm",
+                "template_id": int(template.template_id),
+                "base_item_id": item_id,
+                "readout": READOUT_NAME,
+                "span_markers": {
+                    "class_span": {"base": base_markers["class_span"].__dict__, "cf": cf_markers["class_span"].__dict__},
+                    "value_span": {"base": base_markers["value_span"].__dict__, "cf": cf_markers["value_span"].__dict__},
+                },
+            }
+            try_add(
+                _row(
+                    item_id=item_id,
+                    base_prompt=base_prompt,
+                    base_label=str(base_label),
+                    cf_prompt=cf_prompt,
+                    cf_label=str(cf_label),
+                    metadata=metadata,
+                    contrast_labels=(str(base_label), str(cf_label)),
+                ),
+                base_marker=base_markers["class_span"],
+                cf_marker=cf_markers["class_span"],
+            )
+
     for template in CONFLICT_TEMPLATES:
         for low_class, high_class, value, low_s, high_s in conflict_swap_specs:
             low_cls = classes_by_name[low_class]
@@ -957,7 +1210,9 @@ def generate_size_standard_rows(
                         continue
                     item_id = (
                         f"size-conflict_swap-{_slug(str(spec['direction']))}-{_slug(recv_cls.name)}-"
-                        f"S{recv_s}-V{value}-{patch_span}-to_{donor_label}-t{template.template_id}"
+                        f"S{recv_s}-V{value}-pair_{_slug(low_cls.name)}_{_slug(high_cls.name)}-"
+                        f"{patch_span}-to_{_slug(donor_cls.name)}_S{int(donor_s)}_"
+                        f"{donor_label}-t{template.template_id}"
                     )
                     metadata = {
                     "family": "conflict_swap",
@@ -1032,7 +1287,9 @@ def generate_size_standard_rows(
         "counts_by_family": dict(sorted(Counter(str(r["metadata"]["family"]) for r in rows).items())),
         "counts_by_patch_span": dict(sorted(Counter(str(r["metadata"]["patch_span"]) for r in rows).items())),
         "model_priors_used": {str(k): float(v) for k, v in sorted((model_priors_cm or {}).items())},
+        "model_prior_validity": model_prior_validity or {},
         "class_swap_specs_used": [list(x) for x in class_swap_specs],
+        "class_penumbra_specs_used": [list(x) for x in class_penumbra_specs],
         "conflict_swap_specs_used": [list(x) for x in conflict_swap_specs],
         "penumbra_standard_specs_used": [list(x) for x in _penumbra_standard_specs()],
         "skip_reason_counts": dict(sorted(skip_reasons.items())),
@@ -1059,6 +1316,13 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optional JSON from scripts/elicite_size_priors.py; overrides real-world class priors for class/conflict rows.",
     )
+    p.add_argument(
+        "--model_prior_field",
+        type=str,
+        default="argmax",
+        choices=["argmax", "expected_log", "prior_cm"],
+        help="Which field to read from --model_priors_path. Default: argmax.",
+    )
     p.add_argument("--min_rows", type=int, default=1, help="Fail if fewer rows are generated.")
     p.add_argument("--strict_generation", action="store_true", help="Raise on candidate generation errors.")
     return p.parse_args()
@@ -1073,14 +1337,27 @@ def main() -> None:
         local_files_only=bool(args.local_files_only),
         trust_remote_code=bool(args.trust_remote_code),
     )
-    model_priors_cm = _load_model_priors_cm(str(args.model_priors_path))
+    raw_model_priors_cm, model_prior_validity_flags, model_prior_validity = _load_model_prior_payload(
+        str(args.model_priors_path),
+        prior_field=str(args.model_prior_field),
+    )
+    if model_prior_validity_flags:
+        model_priors_cm: dict[str, float] | None = {
+            str(k): float(v)
+            for k, v in raw_model_priors_cm.items()
+            if bool(model_prior_validity_flags.get(str(k), True))
+        }
+    else:
+        model_priors_cm = raw_model_priors_cm if raw_model_priors_cm else None
     rows, summary = generate_size_standard_rows(
         tokenizers=tokenizers,
         strict_generation=bool(args.strict_generation),
         model_priors_cm=model_priors_cm,
-        require_model_priors=bool(str(args.model_priors_path).strip()),
+        model_prior_validity=model_prior_validity,
+        require_model_priors=False,
     )
     summary["tokenizer_models_checked"] = [str(x) for x in args.tokenizer_models]
+    summary["model_prior_field"] = str(args.model_prior_field)
     summary["strict_generation"] = bool(args.strict_generation)
     summary["min_rows"] = int(args.min_rows)
     if len(rows) < int(args.min_rows):

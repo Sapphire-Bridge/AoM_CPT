@@ -139,7 +139,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 skips.append(CaseSkip(case_id=str(it.item_id), reason="readout_mismatch"))
                 continue
             family = str(md.get("family", ""))
-            if family not in {"standard_swap", "class_swap", "conflict_swap", "penumbra_standard"}:
+            if family not in {"standard_swap", "class_swap", "conflict_swap", "penumbra_standard", "class_penumbra"}:
                 skips.append(CaseSkip(case_id=str(it.item_id), reason=f"invalid_family:{family}"))
                 continue
             patch_span = str(md.get("patch_span", ""))
@@ -149,7 +149,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
             expected_patch_span = None
             if family in {"standard_swap", "penumbra_standard"}:
                 expected_patch_span = "standard_span"
-            elif family == "class_swap":
+            elif family in {"class_swap", "class_penumbra"}:
                 expected_patch_span = "class_span"
             if expected_patch_span is not None and patch_span != expected_patch_span:
                 skips.append(
@@ -184,6 +184,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 "standard_cm",
                 "cf_standard_cm",
                 "value_cm",
+                "value_text",
                 "center_value_cm",
                 "model_prior_cm",
                 "cf_model_prior_cm",
@@ -191,7 +192,13 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
                 "cf_log_ratio",
                 "abs_log_ratio",
                 "cf_abs_log_ratio",
+                "log_ratio_to_prior",
+                "cf_log_ratio_to_prior",
+                "abs_log_ratio_to_prior",
+                "cf_abs_log_ratio_to_prior",
                 "target_abs_log_ratio",
+                "target_log_ratio_to_prior",
+                "donor_abs_log_ratio_to_prior",
                 "distance_from_standard",
                 "cf_distance_from_standard",
                 "polarity",
@@ -207,7 +214,7 @@ class SizeStandardNamedSpanProtocol(ActivationPatchingProtocol):
             )
 
             case_specs: list[tuple[str, str, str]] = [(str(it.item_id), patch_span, "primary")]
-            if bool(self.config.include_value_placebo) and family in {"standard_swap", "penumbra_standard"}:
+            if bool(self.config.include_value_placebo) and family in {"standard_swap", "penumbra_standard", "class_penumbra"}:
                 case_specs.append((f"{it.item_id}__value_span_placebo", "value_span", "placebo"))
 
             for case_id, active_patch_span, case_type in case_specs:
