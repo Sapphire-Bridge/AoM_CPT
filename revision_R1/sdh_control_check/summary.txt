@@ -1,0 +1,18 @@
+== gpt2
+all                        n=104 E_ctrl 0.376 [0.116, 0.694]  E_target 0.086  delta -0.290 [-0.623, 0.000]
+final-pos ctrl (10)        n= 10 E_ctrl 4.214 [2.595, 5.947]  E_target 0.220  delta -3.993 [-5.730, -2.362]
+noop (44)                  n= 44 E_ctrl 0.000 [-0.000, 0.000]  E_target 0.288  delta 0.288 [0.127, 0.462]
+other (50)                 n= 50 E_ctrl -0.061 [-0.119, -0.014]  E_target -0.118  delta -0.057 [-0.296, 0.152]
+all minus final-pos (94)   n= 94 E_ctrl -0.033 [-0.064, -0.007]  E_target 0.072  delta 0.104 [-0.051, 0.250]
+== llama-3.2-1b
+all                        n=104 E_ctrl 0.119 [0.016, 0.242]  E_target 0.377  delta 0.258 [-0.027, 0.539]
+final-pos ctrl (10)        n= 10 E_ctrl 1.514 [0.917, 2.105]  E_target 0.124  delta -1.390 [-2.182, -0.541]
+noop (44)                  n= 44 E_ctrl -0.000 [-0.000, 0.000]  E_target 1.196  delta 1.196 [0.810, 1.583]
+other (50)                 n= 50 E_ctrl -0.055 [-0.137, 0.036]  E_target -0.294  delta -0.238 [-0.557, 0.045]
+all minus final-pos (94)   n= 94 E_ctrl -0.029 [-0.074, 0.018]  E_target 0.404  delta 0.433 [0.149, 0.717]
+== qwen2.5-0.5b
+all                        n=104 E_ctrl 0.072 [-0.006, 0.162]  E_target 0.733  delta 0.661 [0.308, 1.039]
+final-pos ctrl (10)        n= 10 E_ctrl 1.114 [0.683, 1.607]  E_target 0.474  delta -0.640 [-1.654, 0.514]
+noop (44)                  n= 44 E_ctrl 0.000 [-0.000, 0.000]  E_target 1.555  delta 1.555 [1.038, 2.129]
+other (50)                 n= 50 E_ctrl -0.073 [-0.147, 0.002]  E_target 0.060  delta 0.134 [-0.274, 0.555]
+all minus final-pos (94)   n= 94 E_ctrl -0.039 [-0.083, 0.003]  E_target 0.760  delta 0.799 [0.446, 1.173]

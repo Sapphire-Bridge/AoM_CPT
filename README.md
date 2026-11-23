@@ -35,6 +35,8 @@ The repository companion manuscript and verification sources are:
 - Evidence contract: [`AoM_JoLLLI/AoM_evidence_contract.md`](AoM_JoLLLI/AoM_evidence_contract.md)
 - Verification guide: [`PAPER_VERIFICATION_GUIDE.md`](PAPER_VERIFICATION_GUIDE.md)
 - Zenodo preprint: <https://zenodo.org/records/18907020>
+- Paper-cited result files (`results_submission_full/`): replication bundle `aom_replication_bundle_fast8h.tar.gz` attached to release [v1.0.2](https://github.com/Sapphire-Bridge/AoM_CPT/releases/tag/v1.0.2)
+- Materials for the first revision (rescored items, Appendix F check): [`revision_R1/`](revision_R1/README.md)
 - Abstract: in the manuscript section `Abstract` near the top of the file
 
 ## Canonical paper reproduction

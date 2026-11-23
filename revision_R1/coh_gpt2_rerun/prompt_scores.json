@@ -1,0 +1,6242 @@
+[
+  {
+    "id": "possession-16__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0144507884979248
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.1060781478881836
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5950236320495605
+      },
+      {
+        "text": " street.",
+        "score": -4.085953712463379
+      }
+    ],
+    "margin": 1.7802242040634155
+  },
+  {
+    "id": "possession-16__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 33,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.9537090063095093
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.8202903270721436
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.640413522720337
+      },
+      {
+        "text": " street.",
+        "score": -3.6889989376068115
+      }
+    ],
+    "margin": 0.7777065634727478
+  },
+  {
+    "id": "possession-16__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.8476974964141846
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.7563743591308594
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.477415084838867
+      },
+      {
+        "text": " street.",
+        "score": -3.782000780105591
+      }
+    ],
+    "margin": 0.827672004699707
+  },
+  {
+    "id": "possession-4__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.078521490097046
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.007248640060425
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.1497936248779297
+      },
+      {
+        "text": " street.",
+        "score": -3.837095022201538
+      }
+    ],
+    "margin": 1.4505592584609985
+  },
+  {
+    "id": "possession-4__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.291430711746216
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.7409274578094482
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4644289016723633
+      },
+      {
+        "text": " street.",
+        "score": -3.551295757293701
+      }
+    ],
+    "margin": 0.4916832447052002
+  },
+  {
+    "id": "possession-4__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.1446295976638794
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.178241491317749
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.032599687576294
+      },
+      {
+        "text": " street.",
+        "score": -3.974000930786133
+      }
+    ],
+    "margin": 1.3418647646903992
+  },
+  {
+    "id": "possession-2__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.4772107601165771
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3816845417022705
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -1.851157307624817
+      },
+      {
+        "text": " street.",
+        "score": -3.8201956748962402
+      }
+    ],
+    "margin": 0.9062288403511047
+  },
+  {
+    "id": "possession-2__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.368338108062744
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.026139497756958
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.2429730892181396
+      },
+      {
+        "text": " street.",
+        "score": -3.5836243629455566
+      }
+    ],
+    "margin": 0.21605992317199707
+  },
+  {
+    "id": "possession-2__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.3255321979522705
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3474881649017334
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.289557456970215
+      },
+      {
+        "text": " street.",
+        "score": -3.9293763637542725
+      }
+    ],
+    "margin": 1.2729567289352417
+  },
+  {
+    "id": "possession-10__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.056675672531128
+      },
+      {
+        "text": " locked drawer.",
+        "score": -1.9587546586990356
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.55588698387146
+      },
+      {
+        "text": " street.",
+        "score": -4.425769805908203
+      }
+    ],
+    "margin": 1.9831132292747498
+  },
+  {
+    "id": "possession-10__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.9568791389465332
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.495687246322632
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.568704128265381
+      },
+      {
+        "text": " street.",
+        "score": -4.131834506988525
+      }
+    ],
+    "margin": 1.1239861249923706
+  },
+  {
+    "id": "possession-10__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.4807437658309937
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.1915557384490967
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.0621654987335205
+      },
+      {
+        "text": " street.",
+        "score": -4.2115983963012695
+      }
+    ],
+    "margin": 1.3007321953773499
+  },
+  {
+    "id": "location-4__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -1.1305631399154663
+      },
+      {
+        "text": " park quietly.",
+        "score": -3.8263351917266846
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -2.030416965484619
+      },
+      {
+        "text": " hotel again.",
+        "score": -2.974782705307007
+      }
+    ],
+    "margin": 0.02415066957473755
+  },
+  {
+    "id": "location-4__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -3.2680983543395996
+      },
+      {
+        "text": " park quietly.",
+        "score": -4.9582109451293945
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -2.882443428039551
+      },
+      {
+        "text": " hotel again.",
+        "score": -3.927471160888672
+      }
+    ],
+    "margin": -0.7081973552703857
+  },
+  {
+    "id": "location-4__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -1.1881392002105713
+      },
+      {
+        "text": " park quietly.",
+        "score": -3.9067413806915283
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -1.9382688999176025
+      },
+      {
+        "text": " hotel again.",
+        "score": -3.1312572956085205
+      }
+    ],
+    "margin": -0.012677192687988281
+  },
+  {
+    "id": "location-11__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -0.7042336463928223
+      },
+      {
+        "text": " station quietly.",
+        "score": -3.5824859142303467
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.1494574546813965
+      },
+      {
+        "text": " home again.",
+        "score": -3.462510347366333
+      }
+    ],
+    "margin": 1.1626241207122803
+  },
+  {
+    "id": "location-11__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -2.954045534133911
+      },
+      {
+        "text": " station quietly.",
+        "score": -4.787578105926514
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.8370461463928223
+      },
+      {
+        "text": " home again.",
+        "score": -3.9653358459472656
+      }
+    ],
+    "margin": 0.030379176139831543
+  },
+  {
+    "id": "location-11__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -0.6813584566116333
+      },
+      {
+        "text": " station quietly.",
+        "score": -3.5784828662872314
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.2375028133392334
+      },
+      {
+        "text": " home again.",
+        "score": -3.543964385986328
+      }
+    ],
+    "margin": 1.2608129382133484
+  },
+  {
+    "id": "multi-constraint-8__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -1.8572543859481812
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -1.7407795190811157
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -2.0135741233825684
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -2.690082550048828
+      }
+    ],
+    "margin": 0.5528113842010498
+  },
+  {
+    "id": "multi-constraint-8__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -3.3019630908966064
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -3.1783244609832764
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -2.9647254943847656
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -3.8651962280273438
+      }
+    ],
+    "margin": 0.17481708526611328
+  },
+  {
+    "id": "multi-constraint-8__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -1.7698335647583008
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -1.6659331321716309
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -2.030487537384033
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -2.6102702617645264
+      }
+    ],
+    "margin": 0.602495551109314
+  },
+  {
+    "id": "entity-state-11__main",
+    "group": "main",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.0209908485412598
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.0534629821777344
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.186137676239014
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.168669700622559
+      }
+    ],
+    "margin": 1.140176773071289
+  },
+  {
+    "id": "entity-state-11__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 23,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2481842041015625
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.324078321456909
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.4574711322784424
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.944286346435547
+      }
+    ],
+    "margin": 0.4147474765777588
+  },
+  {
+    "id": "entity-state-11__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9224720001220703
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.0102107524871826
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.8369243144989014
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.141432762145996
+      }
+    ],
+    "margin": 1.0228371620178223
+  },
+  {
+    "id": "multi-constraint-6__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -1.9702420234680176
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -1.8473037481307983
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -2.210895538330078
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -2.5872271060943604
+      }
+    ],
+    "margin": 0.4902884364128113
+  },
+  {
+    "id": "multi-constraint-6__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -3.0428264141082764
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -3.0109825134277344
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -3.0522356033325195
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -3.2980926036834717
+      }
+    ],
+    "margin": 0.14825963973999023
+  },
+  {
+    "id": "multi-constraint-6__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -2.046008825302124
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -1.8937050104141235
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -2.218398094177246
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -2.6073391437530518
+      }
+    ],
+    "margin": 0.44301170110702515
+  },
+  {
+    "id": "possession-1__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0478274822235107
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.328495740890503
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5116126537323
+      },
+      {
+        "text": " street.",
+        "score": -3.9961657524108887
+      }
+    ],
+    "margin": 1.5657275915145874
+  },
+  {
+    "id": "possession-1__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.5498449802398682
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.5992441177368164
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.948698043823242
+      },
+      {
+        "text": " street.",
+        "score": -3.9856483936309814
+      }
+    ],
+    "margin": 1.3926286697387695
+  },
+  {
+    "id": "possession-1__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.067824125289917
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.191373825073242
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5430140495300293
+      },
+      {
+        "text": " street.",
+        "score": -3.7640814781188965
+      }
+    ],
+    "margin": 1.5239487886428833
+  },
+  {
+    "id": "multi-constraint-15__main",
+    "group": "main",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -1.7629704475402832
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -1.6944280862808228
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -2.054046869277954
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -2.29655122756958
+      }
+    ],
+    "margin": 0.4465997815132141
+  },
+  {
+    "id": "multi-constraint-15__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -3.777616500854492
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -3.581939697265625
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -3.2388980388641357
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -3.852116346359253
+      }
+    ],
+    "margin": -0.13427090644836426
+  },
+  {
+    "id": "multi-constraint-15__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -1.8384870290756226
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -1.7474557161331177
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -2.1391284465789795
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -2.4253599643707275
+      }
+    ],
+    "margin": 0.4892728328704834
+  },
+  {
+    "id": "entity-state-8__main",
+    "group": "main",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.4268455505371094
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2254209518432617
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.931796073913574
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.135041236877441
+      }
+    ],
+    "margin": 0.7072854042053223
+  },
+  {
+    "id": "entity-state-8__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.664842128753662
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.460822820663452
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.6810123920440674
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.919497013092041
+      }
+    ],
+    "margin": 0.23742222785949707
+  },
+  {
+    "id": "entity-state-8__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.468693494796753
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1691133975982666
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.198885917663574
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.221272945404053
+      }
+    ],
+    "margin": 0.8911759853363037
+  },
+  {
+    "id": "location-17__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -1.6708335876464844
+      },
+      {
+        "text": " garage quietly.",
+        "score": -4.539143085479736
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -2.3950555324554443
+      },
+      {
+        "text": " museum again.",
+        "score": -3.1449434757232666
+      }
+    ],
+    "margin": -0.3349888324737549
+  },
+  {
+    "id": "location-17__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -4.971569538116455
+      },
+      {
+        "text": " garage quietly.",
+        "score": -6.585028171539307
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -4.963360786437988
+      },
+      {
+        "text": " museum again.",
+        "score": -5.218383312225342
+      }
+    ],
+    "margin": -0.6874268054962158
+  },
+  {
+    "id": "location-17__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -1.8872554302215576
+      },
+      {
+        "text": " garage quietly.",
+        "score": -4.684493064880371
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -2.446742057800293
+      },
+      {
+        "text": " museum again.",
+        "score": -3.253791093826294
+      }
+    ],
+    "margin": -0.4356076717376709
+  },
+  {
+    "id": "location-9__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -1.8269670009613037
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -4.56305456161499
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -3.5219833850860596
+      },
+      {
+        "text": " studio again.",
+        "score": -3.9859421253204346
+      }
+    ],
+    "margin": 0.5589519739151001
+  },
+  {
+    "id": "location-9__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -5.499940872192383
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -6.808986663818359
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -3.8937370777130127
+      },
+      {
+        "text": " studio again.",
+        "score": -4.141915321350098
+      }
+    ],
+    "margin": -2.136637568473816
+  },
+  {
+    "id": "location-9__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -1.9048300981521606
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -4.59592866897583
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -3.338510513305664
+      },
+      {
+        "text": " studio again.",
+        "score": -3.7881405353546143
+      }
+    ],
+    "margin": 0.3129461407661438
+  },
+  {
+    "id": "entity-state-1__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.104464054107666
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.106668472290039
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.061779499053955
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.1428937911987305
+      }
+    ],
+    "margin": 0.9967703819274902
+  },
+  {
+    "id": "entity-state-1__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2553374767303467
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2452831268310547
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.081745147705078
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.496911525726318
+      }
+    ],
+    "margin": 1.0390180349349976
+  },
+  {
+    "id": "entity-state-1__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.0404398441314697
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.071160316467285
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.5743021965026855
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.588959217071533
+      }
+    ],
+    "margin": 1.525830626487732
+  },
+  {
+    "id": "entity-state-14__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2271194458007812
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.23352313041687
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.854463815689087
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.148706912994385
+      }
+    ],
+    "margin": 0.7712640762329102
+  },
+  {
+    "id": "entity-state-14__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.425128221511841
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.4406707286834717
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.634251594543457
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.376509666442871
+      }
+    ],
+    "margin": 0.5724811553955078
+  },
+  {
+    "id": "entity-state-14__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1194796562194824
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.109170913696289
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.652707576751709
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.715518474578857
+      }
+    ],
+    "margin": 1.5697877407073975
+  },
+  {
+    "id": "possession-12__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.142429232597351
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.159229040145874
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.452073574066162
+      },
+      {
+        "text": " street.",
+        "score": -4.035506725311279
+      }
+    ],
+    "margin": 1.5929610133171082
+  },
+  {
+    "id": "possession-12__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6541922092437744
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.418016195297241
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.8579256534576416
+      },
+      {
+        "text": " street.",
+        "score": -4.026965141296387
+      }
+    ],
+    "margin": 1.4063411951065063
+  },
+  {
+    "id": "possession-12__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.1150436401367188
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.2878267765045166
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4488415718078613
+      },
+      {
+        "text": " street.",
+        "score": -4.327012538909912
+      }
+    ],
+    "margin": 1.686491847038269
+  },
+  {
+    "id": "possession-19__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.357734203338623
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.27036452293396
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.6106882095336914
+      },
+      {
+        "text": " street.",
+        "score": -4.139118194580078
+      }
+    ],
+    "margin": 1.5608538389205933
+  },
+  {
+    "id": "possession-19__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 33,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.5542138814926147
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.584563970565796
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.9038360118865967
+      },
+      {
+        "text": " street.",
+        "score": -4.610764026641846
+      }
+    ],
+    "margin": 1.6879110932350159
+  },
+  {
+    "id": "possession-19__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.3337925672531128
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4866015911102295
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.586977481842041
+      },
+      {
+        "text": " street.",
+        "score": -4.634006977081299
+      }
+    ],
+    "margin": 1.7002951502799988
+  },
+  {
+    "id": "multi-constraint-3__main",
+    "group": "main",
+    "prompt_tokens": 40,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -1.7644327878952026
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -1.7179380655288696
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -1.919838309288025
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -2.3958539962768555
+      }
+    ],
+    "margin": 0.41666072607040405
+  },
+  {
+    "id": "multi-constraint-3__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -3.448218584060669
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -3.361222267150879
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -3.5081787109375
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -3.6810367107391357
+      }
+    ],
+    "margin": 0.18988728523254395
+  },
+  {
+    "id": "multi-constraint-3__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -1.749671459197998
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -1.6942847967147827
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -1.9053822755813599
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -2.3132359981536865
+      }
+    ],
+    "margin": 0.3873310089111328
+  },
+  {
+    "id": "entity-state-18__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.234640121459961
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1520614624023438
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.098320484161377
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.372994422912598
+      }
+    ],
+    "margin": 1.042306661605835
+  },
+  {
+    "id": "entity-state-18__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3675925731658936
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3721187114715576
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.30393123626709
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.089444160461426
+      }
+    ],
+    "margin": 0.3268320560455322
+  },
+  {
+    "id": "entity-state-18__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2394423484802246
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1672170162200928
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.861607551574707
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.324089050292969
+      }
+    ],
+    "margin": 0.8895186185836792
+  },
+  {
+    "id": "possession-7__main",
+    "group": "main",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.006169319152832
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.084760904312134
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.487450122833252
+      },
+      {
+        "text": " street.",
+        "score": -3.9810428619384766
+      }
+    ],
+    "margin": 1.6887813806533813
+  },
+  {
+    "id": "possession-7__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.7283285856246948
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.574878692626953
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.965015411376953
+      },
+      {
+        "text": " street.",
+        "score": -3.989567279815674
+      }
+    ],
+    "margin": 1.3256877064704895
+  },
+  {
+    "id": "possession-7__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0328807830810547
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.2636168003082275
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4570651054382324
+      },
+      {
+        "text": " street.",
+        "score": -4.197320461273193
+      }
+    ],
+    "margin": 1.6789439916610718
+  },
+  {
+    "id": "entity-state-2__main",
+    "group": "main",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.032766819000244
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.065077781677246
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.7061548233032227
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.005492687225342
+      }
+    ],
+    "margin": 0.8069014549255371
+  },
+  {
+    "id": "entity-state-2__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 23,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3824756145477295
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.364804983139038
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.248842477798462
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.6956284046173096
+      }
+    ],
+    "margin": 0.09859514236450195
+  },
+  {
+    "id": "entity-state-2__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.0853166580200195
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.075596570968628
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.955883741378784
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.0142412185668945
+      }
+    ],
+    "margin": 0.9046058654785156
+  },
+  {
+    "id": "multi-constraint-18__main",
+    "group": "main",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -1.727705478668213
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -1.66389799118042
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -1.8955539464950562
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -2.516631841659546
+      }
+    ],
+    "margin": 0.5102911591529846
+  },
+  {
+    "id": "multi-constraint-18__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -3.5957720279693604
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -3.5674655437469482
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -3.00893497467041
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -4.11071252822876
+      }
+    ],
+    "margin": -0.021795034408569336
+  },
+  {
+    "id": "multi-constraint-18__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the gym and found the keys in the drawer.",
+        "score": -1.7414056062698364
+      },
+      {
+        "text": " arrived at the gym and retrieved the keys from the drawer.",
+        "score": -1.678102970123291
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the home and found the keys in the drawer.",
+        "score": -1.954078197479248
+      },
+      {
+        "text": " arrived at the gym and found the keys on the street.",
+        "score": -2.5406644344329834
+      }
+    ],
+    "margin": 0.537617027759552
+  },
+  {
+    "id": "multi-constraint-14__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -1.9501985311508179
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -1.7111396789550781
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -1.924575924873352
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -2.268735885620117
+      }
+    ],
+    "margin": 0.2659868001937866
+  },
+  {
+    "id": "multi-constraint-14__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -3.5309925079345703
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -3.5892412662506104
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -3.166166305541992
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -3.6910769939422607
+      }
+    ],
+    "margin": -0.13149523735046387
+  },
+  {
+    "id": "multi-constraint-14__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -1.8993645906448364
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -1.7296148538589478
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -1.8339420557022095
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -2.3689217567443848
+      }
+    ],
+    "margin": 0.28694218397140503
+  },
+  {
+    "id": "location-3__main",
+    "group": "main",
+    "prompt_tokens": 31,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -1.0663831233978271
+      },
+      {
+        "text": " gym quietly.",
+        "score": -4.004498481750488
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -1.9704508781433105
+      },
+      {
+        "text": " school again.",
+        "score": -2.8270580768585205
+      }
+    ],
+    "margin": -0.1366863250732422
+  },
+  {
+    "id": "location-3__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -4.517184257507324
+      },
+      {
+        "text": " gym quietly.",
+        "score": -6.379696369171143
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -3.6129746437072754
+      },
+      {
+        "text": " school again.",
+        "score": -4.085599422454834
+      }
+    ],
+    "margin": -1.5991532802581787
+  },
+  {
+    "id": "location-3__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 31,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -0.9807780385017395
+      },
+      {
+        "text": " gym quietly.",
+        "score": -3.91280460357666
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -2.0863749980926514
+      },
+      {
+        "text": " school again.",
+        "score": -2.889876127243042
+      }
+    ],
+    "margin": 0.04133424162864685
+  },
+  {
+    "id": "entity-state-7__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9868764877319336
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1005656719207764
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.024139881134033
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.1456298828125
+      }
+    ],
+    "margin": 1.0411638021469116
+  },
+  {
+    "id": "entity-state-7__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1822218894958496
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.317148447036743
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.4374189376831055
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.9983134269714355
+      }
+    ],
+    "margin": 0.4681810140609741
+  },
+  {
+    "id": "entity-state-7__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9066717624664307
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.038438081741333
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.9808971881866455
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.264771938323975
+      }
+    ],
+    "margin": 1.1502796411514282
+  },
+  {
+    "id": "entity-state-10__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3509113788604736
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2228896617889404
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.523729085922241
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.9920897483825684
+      }
+    ],
+    "margin": 0.47100889682769775
+  },
+  {
+    "id": "entity-state-10__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.6031761169433594
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.477626085281372
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.180615186691284
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.7427501678466797
+      }
+    ],
+    "margin": -0.07871842384338379
+  },
+  {
+    "id": "entity-state-10__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3572514057159424
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2207565307617188
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.7757813930511475
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.105362892150879
+      }
+    ],
+    "margin": 0.6515681743621826
+  },
+  {
+    "id": "multi-constraint-0__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -1.970903754234314
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -1.80281400680542
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -2.1712801456451416
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -2.6040713787078857
+      }
+    ],
+    "margin": 0.5008168816566467
+  },
+  {
+    "id": "multi-constraint-0__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -3.4786834716796875
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -3.368328809738159
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -3.2374379634857178
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -3.870321035385132
+      }
+    ],
+    "margin": 0.13037335872650146
+  },
+  {
+    "id": "multi-constraint-0__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -1.8770886659622192
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -1.7485108375549316
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -2.112945318222046
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -2.635795831680298
+      }
+    ],
+    "margin": 0.5615708231925964
+  },
+  {
+    "id": "location-6__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -1.9281761646270752
+      },
+      {
+        "text": " market quietly.",
+        "score": -4.3534111976623535
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -2.4673781394958496
+      },
+      {
+        "text": " factory again.",
+        "score": -2.952611207962036
+      }
+    ],
+    "margin": -0.4307990074157715
+  },
+  {
+    "id": "location-6__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -5.0883684158325195
+      },
+      {
+        "text": " market quietly.",
+        "score": -6.360776901245117
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -5.163973331451416
+      },
+      {
+        "text": " factory again.",
+        "score": -5.026480197906494
+      }
+    ],
+    "margin": -0.6293458938598633
+  },
+  {
+    "id": "location-6__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -1.7823041677474976
+      },
+      {
+        "text": " market quietly.",
+        "score": -4.257406234741211
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -2.4188244342803955
+      },
+      {
+        "text": " factory again.",
+        "score": -2.9886350631713867
+      }
+    ],
+    "margin": -0.31612545251846313
+  },
+  {
+    "id": "entity-state-15__main",
+    "group": "main",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.990755558013916
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.185662031173706
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.920837640762329
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.102486610412598
+      }
+    ],
+    "margin": 0.9234533309936523
+  },
+  {
+    "id": "entity-state-15__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1776421070098877
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.44797420501709
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.7557084560394287
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.299836158752441
+      }
+    ],
+    "margin": 0.7149641513824463
+  },
+  {
+    "id": "entity-state-15__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.0025277137756348
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2203738689422607
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.494140148162842
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.384687900543213
+      }
+    ],
+    "margin": 1.3279632329940796
+  },
+  {
+    "id": "possession-15__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0070714950561523
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.399885654449463
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.455670118331909
+      },
+      {
+        "text": " street.",
+        "score": -4.245832920074463
+      }
+    ],
+    "margin": 1.6472729444503784
+  },
+  {
+    "id": "possession-15__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.2138490676879883
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.2804949283599854
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.950376272201538
+      },
+      {
+        "text": " street.",
+        "score": -3.9590258598327637
+      }
+    ],
+    "margin": 0.7075290679931641
+  },
+  {
+    "id": "possession-15__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.2819228172302246
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.504732370376587
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5047638416290283
+      },
+      {
+        "text": " street.",
+        "score": -4.040192604064941
+      }
+    ],
+    "margin": 1.379150629043579
+  },
+  {
+    "id": "multi-constraint-11__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -1.8054383993148804
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -1.8556652069091797
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -1.9845775365829468
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -2.1975882053375244
+      }
+    ],
+    "margin": 0.26053106784820557
+  },
+  {
+    "id": "multi-constraint-11__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -3.6289169788360596
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -3.808161973953247
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -3.3193295001983643
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -3.7782928943634033
+      }
+    ],
+    "margin": -0.16972827911376953
+  },
+  {
+    "id": "multi-constraint-11__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -1.771341323852539
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -1.8220419883728027
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -1.8837299346923828
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -2.3455445766448975
+      }
+    ],
+    "margin": 0.31794559955596924
+  },
+  {
+    "id": "location-5__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -1.2504892349243164
+      },
+      {
+        "text": " theater quietly.",
+        "score": -3.7733752727508545
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -2.525055170059204
+      },
+      {
+        "text": " clinic again.",
+        "score": -3.236826181411743
+      }
+    ],
+    "margin": 0.3690084218978882
+  },
+  {
+    "id": "location-5__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -4.399287700653076
+      },
+      {
+        "text": " theater quietly.",
+        "score": -5.5911688804626465
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -2.945773124694824
+      },
+      {
+        "text": " clinic again.",
+        "score": -3.7177202701568604
+      }
+    ],
+    "margin": -1.663481593132019
+  },
+  {
+    "id": "location-5__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -1.1880736351013184
+      },
+      {
+        "text": " theater quietly.",
+        "score": -3.7221601009368896
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -2.732177734375
+      },
+      {
+        "text": " clinic again.",
+        "score": -3.268998861312866
+      }
+    ],
+    "margin": 0.5454714298248291
+  },
+  {
+    "id": "multi-constraint-17__main",
+    "group": "main",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -1.956456184387207
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -1.7300394773483276
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -1.995114803314209
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -2.592816114425659
+      }
+    ],
+    "margin": 0.45071762800216675
+  },
+  {
+    "id": "multi-constraint-17__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -3.4797351360321045
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -3.1960651874542236
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -3.0130455493927
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -3.983684539794922
+      }
+    ],
+    "margin": 0.16046488285064697
+  },
+  {
+    "id": "multi-constraint-17__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -1.8995031118392944
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -1.6653361320495605
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -1.95431387424469
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -2.5092194080352783
+      }
+    ],
+    "margin": 0.44934701919555664
+  },
+  {
+    "id": "entity-state-0__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9492640495300293
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.100770950317383
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.8241097927093506
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.118412971496582
+      }
+    ],
+    "margin": 0.9462438821792603
+  },
+  {
+    "id": "entity-state-0__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 23,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1762495040893555
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2547683715820312
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.465052843093872
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.9808363914489746
+      }
+    ],
+    "margin": 0.50743567943573
+  },
+  {
+    "id": "entity-state-0__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.123562812805176
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.152149200439453
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.234127521514893
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.100196838378906
+      }
+    ],
+    "margin": 1.029306173324585
+  },
+  {
+    "id": "entity-state-3__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.298480987548828
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1457204818725586
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.427863597869873
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.388260364532471
+      }
+    ],
+    "margin": 1.1859612464904785
+  },
+  {
+    "id": "entity-state-3__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3856239318847656
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2820987701416016
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.222400188446045
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.58660888671875
+      }
+    ],
+    "margin": 1.0706431865692139
+  },
+  {
+    "id": "entity-state-3__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 33,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.200246810913086
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.121882677078247
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.6073317527771
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.650783538818359
+      }
+    ],
+    "margin": 1.467992901802063
+  },
+  {
+    "id": "entity-state-16__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2541205883026123
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.091925859451294
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.336116790771484
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.532422065734863
+      }
+    ],
+    "margin": 1.2612462043762207
+  },
+  {
+    "id": "entity-state-16__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.3944244384765625
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3009707927703857
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.5207595825195312
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.211341381072998
+      }
+    ],
+    "margin": 0.5183528661727905
+  },
+  {
+    "id": "entity-state-16__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1285667419433594
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.04870867729187
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.9538395404815674
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.512783527374268
+      }
+    ],
+    "margin": 1.1446738243103027
+  },
+  {
+    "id": "multi-constraint-16__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -1.9096752405166626
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -1.7729063034057617
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -2.1630547046661377
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -2.523803472518921
+      }
+    ],
+    "margin": 0.5021383166313171
+  },
+  {
+    "id": "multi-constraint-16__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -3.0418784618377686
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -3.0167529582977295
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -3.0569276809692383
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -3.2947018146514893
+      }
+    ],
+    "margin": 0.14649903774261475
+  },
+  {
+    "id": "multi-constraint-16__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the station and found the camera in the drawer.",
+        "score": -2.003000497817993
+      },
+      {
+        "text": " arrived at the station and retrieved the camera from the drawer.",
+        "score": -1.8310233354568481
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the studio and found the camera in the drawer.",
+        "score": -2.1852521896362305
+      },
+      {
+        "text": " arrived at the station and found the camera on the street.",
+        "score": -2.558915853500366
+      }
+    ],
+    "margin": 0.4550721049308777
+  },
+  {
+    "id": "location-8__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -1.5788416862487793
+      },
+      {
+        "text": " garden quietly.",
+        "score": -4.30916166305542
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -2.8382186889648438
+      },
+      {
+        "text": " kitchen again.",
+        "score": -3.3277294635772705
+      }
+    ],
+    "margin": 0.13897240161895752
+  },
+  {
+    "id": "location-8__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -3.545320510864258
+      },
+      {
+        "text": " garden quietly.",
+        "score": -5.566873550415039
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -3.185723304748535
+      },
+      {
+        "text": " kitchen again.",
+        "score": -3.9428889751434326
+      }
+    ],
+    "margin": -0.9917908906936646
+  },
+  {
+    "id": "location-8__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -1.5688652992248535
+      },
+      {
+        "text": " garden quietly.",
+        "score": -4.16476583480835
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -2.5705554485321045
+      },
+      {
+        "text": " kitchen again.",
+        "score": -3.0964081287384033
+      }
+    ],
+    "margin": -0.033333778381347656
+  },
+  {
+    "id": "multi-constraint-19__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -1.9950647354125977
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -1.8332163095474243
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -1.8980664014816284
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -2.337071418762207
+      }
+    ],
+    "margin": 0.20342838764190674
+  },
+  {
+    "id": "multi-constraint-19__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -3.396326780319214
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -3.357614517211914
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -3.0731871128082275
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -3.5902719497680664
+      }
+    ],
+    "margin": -0.04524111747741699
+  },
+  {
+    "id": "multi-constraint-19__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -1.753632664680481
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -1.688990592956543
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -1.6571062803268433
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -2.1461143493652344
+      }
+    ],
+    "margin": 0.18029868602752686
+  },
+  {
+    "id": "possession-8__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.741663932800293
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.485640048980713
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5386128425598145
+      },
+      {
+        "text": " street.",
+        "score": -4.214010715484619
+      }
+    ],
+    "margin": 1.2626597881317139
+  },
+  {
+    "id": "possession-8__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.8747270107269287
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.70383358001709
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -3.139880657196045
+      },
+      {
+        "text": " street.",
+        "score": -3.954167604446411
+      }
+    ],
+    "margin": 0.25774383544921875
+  },
+  {
+    "id": "possession-8__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.2958300113677979
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4334654808044434
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.534364700317383
+      },
+      {
+        "text": " street.",
+        "score": -4.759962558746338
+      }
+    ],
+    "margin": 1.7825158834457397
+  },
+  {
+    "id": "entity-state-13__main",
+    "group": "main",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2295124530792236
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1422674655914307
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.8639509677886963
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.181468486785889
+      }
+    ],
+    "margin": 0.8368197679519653
+  },
+  {
+    "id": "entity-state-13__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.45155668258667
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3726913928985596
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.5830490589141846
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.820039749145508
+      }
+    ],
+    "margin": 0.28942036628723145
+  },
+  {
+    "id": "entity-state-13__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.4356205463409424
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.160642623901367
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.148670196533203
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.216578006744385
+      }
+    ],
+    "margin": 0.8844925165176392
+  },
+  {
+    "id": "possession-0__main",
+    "group": "main",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -0.9692866802215576
+      },
+      {
+        "text": " locked drawer.",
+        "score": -1.925652027130127
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.613947629928589
+      },
+      {
+        "text": " street.",
+        "score": -4.448983669281006
+      }
+    ],
+    "margin": 2.083996295928955
+  },
+  {
+    "id": "possession-0__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 33,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.9528955221176147
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.6673967838287354
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.8756439685821533
+      },
+      {
+        "text": " street.",
+        "score": -4.056563377380371
+      }
+    ],
+    "margin": 1.1559575200080872
+  },
+  {
+    "id": "possession-0__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6346070766448975
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.492223024368286
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4844470024108887
+      },
+      {
+        "text": " street.",
+        "score": -4.092086315155029
+      }
+    ],
+    "margin": 1.2248516082763672
+  },
+  {
+    "id": "location-19__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -1.871031403541565
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -4.779017925262451
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -3.6857333183288574
+      },
+      {
+        "text": " studio again.",
+        "score": -4.1704888343811035
+      }
+    ],
+    "margin": 0.6030864119529724
+  },
+  {
+    "id": "location-19__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -4.902548789978027
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -6.768276691436768
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -4.010004997253418
+      },
+      {
+        "text": " studio again.",
+        "score": -4.515699863433838
+      }
+    ],
+    "margin": -1.5725603103637695
+  },
+  {
+    "id": "location-19__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " harbor.",
+        "score": -1.6102111339569092
+      },
+      {
+        "text": " harbor quietly.",
+        "score": -4.7138991355896
+      }
+    ],
+    "invalid": [
+      {
+        "text": " studio.",
+        "score": -4.168036460876465
+      },
+      {
+        "text": " studio again.",
+        "score": -4.560718059539795
+      }
+    ],
+    "margin": 1.2023221254348755
+  },
+  {
+    "id": "location-0__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -1.1060982942581177
+      },
+      {
+        "text": " airport quietly.",
+        "score": -3.9824886322021484
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.308115005493164
+      },
+      {
+        "text": " office again.",
+        "score": -3.0516929626464844
+      }
+    ],
+    "margin": 0.13561052083969116
+  },
+  {
+    "id": "location-0__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -3.9381394386291504
+      },
+      {
+        "text": " airport quietly.",
+        "score": -5.930992603302002
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.2648115158081055
+      },
+      {
+        "text": " office again.",
+        "score": -3.3180339336395264
+      }
+    ],
+    "margin": -2.1431432962417603
+  },
+  {
+    "id": "location-0__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -1.1452369689941406
+      },
+      {
+        "text": " airport quietly.",
+        "score": -4.072575092315674
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.443723440170288
+      },
+      {
+        "text": " office again.",
+        "score": -3.2284650802612305
+      }
+    ],
+    "margin": 0.22718822956085205
+  },
+  {
+    "id": "multi-constraint-9__main",
+    "group": "main",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -1.7161065340042114
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -1.6486653089523315
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -1.6015633344650269
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -2.125312089920044
+      }
+    ],
+    "margin": 0.18105179071426392
+  },
+  {
+    "id": "multi-constraint-9__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -3.4789555072784424
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -3.3892688751220703
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -3.0753390789031982
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -3.7552974224090576
+      }
+    ],
+    "margin": -0.018793940544128418
+  },
+  {
+    "id": "multi-constraint-9__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the park and found the wallet in the drawer.",
+        "score": -1.8802589178085327
+      },
+      {
+        "text": " arrived at the park and retrieved the wallet from the drawer.",
+        "score": -1.6966886520385742
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the library and found the wallet in the drawer.",
+        "score": -1.7326369285583496
+      },
+      {
+        "text": " arrived at the park and found the wallet on the street.",
+        "score": -2.345939874649048
+      }
+    ],
+    "margin": 0.25081461668014526
+  },
+  {
+    "id": "location-2__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -1.4380675554275513
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -3.7898502349853516
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -2.6864752769470215
+      },
+      {
+        "text": " library again.",
+        "score": -3.2946155071258545
+      }
+    ],
+    "margin": 0.3765864968299866
+  },
+  {
+    "id": "location-2__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -3.391772985458374
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -5.0606303215026855
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -3.2530624866485596
+      },
+      {
+        "text": " library again.",
+        "score": -3.976766347885132
+      }
+    ],
+    "margin": -0.6112872362136841
+  },
+  {
+    "id": "location-2__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -1.566346526145935
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -3.731065511703491
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -2.684666156768799
+      },
+      {
+        "text": " library again.",
+        "score": -3.198725700378418
+      }
+    ],
+    "margin": 0.29298990964889526
+  },
+  {
+    "id": "possession-14__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0977673530578613
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3090245723724365
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -1.9837841987609863
+      },
+      {
+        "text": " street.",
+        "score": -4.1475510597229
+      }
+    ],
+    "margin": 1.3622716665267944
+  },
+  {
+    "id": "possession-14__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.3984036445617676
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.9600698947906494
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.3323287963867188
+      },
+      {
+        "text": " street.",
+        "score": -3.716428756713867
+      }
+    ],
+    "margin": 0.3451420068740845
+  },
+  {
+    "id": "possession-14__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.073196530342102
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.2172350883483887
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -1.9115519523620605
+      },
+      {
+        "text": " street.",
+        "score": -3.9632503986358643
+      }
+    ],
+    "margin": 1.292185366153717
+  },
+  {
+    "id": "location-15__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -1.1984699964523315
+      },
+      {
+        "text": " theater quietly.",
+        "score": -3.6416971683502197
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -2.8638501167297363
+      },
+      {
+        "text": " clinic again.",
+        "score": -3.6277058124542236
+      }
+    ],
+    "margin": 0.8256943821907043
+  },
+  {
+    "id": "location-15__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -4.1190338134765625
+      },
+      {
+        "text": " theater quietly.",
+        "score": -5.378311634063721
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -3.699298858642578
+      },
+      {
+        "text": " clinic again.",
+        "score": -4.4414167404174805
+      }
+    ],
+    "margin": -0.6783149242401123
+  },
+  {
+    "id": "location-15__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " theater.",
+        "score": -1.2067067623138428
+      },
+      {
+        "text": " theater quietly.",
+        "score": -3.6309280395507812
+      }
+    ],
+    "invalid": [
+      {
+        "text": " clinic.",
+        "score": -2.6668267250061035
+      },
+      {
+        "text": " clinic again.",
+        "score": -3.401914358139038
+      }
+    ],
+    "margin": 0.6155531406402588
+  },
+  {
+    "id": "location-10__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -1.2517192363739014
+      },
+      {
+        "text": " airport quietly.",
+        "score": -4.1055908203125
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.2904672622680664
+      },
+      {
+        "text": " office again.",
+        "score": -3.205240249633789
+      }
+    ],
+    "margin": 0.06919872760772705
+  },
+  {
+    "id": "location-10__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -4.377240180969238
+      },
+      {
+        "text": " airport quietly.",
+        "score": -6.260602951049805
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.280432939529419
+      },
+      {
+        "text": " office again.",
+        "score": -3.369021415710449
+      }
+    ],
+    "margin": -2.4941943883895874
+  },
+  {
+    "id": "location-10__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " airport.",
+        "score": -1.2659072875976562
+      },
+      {
+        "text": " airport quietly.",
+        "score": -4.0583930015563965
+      }
+    ],
+    "invalid": [
+      {
+        "text": " office.",
+        "score": -2.3474831581115723
+      },
+      {
+        "text": " office again.",
+        "score": -3.087503433227539
+      }
+    ],
+    "margin": 0.0553431510925293
+  },
+  {
+    "id": "location-1__main",
+    "group": "main",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -0.6652265787124634
+      },
+      {
+        "text": " station quietly.",
+        "score": -3.637521505355835
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.208164930343628
+      },
+      {
+        "text": " home again.",
+        "score": -3.683271646499634
+      }
+    ],
+    "margin": 1.2943442463874817
+  },
+  {
+    "id": "location-1__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -2.8091466426849365
+      },
+      {
+        "text": " station quietly.",
+        "score": -4.890902042388916
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.2673439979553223
+      },
+      {
+        "text": " home again.",
+        "score": -3.795607566833496
+      }
+    ],
+    "margin": -0.3185485601425171
+  },
+  {
+    "id": "location-1__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " station.",
+        "score": -0.6501846313476562
+      },
+      {
+        "text": " station quietly.",
+        "score": -3.5937721729278564
+      }
+    ],
+    "invalid": [
+      {
+        "text": " home.",
+        "score": -3.24050235748291
+      },
+      {
+        "text": " home again.",
+        "score": -3.5641729831695557
+      }
+    ],
+    "margin": 1.2803592681884766
+  },
+  {
+    "id": "possession-3__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.7737834453582764
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.756983757019043
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.1366524696350098
+      },
+      {
+        "text": " street.",
+        "score": -3.676082134246826
+      }
+    ],
+    "margin": 0.6409837007522583
+  },
+  {
+    "id": "possession-3__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.7900912761688232
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.4915218353271484
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.2168378829956055
+      },
+      {
+        "text": " street.",
+        "score": -3.2538976669311523
+      }
+    ],
+    "margin": -0.40543878078460693
+  },
+  {
+    "id": "possession-3__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.4137704372406006
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3976476192474365
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.2676587104797363
+      },
+      {
+        "text": " street.",
+        "score": -3.98486328125
+      }
+    ],
+    "margin": 1.2205519676208496
+  },
+  {
+    "id": "entity-state-4__main",
+    "group": "main",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2010178565979004
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.176532506942749
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.8635876178741455
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.2653303146362305
+      }
+    ],
+    "margin": 0.8756837844848633
+  },
+  {
+    "id": "entity-state-4__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.531733989715576
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.5207507610321045
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.1209590435028076
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.8670928478240967
+      }
+    ],
+    "margin": -0.032216429710388184
+  },
+  {
+    "id": "entity-state-4__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.232788562774658
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2221744060516357
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.601822853088379
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.145265102386475
+      }
+    ],
+    "margin": 0.6460624933242798
+  },
+  {
+    "id": "possession-6__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -0.9775872826576233
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.073730707168579
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5649032592773438
+      },
+      {
+        "text": " street.",
+        "score": -4.187408447265625
+      }
+    ],
+    "margin": 1.8504968583583832
+  },
+  {
+    "id": "possession-6__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.7119224071502686
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.5710551738739014
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.61215877532959
+      },
+      {
+        "text": " street.",
+        "score": -4.033912181854248
+      }
+    ],
+    "margin": 1.181546688079834
+  },
+  {
+    "id": "possession-6__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.2429393529891968
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3398921489715576
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4820117950439453
+      },
+      {
+        "text": " street.",
+        "score": -4.211235046386719
+      }
+    ],
+    "margin": 1.5552076697349548
+  },
+  {
+    "id": "entity-state-6__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.316446304321289
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2766904830932617
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.43181848526001
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.41373348236084
+      }
+    ],
+    "margin": 1.1262075901031494
+  },
+  {
+    "id": "entity-state-6__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.389073133468628
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3767893314361572
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.6757307052612305
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.090329170227051
+      }
+    ],
+    "margin": 0.500098705291748
+  },
+  {
+    "id": "entity-state-6__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.100714683532715
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.0890305042266846
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.909562349319458
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.481344699859619
+      }
+    ],
+    "margin": 1.1005809307098389
+  },
+  {
+    "id": "entity-state-19__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1090471744537354
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.0868332386016846
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.278381824493408
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.595719337463379
+      }
+    ],
+    "margin": 1.3391103744506836
+  },
+  {
+    "id": "entity-state-19__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2743263244628906
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3114137649536133
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.54315185546875
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.1525468826293945
+      }
+    ],
+    "margin": 0.5549793243408203
+  },
+  {
+    "id": "entity-state-19__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9874420166015625
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.0436058044433594
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.926144599914551
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.542664051055908
+      }
+    ],
+    "margin": 1.2188804149627686
+  },
+  {
+    "id": "entity-state-9__main",
+    "group": "main",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.0723159313201904
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1151139736175537
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.032305717468262
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.096270561218262
+      }
+    ],
+    "margin": 0.9705731868743896
+  },
+  {
+    "id": "entity-state-9__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.476306200027466
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.5048606395721436
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.7726848125457764
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.874394178390503
+      }
+    ],
+    "margin": 0.33295607566833496
+  },
+  {
+    "id": "entity-state-9__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2066121101379395
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.2085752487182617
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.42323637008667
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.153364181518555
+      }
+    ],
+    "margin": 1.0807065963745117
+  },
+  {
+    "id": "possession-17__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.1214113235473633
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.271824598312378
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.631976842880249
+      },
+      {
+        "text": " street.",
+        "score": -4.140821933746338
+      }
+    ],
+    "margin": 1.6897814273834229
+  },
+  {
+    "id": "possession-17__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6204426288604736
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.603050947189331
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.9081454277038574
+      },
+      {
+        "text": " street.",
+        "score": -3.976569414138794
+      }
+    ],
+    "margin": 1.3306106328964233
+  },
+  {
+    "id": "possession-17__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.1220066547393799
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.0862622261047363
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.6533665657043457
+      },
+      {
+        "text": " street.",
+        "score": -3.9322636127471924
+      }
+    ],
+    "margin": 1.688680648803711
+  },
+  {
+    "id": "multi-constraint-12__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -1.7751513719558716
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -1.7631540298461914
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -1.9528025388717651
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -2.3388848304748535
+      }
+    ],
+    "margin": 0.37669098377227783
+  },
+  {
+    "id": "multi-constraint-12__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -3.483966827392578
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -3.498143196105957
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -3.677938461303711
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -3.655714988708496
+      }
+    ],
+    "margin": 0.17577171325683594
+  },
+  {
+    "id": "multi-constraint-12__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -1.6128920316696167
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -1.658896803855896
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -1.9078031778335571
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -2.1348798274993896
+      }
+    ],
+    "margin": 0.38544708490371704
+  },
+  {
+    "id": "multi-constraint-13__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -1.728366494178772
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -1.76414954662323
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -1.9318591356277466
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -2.3586080074310303
+      }
+    ],
+    "margin": 0.39897555112838745
+  },
+  {
+    "id": "multi-constraint-13__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -3.3066093921661377
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -3.3186066150665283
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -3.395578622817993
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -3.4549362659454346
+      }
+    ],
+    "margin": 0.11264944076538086
+  },
+  {
+    "id": "multi-constraint-13__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the garden and found the ring in the drawer.",
+        "score": -1.7227253913879395
+      },
+      {
+        "text": " arrived at the garden and retrieved the ring from the drawer.",
+        "score": -1.8229726552963257
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the factory and found the ring in the drawer.",
+        "score": -1.957123875617981
+      },
+      {
+        "text": " arrived at the garden and found the ring on the street.",
+        "score": -2.378939390182495
+      }
+    ],
+    "margin": 0.39518260955810547
+  },
+  {
+    "id": "multi-constraint-10__main",
+    "group": "main",
+    "prompt_tokens": 39,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -1.9145411252975464
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -1.7684632539749146
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -2.1932013034820557
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -2.574944496154785
+      }
+    ],
+    "margin": 0.5425707101821899
+  },
+  {
+    "id": "multi-constraint-10__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -3.3982791900634766
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -3.2970941066741943
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -3.141474485397339
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -3.798351287841797
+      }
+    ],
+    "margin": 0.12222623825073242
+  },
+  {
+    "id": "multi-constraint-10__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the theater and found the phone in the drawer.",
+        "score": -2.038444757461548
+      },
+      {
+        "text": " arrived at the theater and retrieved the phone from the drawer.",
+        "score": -1.8328877687454224
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the school and found the phone in the drawer.",
+        "score": -2.2336723804473877
+      },
+      {
+        "text": " arrived at the theater and found the phone on the street.",
+        "score": -2.66375470161438
+      }
+    ],
+    "margin": 0.5130472779273987
+  },
+  {
+    "id": "location-14__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -1.352540135383606
+      },
+      {
+        "text": " park quietly.",
+        "score": -4.083436489105225
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -1.8199396133422852
+      },
+      {
+        "text": " hotel again.",
+        "score": -2.8964662551879883
+      }
+    ],
+    "margin": -0.35978537797927856
+  },
+  {
+    "id": "location-14__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -3.9112563133239746
+      },
+      {
+        "text": " park quietly.",
+        "score": -5.478805065155029
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -3.0740370750427246
+      },
+      {
+        "text": " hotel again.",
+        "score": -3.960855484008789
+      }
+    ],
+    "margin": -1.1775844097137451
+  },
+  {
+    "id": "location-14__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " park.",
+        "score": -1.4123680591583252
+      },
+      {
+        "text": " park quietly.",
+        "score": -4.043776035308838
+      }
+    ],
+    "invalid": [
+      {
+        "text": " hotel.",
+        "score": -1.9825544357299805
+      },
+      {
+        "text": " hotel again.",
+        "score": -2.9262216091156006
+      }
+    ],
+    "margin": -0.273684024810791
+  },
+  {
+    "id": "possession-18__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6362296342849731
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4638030529022217
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -1.9550817012786865
+      },
+      {
+        "text": " street.",
+        "score": -4.284051418304443
+      }
+    ],
+    "margin": 1.0695502161979675
+  },
+  {
+    "id": "possession-18__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.6929500102996826
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.693150281906128
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.572481870651245
+      },
+      {
+        "text": " street.",
+        "score": -3.978816270828247
+      }
+    ],
+    "margin": 0.08259892463684082
+  },
+  {
+    "id": "possession-18__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.185738444328308
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4740793704986572
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.4991748332977295
+      },
+      {
+        "text": " street.",
+        "score": -4.866823196411133
+      }
+    ],
+    "margin": 1.8530901074409485
+  },
+  {
+    "id": "location-12__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -1.6585768461227417
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -3.7715768814086914
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -2.8087000846862793
+      },
+      {
+        "text": " library again.",
+        "score": -3.2432548999786377
+      }
+    ],
+    "margin": 0.31090062856674194
+  },
+  {
+    "id": "location-12__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -4.313648223876953
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -5.46910285949707
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -3.262327194213867
+      },
+      {
+        "text": " library again.",
+        "score": -3.756114959716797
+      }
+    ],
+    "margin": -1.3821544647216797
+  },
+  {
+    "id": "location-12__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " cafe.",
+        "score": -1.5954653024673462
+      },
+      {
+        "text": " cafe quietly.",
+        "score": -3.795091390609741
+      }
+    ],
+    "invalid": [
+      {
+        "text": " library.",
+        "score": -2.5497710704803467
+      },
+      {
+        "text": " library again.",
+        "score": -3.25026535987854
+      }
+    ],
+    "margin": 0.20473986864089966
+  },
+  {
+    "id": "entity-state-12__main",
+    "group": "main",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.271437168121338
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.1872122287750244
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.935350179672241
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.015659332275391
+      }
+    ],
+    "margin": 0.7461800575256348
+  },
+  {
+    "id": "entity-state-12__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.6178085803985596
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.5525293350219727
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.224414825439453
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.7108428478240967
+      }
+    ],
+    "margin": -0.11754012107849121
+  },
+  {
+    "id": "entity-state-12__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.2738208770751953
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.192699432373047
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.6827173233032227
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -3.89497709274292
+      }
+    ],
+    "margin": 0.5555870532989502
+  },
+  {
+    "id": "multi-constraint-7__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -1.8082305192947388
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -1.6354514360427856
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -1.8754056692123413
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -2.4387409687042236
+      }
+    ],
+    "margin": 0.43523234128952026
+  },
+  {
+    "id": "multi-constraint-7__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -3.3023316860198975
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -3.0327529907226562
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -2.858588933944702
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -3.780864715576172
+      }
+    ],
+    "margin": 0.15218448638916016
+  },
+  {
+    "id": "multi-constraint-7__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the cafe and found the notebook in the drawer.",
+        "score": -1.9057422876358032
+      },
+      {
+        "text": " arrived at the cafe and retrieved the notebook from the drawer.",
+        "score": -1.734038233757019
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the office and found the notebook in the drawer.",
+        "score": -1.9002184867858887
+      },
+      {
+        "text": " arrived at the cafe and found the notebook on the street.",
+        "score": -2.5458242893218994
+      }
+    ],
+    "margin": 0.4031311273574829
+  },
+  {
+    "id": "location-16__main",
+    "group": "main",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -2.0358810424804688
+      },
+      {
+        "text": " market quietly.",
+        "score": -4.442063808441162
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -2.661569595336914
+      },
+      {
+        "text": " factory again.",
+        "score": -3.2971391677856445
+      }
+    ],
+    "margin": -0.25961804389953613
+  },
+  {
+    "id": "location-16__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -5.007577419281006
+      },
+      {
+        "text": " market quietly.",
+        "score": -6.254319667816162
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -4.8026909828186035
+      },
+      {
+        "text": " factory again.",
+        "score": -4.993686199188232
+      }
+    ],
+    "margin": -0.732759952545166
+  },
+  {
+    "id": "location-16__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " market.",
+        "score": -2.359921932220459
+      },
+      {
+        "text": " market quietly.",
+        "score": -4.593708038330078
+      }
+    ],
+    "invalid": [
+      {
+        "text": " factory.",
+        "score": -2.7565388679504395
+      },
+      {
+        "text": " factory again.",
+        "score": -3.215020179748535
+      }
+    ],
+    "margin": -0.49103546142578125
+  },
+  {
+    "id": "entity-state-17__main",
+    "group": "main",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.9910945892333984
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.086723566055298
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.325782775878906
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.348349571228027
+      }
+    ],
+    "margin": 1.2981570959091187
+  },
+  {
+    "id": "entity-state-17__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 24,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.1788926124572754
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.304086923599243
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.607358932495117
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.064009666442871
+      }
+    ],
+    "margin": 0.5941945314407349
+  },
+  {
+    "id": "entity-state-17__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -2.8883767127990723
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.041654586791992
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.9701712131500244
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.275792121887207
+      }
+    ],
+    "margin": 1.1579660177230835
+  },
+  {
+    "id": "multi-constraint-4__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -1.9188661575317383
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -1.6934595108032227
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -1.9224141836166382
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -2.2655038833618164
+      }
+    ],
+    "margin": 0.2877961993217468
+  },
+  {
+    "id": "multi-constraint-4__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -3.611403703689575
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -3.6844775676727295
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -3.327873945236206
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -3.7284088134765625
+      }
+    ],
+    "margin": -0.11979925632476807
+  },
+  {
+    "id": "multi-constraint-4__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the harbor and found the letter in the drawer.",
+        "score": -1.8991585969924927
+      },
+      {
+        "text": " arrived at the harbor and retrieved the letter from the drawer.",
+        "score": -1.696197509765625
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the museum and found the letter in the drawer.",
+        "score": -1.8592219352722168
+      },
+      {
+        "text": " arrived at the harbor and found the letter on the street.",
+        "score": -2.348422050476074
+      }
+    ],
+    "margin": 0.30614393949508667
+  },
+  {
+    "id": "location-7__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -1.5967355966567993
+      },
+      {
+        "text": " garage quietly.",
+        "score": -4.479586124420166
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -2.1442980766296387
+      },
+      {
+        "text": " museum again.",
+        "score": -2.9565327167510986
+      }
+    ],
+    "margin": -0.487745463848114
+  },
+  {
+    "id": "location-7__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -4.429105758666992
+      },
+      {
+        "text": " garage quietly.",
+        "score": -6.2205491065979
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -4.535771369934082
+      },
+      {
+        "text": " museum again.",
+        "score": -4.928918361663818
+      }
+    ],
+    "margin": -0.5924825668334961
+  },
+  {
+    "id": "location-7__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 28,
+    "valid": [
+      {
+        "text": " garage.",
+        "score": -1.4756722450256348
+      },
+      {
+        "text": " garage quietly.",
+        "score": -4.410806179046631
+      }
+    ],
+    "invalid": [
+      {
+        "text": " museum.",
+        "score": -1.999715805053711
+      },
+      {
+        "text": " museum again.",
+        "score": -2.967164993286133
+      }
+    ],
+    "margin": -0.45979881286621094
+  },
+  {
+    "id": "possession-5__main",
+    "group": "main",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.245890498161316
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.2664802074432373
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5912201404571533
+      },
+      {
+        "text": " street.",
+        "score": -3.9185423851013184
+      }
+    ],
+    "margin": 1.4986959099769592
+  },
+  {
+    "id": "possession-5__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.8027970790863037
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.8123226165771484
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -3.049675226211548
+      },
+      {
+        "text": " street.",
+        "score": -3.804555892944336
+      }
+    ],
+    "margin": 1.1195557117462158
+  },
+  {
+    "id": "possession-5__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.1491581201553345
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.403472423553467
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5229318141937256
+      },
+      {
+        "text": " street.",
+        "score": -4.164097309112549
+      }
+    ],
+    "margin": 1.5671992897987366
+  },
+  {
+    "id": "multi-constraint-1__main",
+    "group": "main",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -1.5595488548278809
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -1.6962852478027344
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -1.7281079292297363
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -2.061228036880493
+      }
+    ],
+    "margin": 0.26675093173980713
+  },
+  {
+    "id": "multi-constraint-1__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -3.5396878719329834
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -3.7781035900115967
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -3.1358883380889893
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -3.677957534790039
+      }
+    ],
+    "margin": -0.2519727945327759
+  },
+  {
+    "id": "multi-constraint-1__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " arrived at the market and found the passport in the drawer.",
+        "score": -1.7213619947433472
+      },
+      {
+        "text": " arrived at the market and retrieved the passport from the drawer.",
+        "score": -1.785261631011963
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the hotel and found the passport in the drawer.",
+        "score": -1.9151455163955688
+      },
+      {
+        "text": " arrived at the market and found the passport on the street.",
+        "score": -2.1592142581939697
+      }
+    ],
+    "margin": 0.28386807441711426
+  },
+  {
+    "id": "location-18__main",
+    "group": "main",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -1.6261711120605469
+      },
+      {
+        "text": " garden quietly.",
+        "score": -4.200387477874756
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -2.1888365745544434
+      },
+      {
+        "text": " kitchen again.",
+        "score": -2.832029104232788
+      }
+    ],
+    "margin": -0.40284645557403564
+  },
+  {
+    "id": "location-18__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -4.784543991088867
+      },
+      {
+        "text": " garden quietly.",
+        "score": -6.048562526702881
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -3.0093021392822266
+      },
+      {
+        "text": " kitchen again.",
+        "score": -3.6347999572753906
+      }
+    ],
+    "margin": -2.0945022106170654
+  },
+  {
+    "id": "location-18__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " garden.",
+        "score": -1.740757942199707
+      },
+      {
+        "text": " garden quietly.",
+        "score": -4.284568786621094
+      }
+    ],
+    "invalid": [
+      {
+        "text": " kitchen.",
+        "score": -2.0840682983398438
+      },
+      {
+        "text": " kitchen again.",
+        "score": -2.6634719371795654
+      }
+    ],
+    "margin": -0.6388932466506958
+  },
+  {
+    "id": "possession-11__main",
+    "group": "main",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.0689135789871216
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4351089000701904
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.667797565460205
+      },
+      {
+        "text": " street.",
+        "score": -4.363753318786621
+      }
+    ],
+    "margin": 1.763764202594757
+  },
+  {
+    "id": "possession-11__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.7833523750305176
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.841909170150757
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.9185633659362793
+      },
+      {
+        "text": " street.",
+        "score": -4.196522235870361
+      }
+    ],
+    "margin": 1.244912028312683
+  },
+  {
+    "id": "possession-11__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.3351593017578125
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.405071973800659
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.5208823680877686
+      },
+      {
+        "text": " street.",
+        "score": -3.8414344787597656
+      }
+    ],
+    "margin": 1.3110427856445312
+  },
+  {
+    "id": "multi-constraint-2__main",
+    "group": "main",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -1.7205791473388672
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -1.6881264448165894
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -1.8642359972000122
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -2.2198426723480225
+      }
+    ],
+    "margin": 0.33768653869628906
+  },
+  {
+    "id": "multi-constraint-2__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -3.299933433532715
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -3.366703987121582
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -3.5065810680389404
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -3.413853645324707
+      }
+    ],
+    "margin": 0.1268986463546753
+  },
+  {
+    "id": "multi-constraint-2__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " arrived at the garage and found the ticket in the drawer.",
+        "score": -1.7406924962997437
+      },
+      {
+        "text": " arrived at the garage and retrieved the ticket from the drawer.",
+        "score": -1.7011502981185913
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the clinic and found the ticket in the drawer.",
+        "score": -1.8784879446029663
+      },
+      {
+        "text": " arrived at the garage and found the ticket on the street.",
+        "score": -2.2365825176239014
+      }
+    ],
+    "margin": 0.33661383390426636
+  },
+  {
+    "id": "multi-constraint-5__main",
+    "group": "main",
+    "prompt_tokens": 38,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -1.8004661798477173
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -1.751093864440918
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -2.16330623626709
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -2.311109781265259
+      }
+    ],
+    "margin": 0.4614279866218567
+  },
+  {
+    "id": "multi-constraint-5__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 26,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -3.6437828540802
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -3.543734312057495
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -3.41571307182312
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -3.663351058959961
+      }
+    ],
+    "margin": -0.05422651767730713
+  },
+  {
+    "id": "multi-constraint-5__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 37,
+    "valid": [
+      {
+        "text": " arrived at the airport and found the badge in the drawer.",
+        "score": -1.8417705297470093
+      },
+      {
+        "text": " arrived at the airport and retrieved the badge from the drawer.",
+        "score": -1.7523393630981445
+      }
+    ],
+    "invalid": [
+      {
+        "text": " arrived at the kitchen and found the badge in the drawer.",
+        "score": -2.190680980682373
+      },
+      {
+        "text": " arrived at the airport and found the badge on the street.",
+        "score": -2.319709539413452
+      }
+    ],
+    "margin": 0.4581403136253357
+  },
+  {
+    "id": "location-13__main",
+    "group": "main",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -1.3752268552780151
+      },
+      {
+        "text": " gym quietly.",
+        "score": -4.467710494995117
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -1.744722843170166
+      },
+      {
+        "text": " school again.",
+        "score": -2.93798828125
+      }
+    ],
+    "margin": -0.5801131129264832
+  },
+  {
+    "id": "location-13__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 29,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -7.811209678649902
+      },
+      {
+        "text": " gym quietly.",
+        "score": -9.29232120513916
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -4.45708703994751
+      },
+      {
+        "text": " school again.",
+        "score": -4.847099781036377
+      }
+    ],
+    "margin": -3.899672031402588
+  },
+  {
+    "id": "location-13__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 30,
+    "valid": [
+      {
+        "text": " gym.",
+        "score": -0.9879640936851501
+      },
+      {
+        "text": " gym quietly.",
+        "score": -3.9354467391967773
+      }
+    ],
+    "invalid": [
+      {
+        "text": " school.",
+        "score": -1.8807940483093262
+      },
+      {
+        "text": " school again.",
+        "score": -2.8705053329467773
+      }
+    ],
+    "margin": -0.08605572581291199
+  },
+  {
+    "id": "entity-state-5__main",
+    "group": "main",
+    "prompt_tokens": 27,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.178040027618408
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.069857358932495
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.251449108123779
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.582871437072754
+      }
+    ],
+    "margin": 1.293211579322815
+  },
+  {
+    "id": "entity-state-5__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.382112979888916
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.3778936862945557
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -3.90915584564209
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.215737342834473
+      }
+    ],
+    "margin": 0.6824432611465454
+  },
+  {
+    "id": "entity-state-5__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 25,
+    "valid": [
+      {
+        "text": " was remembered by friends.",
+        "score": -3.339865207672119
+      },
+      {
+        "text": " was mourned by family.",
+        "score": -3.145728349685669
+      }
+    ],
+    "invalid": [
+      {
+        "text": " walked into the room smiling.",
+        "score": -4.6135478019714355
+      },
+      {
+        "text": " said hello to everyone.",
+        "score": -4.562023639678955
+      }
+    ],
+    "margin": 1.3449889421463013
+  },
+  {
+    "id": "possession-13__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6596866846084595
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4281513690948486
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -1.80979585647583
+      },
+      {
+        "text": " street.",
+        "score": -3.8395745754241943
+      }
+    ],
+    "margin": 0.7807661890983582
+  },
+  {
+    "id": "possession-13__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 33,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -2.9497311115264893
+      },
+      {
+        "text": " locked drawer.",
+        "score": -3.259552240371704
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.003324270248413
+      },
+      {
+        "text": " street.",
+        "score": -3.2985031604766846
+      }
+    ],
+    "margin": -0.45372796058654785
+  },
+  {
+    "id": "possession-13__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.6756312847137451
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.3829619884490967
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.293224811553955
+      },
+      {
+        "text": " street.",
+        "score": -3.8334157466888428
+      }
+    ],
+    "margin": 1.034023642539978
+  },
+  {
+    "id": "possession-9__main",
+    "group": "main",
+    "prompt_tokens": 36,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.269770622253418
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4113759994506836
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.435854434967041
+      },
+      {
+        "text": " street.",
+        "score": -4.3569722175598145
+      }
+    ],
+    "margin": 1.555840015411377
+  },
+  {
+    "id": "possession-9__ablate_relevant",
+    "group": "ablate_relevant",
+    "prompt_tokens": 34,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.5692795515060425
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.7790536880493164
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.8538801670074463
+      },
+      {
+        "text": " street.",
+        "score": -4.966592311859131
+      }
+    ],
+    "margin": 1.7360696196556091
+  },
+  {
+    "id": "possession-9__ablate_irrelevant",
+    "group": "ablate_irrelevant",
+    "prompt_tokens": 35,
+    "valid": [
+      {
+        "text": " drawer.",
+        "score": -1.2741953134536743
+      },
+      {
+        "text": " locked drawer.",
+        "score": -2.4814350605010986
+      }
+    ],
+    "invalid": [
+      {
+        "text": " trash.",
+        "score": -2.488676071166992
+      },
+      {
+        "text": " street.",
+        "score": -4.647342205047607
+      }
+    ],
+    "margin": 1.6901939511299133
+  }
+]

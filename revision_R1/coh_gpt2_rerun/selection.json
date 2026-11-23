@@ -1,0 +1,432 @@
+{
+  "data_sha256": "04e122738582a3d5ea2a7e7f8e38a3c7841c3bab2cc04cf4d24640d5a902fc64",
+  "matched_ids": [
+    "possession-2",
+    "location-4",
+    "possession-1",
+    "entity-state-8",
+    "location-17",
+    "location-6",
+    "location-5",
+    "location-8",
+    "entity-state-13",
+    "location-0",
+    "location-2",
+    "entity-state-9",
+    "location-12",
+    "entity-state-12",
+    "entity-state-5"
+  ],
+  "matched_entity_state_ids": [
+    "entity-state-8",
+    "entity-state-13",
+    "entity-state-9",
+    "entity-state-12",
+    "entity-state-5"
+  ],
+  "tokens_by_triplet": {
+    "possession-16": {
+      "main": 35,
+      "ablate_relevant": 33,
+      "ablate_irrelevant": 35
+    },
+    "possession-4": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 36
+    },
+    "possession-2": {
+      "main": 35,
+      "ablate_relevant": 36,
+      "ablate_irrelevant": 36
+    },
+    "possession-10": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 36
+    },
+    "location-4": {
+      "main": 30,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 28
+    },
+    "location-11": {
+      "main": 29,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 28
+    },
+    "multi-constraint-8": {
+      "main": 36,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 37
+    },
+    "entity-state-11": {
+      "main": 24,
+      "ablate_relevant": 23,
+      "ablate_irrelevant": 25
+    },
+    "multi-constraint-6": {
+      "main": 37,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 36
+    },
+    "possession-1": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 34
+    },
+    "multi-constraint-15": {
+      "main": 39,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 37
+    },
+    "entity-state-8": {
+      "main": 26,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 24
+    },
+    "location-17": {
+      "main": 30,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 29
+    },
+    "location-9": {
+      "main": 29,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 29
+    },
+    "entity-state-1": {
+      "main": 25,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 29
+    },
+    "entity-state-14": {
+      "main": 25,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 30
+    },
+    "possession-12": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 36
+    },
+    "possession-19": {
+      "main": 35,
+      "ablate_relevant": 33,
+      "ablate_irrelevant": 35
+    },
+    "multi-constraint-3": {
+      "main": 40,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 39
+    },
+    "entity-state-18": {
+      "main": 28,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 27
+    },
+    "possession-7": {
+      "main": 34,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 35
+    },
+    "entity-state-2": {
+      "main": 24,
+      "ablate_relevant": 23,
+      "ablate_irrelevant": 25
+    },
+    "multi-constraint-18": {
+      "main": 39,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 38
+    },
+    "multi-constraint-14": {
+      "main": 37,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 38
+    },
+    "location-3": {
+      "main": 31,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 31
+    },
+    "entity-state-7": {
+      "main": 25,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 25
+    },
+    "entity-state-10": {
+      "main": 25,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 27
+    },
+    "multi-constraint-0": {
+      "main": 36,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 37
+    },
+    "location-6": {
+      "main": 30,
+      "ablate_relevant": 30,
+      "ablate_irrelevant": 30
+    },
+    "entity-state-15": {
+      "main": 26,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 30
+    },
+    "possession-15": {
+      "main": 36,
+      "ablate_relevant": 36,
+      "ablate_irrelevant": 37
+    },
+    "multi-constraint-11": {
+      "main": 36,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 36
+    },
+    "location-5": {
+      "main": 30,
+      "ablate_relevant": 30,
+      "ablate_irrelevant": 30
+    },
+    "multi-constraint-17": {
+      "main": 38,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 37
+    },
+    "entity-state-0": {
+      "main": 25,
+      "ablate_relevant": 23,
+      "ablate_irrelevant": 24
+    },
+    "entity-state-3": {
+      "main": 28,
+      "ablate_relevant": 30,
+      "ablate_irrelevant": 33
+    },
+    "entity-state-16": {
+      "main": 25,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 26
+    },
+    "multi-constraint-16": {
+      "main": 37,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 36
+    },
+    "location-8": {
+      "main": 28,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 27
+    },
+    "multi-constraint-19": {
+      "main": 37,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 39
+    },
+    "possession-8": {
+      "main": 36,
+      "ablate_relevant": 35,
+      "ablate_irrelevant": 34
+    },
+    "entity-state-13": {
+      "main": 27,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 25
+    },
+    "possession-0": {
+      "main": 34,
+      "ablate_relevant": 33,
+      "ablate_irrelevant": 34
+    },
+    "location-19": {
+      "main": 29,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 29
+    },
+    "location-0": {
+      "main": 28,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 28
+    },
+    "multi-constraint-9": {
+      "main": 39,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 37
+    },
+    "location-2": {
+      "main": 28,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 28
+    },
+    "possession-14": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 36
+    },
+    "location-15": {
+      "main": 28,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 29
+    },
+    "location-10": {
+      "main": 29,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 30
+    },
+    "location-1": {
+      "main": 27,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 28
+    },
+    "possession-3": {
+      "main": 37,
+      "ablate_relevant": 36,
+      "ablate_irrelevant": 39
+    },
+    "entity-state-4": {
+      "main": 26,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 25
+    },
+    "possession-6": {
+      "main": 35,
+      "ablate_relevant": 35,
+      "ablate_irrelevant": 37
+    },
+    "entity-state-6": {
+      "main": 25,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 26
+    },
+    "entity-state-19": {
+      "main": 25,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 26
+    },
+    "entity-state-9": {
+      "main": 27,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 25
+    },
+    "possession-17": {
+      "main": 36,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 35
+    },
+    "multi-constraint-12": {
+      "main": 37,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 39
+    },
+    "multi-constraint-13": {
+      "main": 37,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 38
+    },
+    "multi-constraint-10": {
+      "main": 39,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 37
+    },
+    "location-14": {
+      "main": 29,
+      "ablate_relevant": 28,
+      "ablate_irrelevant": 29
+    },
+    "possession-18": {
+      "main": 37,
+      "ablate_relevant": 35,
+      "ablate_irrelevant": 36
+    },
+    "location-12": {
+      "main": 30,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 29
+    },
+    "entity-state-12": {
+      "main": 27,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 25
+    },
+    "multi-constraint-7": {
+      "main": 36,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 36
+    },
+    "location-16": {
+      "main": 28,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 29
+    },
+    "entity-state-17": {
+      "main": 25,
+      "ablate_relevant": 24,
+      "ablate_irrelevant": 26
+    },
+    "multi-constraint-4": {
+      "main": 37,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 37
+    },
+    "location-7": {
+      "main": 29,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 28
+    },
+    "possession-5": {
+      "main": 35,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 36
+    },
+    "multi-constraint-1": {
+      "main": 38,
+      "ablate_relevant": 27,
+      "ablate_irrelevant": 36
+    },
+    "location-18": {
+      "main": 30,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 30
+    },
+    "possession-11": {
+      "main": 34,
+      "ablate_relevant": 35,
+      "ablate_irrelevant": 36
+    },
+    "multi-constraint-2": {
+      "main": 37,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 35
+    },
+    "multi-constraint-5": {
+      "main": 38,
+      "ablate_relevant": 26,
+      "ablate_irrelevant": 37
+    },
+    "location-13": {
+      "main": 29,
+      "ablate_relevant": 29,
+      "ablate_irrelevant": 30
+    },
+    "entity-state-5": {
+      "main": 27,
+      "ablate_relevant": 25,
+      "ablate_irrelevant": 25
+    },
+    "possession-13": {
+      "main": 36,
+      "ablate_relevant": 33,
+      "ablate_irrelevant": 34
+    },
+    "possession-9": {
+      "main": 36,
+      "ablate_relevant": 34,
+      "ablate_irrelevant": 35
+    }
+  },
+  "rule": "GPT-2 prompt tokens without specials: ablate_relevant == ablate_irrelevant; subset within these: entity_state",
+  "estimand": "mean of within-triplet margin(irrelevant replacement) minus margin(relevant replacement)",
+  "archived_reproduction_absolute_tolerance": 1e-05
+}
